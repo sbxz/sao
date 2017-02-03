@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Sao.iml" filepath="$PROJECT_DIR$/Sao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sao/sao.iml" filepath="$PROJECT_DIR$/sao/sao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/saolib/saolib.iml" filepath="$PROJECT_DIR$/saolib/saolib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/saopro/saopro.iml" filepath="$PROJECT_DIR$/saopro/saopro.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/android:progressBarStyleLarge"
+        android:theme="@style/CircularProgressWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="false" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:clipToPadding="false"
+        android:paddingEnd="48dp"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        android:paddingStart="48dp">
+
+    </android.support.v4.view.ViewPager>
+
+    <TextView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="1/199"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="bottom|center_horizontal" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/position_view"
+            android:layout_width="1px"
+            android:layout_height="1px" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/select_bar"
+                android:layout_marginTop="70dp"
+                android:textSize="18dp"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

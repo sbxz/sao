@@ -1,0 +1,74 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Sao Pro</string>
+
+    <!-- Menu -->
+    <string name="menu_home">Accueil</string>
+    <string name="menu_beacon">Beacon</string>
+    <string name="menu_stats">Statistique</string>
+    <string name="menu_type_settings">Aide et paramètres</string>
+    <string name="menu_settings">Paramètre de l\'application</string>
+    <string name="menu_help">Paramètre de l\'application</string>
+    <string name="menu_condition">Condition et règlements</string>
+    <string name="menu_problem">Signaler un problème</string>
+    <string name="menu_about">A propos</string>
+    <string name="menu_logout">Deconnexion</string>
+
+    <!-- Login Activity -->
+    <string name="btn_sign_up">Connexion</string>
+    <string name="connect_progress">Connexion en cours</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_email">E-mail</string>
+    <string name="forget_password">Mot de passe oublié ?</string>
+    <string name="err_msg_mail">Adresse mal invalide</string>
+    <string name="err_msg_password">Entrer votre mot de passe</string>
+
+    <!-- Bar Select Activity -->
+    <string name="select_bar">Sélectionner votre bar</string>
+
+    <!-- Order Fragment-->
+    <string name="order_number">#</string>
+    <string name="wait_customer">(En attente du client)</string>
+    <string name="not_new_order">Aucune nouvelle commande</string>
+    <string name="not_wait_order">Aucune commande en attente</string>
+
+    <!-- Order Details Activity -->
+    <string name="confirm_info">Lors de la confirmation, une alerte sera envoyée au client pour qu\'il vienne chercher sa commande</string>
+    <string name="orderDetailsTitle">Commande</string>
+    <string name="orderDetailsConfirm">Confirmer</string>
+    <string name="order_total">Total</string>
+    <string name="finish_order">Terminer</string>
+
+    <!-- Notification Activity -->
+    <string name="notification_title">Notifications</string>
+    <string name="notification_send">Envoyer</string>
+    <string name="notification_send_info">Lors de l\'envoie, tous les clients concerné recevront une notification</string>
+    <string name="notification_message_title">Titre</string>
+    <string name="notification_message">Message</string>
+    <string name="notification_receiver">Destinataire: </string>
+    <string name="put_little_message">Veuillez renseigner un message plus cours</string>
+
+    <string-array name="receiver_array">
+        <item>Tout vos clients</item>
+        <item>Clients présent</item>
+    </string-array>
+
+    <!-- Beacon Fragment -->
+    <string name="beacon_info">Veuillez passer votre appareil prêt du Beacon pour l\'enregistrer</string>
+    <string name="beacon_success_save">Beacon associé à votre bar</string>
+
+    <!-- Failure retrieve data-->
+    <string name="failure_data">Erreur pendant le chargement des données</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_splash">Sao</string>
+    <string name="title_activity_bar_select">BarSelectActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <string name="title_activity_beacon_info">BeaconInfoActivity</string>
+</resources>
