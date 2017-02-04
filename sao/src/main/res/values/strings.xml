@@ -18,6 +18,15 @@
 
     <!-- Bar Details -->
     <string name="bar_details_point"> points</string>
+    <string name="bar_details_order">CONSULTER VOTRE COMMANDE</string>
+
+    <!-- Order Details -->
+    <string name="orderDetailsConfirm">CONFIRMER</string>
+    <string name="confirm_info">En réalisant cette commande, j\'accepte les conditions générales de vente</string>
+    <string name="confirm_info1">J\'accepte et je demande à ce que vous exécutiez la commande avant la fin de la période de révocation. Je suis au courant qu\'après exécution complète du service je perdrait mon droit de rescision.</string>
+    <string name="change_order">Voules-vous modifier votre commande en cours?</string>
+    <string name="barCatalog">CATALOGUE DU BAR</string>
+    <string name="order_name">Ma commande</string>
 
     <!-- Login Activity -->
     <string name="btn_sign_up">Connexion</string>
@@ -36,5 +45,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
 
 </resources>

@@ -60,6 +60,7 @@ public class SplashActivity extends BaseActivity {
 
     private void startMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void retrieveUserInfo() {

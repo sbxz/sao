@@ -15,15 +15,18 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Bar;
 import com.sao.mobile.sao.entities.Catalog;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
+import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
@@ -44,7 +47,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     private ImageView mBarThumbnail;
     private TextView mBarPoint;
     private TabLayout mBarInfosTab;
-    private ViewPager viewPager;
+    private ViewPager mViewPager;
     private RelativeLayout mCartButton;
 
     private TextView mCartQuantity;
@@ -53,6 +56,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     private OrderManager mOrderManager = OrderManager.getInstance();
+    private UserManager mUserManager = UserManager.getInstance();
 
     private Bar mBar;
 
@@ -69,12 +73,26 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         setStatusBarTranslucent(true);
 
         mBar = (Bar) getIntent().getSerializableExtra(BAR_EXTRA);
+        mUserManager.currentBar = mBar;
 
         setupHeader();
         setupTabs();
         setupFooter();
 
         setupCatalog();
+
+        setCarButtonVisible();
+    }
+
+    private void setCarButtonVisible() {
+        ViewGroup.MarginLayoutParams layoutParam = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
+        if(mBar.getId() == mUserManager.currentBar.getId() && mOrderManager.getProductSize() > 0) {
+            mCartButton.setVisibility(View.VISIBLE);
+            layoutParam.bottomMargin = (int) getResources().getDimension(R.dimen.cart_button_height);
+        } else {
+            mCartButton.setVisibility(View.GONE);
+            layoutParam.bottomMargin = 0;
+        }
     }
 
     private void initActivityTransitions() {
@@ -94,6 +112,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         mCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(OrderActivity.class);
             }
         });
     }
@@ -140,9 +159,10 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     }
 
     private void setupTabs() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setOffscreenPageLimit(99);
         mBarInfosTab = (TabLayout) findViewById(R.id.barInfosTab);
-        mBarInfosTab.setupWithViewPager(viewPager);
+        mBarInfosTab.setupWithViewPager(mViewPager);
 
         mBarInfosTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -172,7 +192,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
             adapter.addFragment(barProductsFragment, catalog.getType());
         }
 
-        viewPager.setAdapter(adapter);
+        mViewPager.setAdapter(adapter);
     }
 
     @Override
@@ -181,7 +201,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
 
         mOrderManager.addProduct(product);
 
-        mCartButton.setVisibility(View.VISIBLE);
+        setCarButtonVisible();
         mCartQuantity.setText(mOrderManager.getTotalQuantityAsString());
         mCartPrice.setText(mOrderManager.getTotalPriceAsString());
     }

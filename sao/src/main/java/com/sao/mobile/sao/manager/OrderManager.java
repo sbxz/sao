@@ -22,28 +22,48 @@ public class OrderManager {
     private OrderManager() {
     }
 
-    public void addProduct(Product product) {
+    public Product addProduct(Product product) {
         if(order == null) {
             List<Product> products = new ArrayList<>();
             products.add(product);
             order = new Order(calculPrice(product), products);
         } else {
+            Boolean isFind = false;
             for(Product item : order.getProducts()) {
-
+                if(item.getId() == product.getId()) {
+                    product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) + 1)));
+                    order.getProducts().set(order.getProducts().indexOf(item), product);
+                    isFind = true;
+                }
             }
-            verifyProduct(product);
-            order.getProducts().add(product);
+
+            if(!isFind) {
+                order.getProducts().add(product);
+            }
+
             order.incrementQuantity();
             order.setTotalPrice(order.getTotalPrice() + calculPrice(product));
         }
+
+        return product;
     }
 
-    private void verifyProduct(Product product) {
+    public Product removeProduct(Product product) {
+        Boolean isRemove = false;
+        for(Product item : order.getProducts()) {
+            if(item.getId() == product.getId()) {
+                if(Integer.valueOf(item.getQuantity()) > 1) {
+                    product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) - 1)));
+                } else {
+                    isRemove = true;
+                    order.getProducts().remove(item);
+                }
+            }
+        }
 
-    }
-
-    public void removeProduct(Product product) {
-
+        order.decrementQuantity();
+        order.setTotalPrice(order.getTotalPrice() - calculPrice(product));
+        return isRemove ? null : product;
     }
 
     public void removeOrder() {
@@ -60,5 +80,15 @@ public class OrderManager {
 
     public String getTotalPriceAsString() {
         return UnitPriceUtils.addEuro(String.valueOf(order.getTotalPrice()));
+    }
+
+    public int getProductSize() {
+        if(order == null) {
+            return 0;
+        } else if(order.getProducts() == null) {
+            return 0;
+        } else {
+            return order.getProducts().size();
+        }
     }
 }

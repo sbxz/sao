@@ -36,8 +36,12 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBarBasic" />
-        <activity android:name=".ui.activity.BarDetailActivity"
-            android:theme="@style/AppTheme.NoActionBarBasic"/>
+        <activity
+            android:name=".ui.activity.BarDetailActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
+        <activity
+            android:name=".ui.activity.OrderActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic2" />
 
         <service android:name=".service.SaoFirebaseInstanceIDService">
             <intent-filter>
