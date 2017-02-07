@@ -73,4 +73,12 @@ public class BarProductsFragment extends BaseFragment {
             }
         }));
     }
+
+    public void updateCart() {
+        if(mProductRecycler == null || mProductRecycler.getAdapter() == null) {
+            return;
+        }
+
+        ((ProductAdapter) mProductRecycler.getAdapter()).updateProductList();
+    }
 }

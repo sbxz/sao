@@ -49,6 +49,10 @@ public class OrderManager {
     }
 
     public Product removeProduct(Product product) {
+        if(order == null) {
+            return null;
+        }
+
         Boolean isRemove = false;
         for(Product item : order.getProducts()) {
             if(item.getId() == product.getId()) {
@@ -57,6 +61,7 @@ public class OrderManager {
                 } else {
                     isRemove = true;
                     order.getProducts().remove(item);
+                    break;
                 }
             }
         }
@@ -75,11 +80,11 @@ public class OrderManager {
     }
 
     public String getTotalQuantityAsString() {
-        return String.valueOf(order.getTotalQuantity());
+        return order == null ? "" : String.valueOf(order.getTotalQuantity());
     }
 
     public String getTotalPriceAsString() {
-        return UnitPriceUtils.addEuro(String.valueOf(order.getTotalPrice()));
+        return order == null ? "0" : UnitPriceUtils.addEuro(String.valueOf(order.getTotalPrice()));
     }
 
     public int getProductSize() {

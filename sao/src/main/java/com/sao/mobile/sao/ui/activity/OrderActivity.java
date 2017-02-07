@@ -68,6 +68,10 @@ public class OrderActivity extends BaseActivity {
 
     private void setupInfo() {
         mTotalPrice = (TextView) findViewById(R.id.totalPrice);
+        updateCart();
+    }
+
+    private void updateCart() {
         mTotalPrice.setText(mOrderManager.getTotalPriceAsString());
     }
 
@@ -86,8 +90,11 @@ public class OrderActivity extends BaseActivity {
         };
 
         mOrderRecyclerView.addOnScrollListener(mEndlessRecyclerScrollListener);
-        mOrderRecyclerView.setAdapter(new OrderAdapter(mContext, mOrderManager.order.getProducts()));
+        mOrderRecyclerView.setAdapter(new OrderAdapter(mContext, mOrderManager.order.getProducts(), new OrderAdapter.OnCartUpdate() {
+            @Override
+            public void onUpdateOrder() {
+                updateCart();
+            }
+        }));
     }
-
-
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
@@ -28,6 +29,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Product> mItems;
     private Context mContext;
     private OnItemClickListener mListener;
+
+    private OrderManager mOrderManager = OrderManager.getInstance();
 
     public ProductAdapter(Context context, List<Product> items, OnItemClickListener listener) {
         this.mContext = context;
@@ -56,6 +59,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         productViewHolder.quantityFrameLayout.setVisibility(View.GONE);
         productViewHolder.productQuantity.setText(product.getQuantity());
 
+        productViewHolder.quantityFrameLayout.setVisibility(Double.parseDouble(product.getQuantity()) > 0 ? View.VISIBLE : View.GONE);
+
         productViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,9 +72,16 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
     }
 
+    private void updateQuantityFrameLayout() {
+    }
+
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public void updateProductList() {
+        notifyDataSetChanged();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder{

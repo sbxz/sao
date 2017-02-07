@@ -21,14 +21,16 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private List<Product> mItems;
     private Context mContext;
+    private OrderAdapter.OnCartUpdate mListener;
 
     private LayoutInflater mLayoutInflater;
 
     private OrderManager mOrderManager = OrderManager.getInstance();
 
-    public OrderAdapter(Context context, List<Product> items) {
+    public OrderAdapter(Context context, List<Product> items, OrderAdapter.OnCartUpdate listener) {
         this.mContext = context;
         this.mItems = items != null ? items : new ArrayList<Product>();
+        this.mListener = listener;
     }
 
     @Override
@@ -74,33 +76,38 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if(item.getId().equals(product.getId())) {
                 int index = mItems.indexOf(item);
                 notifyItemChanged(index);
-
-                return;
+                break;
             }
         }
+
+        updateOrder();
     }
 
     private void lessQuantity(Product product) {
-        Product productTemp = mOrderManager.removeProduct(product);
+        mOrderManager.removeProduct(product);
+
         for (Product prod : mItems) {
             if(prod.getId() == product.getId()) {
                 int index = mItems.indexOf(prod);
-
-                if(productTemp == null) {
-                    mItems.remove(index);
-                    notifyItemRemoved(index);
-                    return;
-                }
-
                 notifyItemChanged(index);
-                return;
+                break;
             }
         }
+
+        updateOrder();
+    }
+
+    private void updateOrder() {
+        mListener.onUpdateOrder();
     }
 
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public interface OnCartUpdate {
+        void onUpdateOrder();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder{

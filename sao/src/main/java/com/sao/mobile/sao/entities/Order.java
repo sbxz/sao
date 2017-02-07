@@ -22,7 +22,7 @@ public class Order {
     }
 
     public void setTotalQuantity(int totalQuantity) {
-        this.totalQuantity = totalQuantity;
+        this.totalQuantity = totalQuantity < 0 ? 0 : totalQuantity;
     }
 
     public double getTotalPrice() {
@@ -30,7 +30,7 @@ public class Order {
     }
 
     public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+        this.totalPrice = totalPrice < 0 ? 0 : totalPrice;
     }
 
     public List<Product> getProducts() {
@@ -46,6 +46,8 @@ public class Order {
     }
 
     public void decrementQuantity() {
-        totalQuantity--;
+        if(totalQuantity != 0) {
+            totalQuantity--;
+        }
     }
 }

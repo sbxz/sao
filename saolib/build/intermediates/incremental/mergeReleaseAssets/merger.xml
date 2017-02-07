@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\Roxane\Documents\Seb\workspace\Sao\saolib\src\main\assets"/><source path="C:\Users\Roxane\Documents\Seb\workspace\Sao\saolib\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="C:\Users\Roxane\Documents\Seb\workspace\Sao\saolib\src\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Travaux\workspace\SAO\mobile\Sao\saolib\src\main\assets"/><source path="D:\Travaux\workspace\SAO\mobile\Sao\saolib\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\Travaux\workspace\SAO\mobile\Sao\saolib\src\release\assets"/></dataSet></merger>

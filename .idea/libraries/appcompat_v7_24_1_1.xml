@@ -3,7 +3,6 @@
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/sao/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/annotations.zip!/" />
       <root url="jar://$PROJECT_DIR$/saolib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/annotations.zip!/" />
-      <root url="jar://$PROJECT_DIR$/saopro/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/sao/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/res" />

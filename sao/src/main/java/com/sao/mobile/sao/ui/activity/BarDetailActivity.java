@@ -81,8 +81,19 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
 
         setupCatalog();
 
-        setCarButtonVisible();
+        updateCart();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCart();
+
+        for(int i = 0; i < mViewPager.getAdapter().getCount(); i++) {
+            ((BarProductsFragment)((ViewPagerAdapter) mViewPager.getAdapter()).getItem(i)).updateCart();
+        }
+    }
+
 
     private void setCarButtonVisible() {
         ViewGroup.MarginLayoutParams layoutParam = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
@@ -198,9 +209,12 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     @Override
     public void onItemClick(Object object) {
         Product product = (Product) object;
-
         mOrderManager.addProduct(product);
 
+        updateCart();
+    }
+
+    private void updateCart() {
         setCarButtonVisible();
         mCartQuantity.setText(mOrderManager.getTotalQuantityAsString());
         mCartPrice.setText(mOrderManager.getTotalPriceAsString());
