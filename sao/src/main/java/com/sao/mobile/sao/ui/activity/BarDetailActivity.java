@@ -74,6 +74,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
 
         mBar = (Bar) getIntent().getSerializableExtra(BAR_EXTRA);
         mUserManager.currentBar = mBar;
+        mOrderManager.removeOrder();
 
         setupHeader();
         setupTabs();
@@ -208,9 +209,6 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
 
     @Override
     public void onItemClick(Object object) {
-        Product product = (Product) object;
-        mOrderManager.addProduct(product);
-
         updateCart();
     }
 

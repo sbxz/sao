@@ -73,6 +73,10 @@ public class OrderActivity extends BaseActivity {
 
     private void updateCart() {
         mTotalPrice.setText(mOrderManager.getTotalPriceAsString());
+        if(mOrderManager.getTotalQuantityAsString().equals("0")) {
+            mOrderManager.removeOrder();
+            finish();
+        }
     }
 
     private void initRecyclerView() {

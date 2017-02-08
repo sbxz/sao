@@ -25,6 +25,7 @@ public class OrderManager {
     public Product addProduct(Product product) {
         if(order == null) {
             List<Product> products = new ArrayList<>();
+            product.setQuantity("1");
             products.add(product);
             order = new Order(calculPrice(product), products);
         } else {
@@ -38,6 +39,7 @@ public class OrderManager {
             }
 
             if(!isFind) {
+                product.setQuantity("1");
                 order.getProducts().add(product);
             }
 

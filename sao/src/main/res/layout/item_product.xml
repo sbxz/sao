@@ -10,7 +10,7 @@
 
     <FrameLayout
         android:id="@+id/quantityFrameLayout"
-        android:layout_width="35dp"
+        android:layout_width="40dp"
         android:layout_height="60dp"
         android:layout_gravity="end"
         android:background="@drawable/product_triangle">
