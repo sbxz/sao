@@ -10,7 +10,7 @@
         <Button
             android:id="@+id/lessQuantityButton"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:textColor="@color/colorPrimaryDark"
             android:text="-"
             android:foreground="?attr/selectableItemBackground"
@@ -18,15 +18,16 @@
 
         <TextView
             android:id="@+id/productQuantity"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="14dp"
             android:text="5"/>
 
         <Button
             android:id="@+id/moreQuantityButton"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="+"
             android:foreground="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimaryDark"

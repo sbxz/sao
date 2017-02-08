@@ -90,12 +90,14 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/textBlack"
+                            android:textSize="14dp"
                             android:text="Total"/>
 
                         <TextView
@@ -103,6 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/textBlack"
+                            android:textSize="14dp"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true" />

@@ -65,8 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View view) {
                 productViewHolder.quantityFrameLayout.setVisibility(View.VISIBLE);
-                product.incrementQuantity();
-                productViewHolder.productQuantity.setText(product.getQuantity());
+                productViewHolder.productQuantity.setText(String.valueOf(Integer.valueOf(product.getQuantity()) + 1));
                 mListener.onItemClick(product);
             }
         });

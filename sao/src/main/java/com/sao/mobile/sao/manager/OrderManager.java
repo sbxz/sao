@@ -54,8 +54,11 @@ public class OrderManager {
         }
 
         Boolean isRemove = false;
+        Boolean isFind = false;
         for(Product item : order.getProducts()) {
             if(item.getId() == product.getId()) {
+                isFind = true;
+
                 if(Integer.valueOf(item.getQuantity()) > 1) {
                     product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) - 1)));
                 } else {
@@ -66,8 +69,11 @@ public class OrderManager {
             }
         }
 
-        order.decrementQuantity();
-        order.setTotalPrice(order.getTotalPrice() - calculPrice(product));
+        if(isFind) {
+            order.decrementQuantity();
+            order.setTotalPrice(order.getTotalPrice() - calculPrice(product));
+        }
+
         return isRemove ? null : product;
     }
 
