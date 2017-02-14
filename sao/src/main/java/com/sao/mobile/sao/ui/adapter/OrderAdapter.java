@@ -1,6 +1,7 @@
 package com.sao.mobile.sao.ui.adapter;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
+import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
 import java.util.ArrayList;
@@ -54,6 +57,10 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         orderHolder.lessQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOrderManager.order != null && (mOrderManager.order.getStep().equals(Order.Step.WAIT) || mOrderManager.order.getStep().equals(Order.Step.FINISH))) {
+                    return;
+                }
+
                 lessQuantity(product);
                 orderHolder.productQuantity.setText(product.getQuantity());
                 orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
@@ -63,6 +70,10 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         orderHolder.moreQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOrderManager.order != null && (mOrderManager.order.getStep().equals(Order.Step.WAIT) || mOrderManager.order.getStep().equals(Order.Step.FINISH))) {
+                    return;
+                }
+
                 moreQuantity(product);
                 orderHolder.productQuantity.setText(product.getQuantity());
                 orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
@@ -73,7 +84,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void moreQuantity(Product product) {
         product = mOrderManager.addProduct(product);
         for (Product item : mItems) {
-            if(item.getId().equals(product.getId())) {
+            if (item.getId().equals(product.getId())) {
                 int index = mItems.indexOf(item);
                 notifyItemChanged(index);
                 break;
@@ -86,12 +97,19 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void lessQuantity(Product product) {
         mOrderManager.removeProduct(product);
 
+        Boolean isFind = false;
+
         for (Product prod : mItems) {
-            if(prod.getId() == product.getId()) {
+            if (prod.getId().equals(product.getId())) {
+                isFind = true;
                 int index = mItems.indexOf(prod);
                 notifyItemChanged(index);
                 break;
             }
+        }
+
+        if (!isFind) {
+            notifyDataSetChanged();
         }
 
         updateOrder();
@@ -110,14 +128,14 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void onUpdateOrder();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder{
-        public Button lessQuantityButton;
-        public Button moreQuantityButton;
-        public TextView productQuantity;
-        public TextView productName;
-        public TextView productPrice;
+    private static class ProductViewHolder extends RecyclerView.ViewHolder {
+        Button lessQuantityButton;
+        Button moreQuantityButton;
+        TextView productQuantity;
+        TextView productName;
+        TextView productPrice;
 
-        public ProductViewHolder(View view) {
+        ProductViewHolder(View view) {
             super(view);
 
             lessQuantityButton = (Button) view.findViewById(R.id.lessQuantityButton);

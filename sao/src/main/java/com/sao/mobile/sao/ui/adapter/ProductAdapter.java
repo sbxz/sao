@@ -1,6 +1,7 @@
 package com.sao.mobile.sao.ui.adapter;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,9 +11,14 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
+import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
@@ -27,15 +33,18 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LayoutInflater mLayoutInflater;
 
     private List<Product> mItems;
+    private String mBarId;
     private Context mContext;
     private OnItemClickListener mListener;
 
     private OrderManager mOrderManager = OrderManager.getInstance();
+    private UserManager mUserManager = UserManager.getInstance();
 
-    public ProductAdapter(Context context, List<Product> items, OnItemClickListener listener) {
+    public ProductAdapter(Context context, String barId, List<Product> items, OnItemClickListener listener) {
+        this.mBarId = barId;
         this.mContext = context;
         this.mItems = items != null ? items : new ArrayList<Product>();
-        mListener = listener;
+        this.mListener = listener;
     }
 
     @Override
@@ -64,7 +73,15 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         productViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOrderManager.addProduct(product);
+                if(!isOrderOk()) {
+                    return;
+                }
+
+                Product productOrder = mOrderManager.addProduct(product);
+                if (productOrder == null) {
+                    return;
+                }
+
                 productViewHolder.quantityFrameLayout.setVisibility(View.VISIBLE);
                 productViewHolder.productQuantity.setText(product.getQuantity());
                 mListener.onItemClick(product);
@@ -72,7 +89,22 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
     }
 
-    private void updateQuantityFrameLayout() {
+    private boolean isOrderOk() {
+        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getId())) {
+            return false;
+        }
+
+        if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.WAIT)) {
+            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_wait, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return false;
+        } else if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.FINISH)) {
+            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_finish, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -81,18 +113,39 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void updateProductList() {
+        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getId())) {
+            return;
+        }
+
+        Boolean isFind = false;
+        for (Product product : mItems) {
+            isFind = false;
+            if (mOrderManager.order != null && mOrderManager.order.getProducts() != null) {
+                for (Product orderProduct : mOrderManager.order.getProducts()) {
+                    if (product.getId().equals(orderProduct.getId())) {
+                        isFind = true;
+                        product.setQuantity(orderProduct.getQuantity());
+                    }
+                }
+            }
+
+            if (!isFind) {
+                product.setQuantity("0");
+            }
+
+        }
         notifyDataSetChanged();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder{
-        public TextView productName;
-        public TextView productDesc;
-        public TextView productPrice;
-        public TextView productQuantity;
-        public CardView cardView;
-        public FrameLayout quantityFrameLayout;
+    private static class ProductViewHolder extends RecyclerView.ViewHolder {
+        TextView productName;
+        TextView productDesc;
+        TextView productPrice;
+        TextView productQuantity;
+        CardView cardView;
+        FrameLayout quantityFrameLayout;
 
-        public ProductViewHolder(View view) {
+        ProductViewHolder(View view) {
             super(view);
             productName = (TextView) view.findViewById(R.id.productName);
             productDesc = (TextView) view.findViewById(R.id.productDesc);

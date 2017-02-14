@@ -28,6 +28,7 @@ public class BarProductsFragment extends BaseFragment {
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
     private List<Product> mProducts;
+    private String mBarId;
 
     @Override
     protected void initServices() {
@@ -36,8 +37,9 @@ public class BarProductsFragment extends BaseFragment {
     public BarProductsFragment() {
     }
 
-    public void addProducts(List<Product> products) {
+    public void addProducts(String barId, List<Product> products) {
         this.mProducts = products;
+        this.mBarId = barId;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class BarProductsFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_bar_products, container, false);
 
         setupRecylerView();
+        updateCart();
 
         return mView;
     }
@@ -66,7 +69,7 @@ public class BarProductsFragment extends BaseFragment {
 
         mProductRecycler.addOnScrollListener(mEndlessRecyclerScrollListener);
 
-        mProductRecycler.setAdapter(new ProductAdapter(mContext, mProducts, new OnItemClickListener() {
+        mProductRecycler.setAdapter(new ProductAdapter(mContext, mBarId, mProducts, new OnItemClickListener() {
             @Override
             public void onItemClick(Object object) {
                 ((OnItemClickListener) mContext).onItemClick(object);

@@ -1,5 +1,6 @@
 package com.sao.mobile.sao.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new BarsViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final BarsViewHolder barsViewHolder = (BarsViewHolder) holder;
@@ -93,13 +95,13 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public static class BarsViewHolder extends RecyclerView.ViewHolder{
-        public CardView cardView;
-        public ImageView barThumbnail;
-        public TextView barName;
-        public TextView barPoint;
+    private static class BarsViewHolder extends RecyclerView.ViewHolder{
+        CardView cardView;
+        ImageView barThumbnail;
+        TextView barName;
+        TextView barPoint;
 
-        public BarsViewHolder(View view) {
+        BarsViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.card_view);
             barThumbnail = (ImageView) view.findViewById(R.id.barThumbnail);

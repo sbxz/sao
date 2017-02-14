@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -73,8 +74,6 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         setStatusBarTranslucent(true);
 
         mBar = (Bar) getIntent().getSerializableExtra(BAR_EXTRA);
-        mUserManager.currentBar = mBar;
-        mOrderManager.removeOrder();
 
         setupHeader();
         setupTabs();
@@ -95,10 +94,9 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         }
     }
 
-
     private void setCarButtonVisible() {
         ViewGroup.MarginLayoutParams layoutParam = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
-        if(mBar.getId() == mUserManager.currentBar.getId() && mOrderManager.getProductSize() > 0) {
+        if(mBar.getId().equals(mUserManager.currentBar.getId()) && mOrderManager.getProductSize() > 0) {
             mCartButton.setVisibility(View.VISIBLE);
             layoutParam.bottomMargin = (int) getResources().getDimension(R.dimen.cart_button_height);
         } else {
@@ -200,7 +198,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         BarProductsFragment barProductsFragment;
         for (Catalog catalog : mBar.getCatalogs()) {
             barProductsFragment = new BarProductsFragment();
-            barProductsFragment.addProducts(catalog.getProducts());
+            barProductsFragment.addProducts(mBar.getId(), catalog.getProducts());
             adapter.addFragment(barProductsFragment, catalog.getType());
         }
 

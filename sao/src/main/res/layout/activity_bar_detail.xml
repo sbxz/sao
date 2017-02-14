@@ -57,9 +57,11 @@
             android:id="@+id/barInfosTab"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/colorAccent"
+            android:background="@color/white"
             app:tabGravity="fill"
-            app:tabIndicatorColor="#5be5ad"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabTextColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorPrimaryDark"
             app:tabIndicatorHeight="4dp"
             app:tabMode="scrollable" />
 

@@ -7,14 +7,21 @@ import java.util.List;
  */
 
 public class Order {
+    public enum Step {
+        FINISH, WAIT, START
+    }
+
     private int totalQuantity;
     private double totalPrice;
     private List<Product> products;
+    private Step step;
+
 
     public Order(double totalPrice, List<Product> products) {
         this.totalQuantity = 1;
         this.totalPrice = totalPrice;
         this.products = products;
+        this.step = Step.START;
     }
 
     public int getTotalQuantity() {
@@ -49,5 +56,13 @@ public class Order {
         if(totalQuantity != 0) {
             totalQuantity--;
         }
+    }
+
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
     }
 }

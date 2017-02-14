@@ -9,8 +9,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  * Created by Seb on 04/01/2017.
  */
 
-public class SaoFirebaseInstanceIDService extends FirebaseInstanceIdService {
-    private static final String TAG = SaoFirebaseInstanceIDService.class.getSimpleName();
+public class SaoInstanceIDService extends FirebaseInstanceIdService {
+    private static final String TAG = SaoInstanceIDService.class.getSimpleName();
 
     @Override
     public void onTokenRefresh() {

@@ -1,4 +1,4 @@
-package com.sao.mobile.sao.service;
+package com.sao.mobile.saopro.service;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -6,13 +6,14 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 
 import java.util.Map;
 
-public class SaoFirebaseMessaginService extends FirebaseMessagingService {
-    private static final String TAG = SaoFirebaseMessaginService.class.getSimpleName();
+public class SaoMessagingService extends FirebaseMessagingService {
+    private static final String TAG = SaoMessagingService.class.getSimpleName();
 
-    public SaoFirebaseMessaginService() {
+    public SaoMessagingService() {
     }
 
     @Override
@@ -40,7 +41,10 @@ public class SaoFirebaseMessaginService extends FirebaseMessagingService {
 
         switch (type)
         {
-
+            case OrderListFragment.NEW_ORDER_EXTRA:
+                Intent intent = new Intent(OrderListFragment.NEW_ORDER_EXTRA);
+                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+                break;
         }
     }
 }

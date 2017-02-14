@@ -1,7 +1,12 @@
 package com.sao.mobile.sao.manager;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.sao.ui.activity.OrderActivity;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
 import java.util.ArrayList;
@@ -19,10 +24,16 @@ public class OrderManager {
 
     public Order order;
 
+    private UserManager mUserManager = UserManager.getInstance();
+
     private OrderManager() {
     }
 
     public Product addProduct(Product product) {
+        if(mUserManager.currentBar == null) {
+            return null;
+        }
+
         if(order == null) {
             List<Product> products = new ArrayList<>();
             product.setQuantity("1");
@@ -31,7 +42,7 @@ public class OrderManager {
         } else {
             Boolean isFind = false;
             for(Product item : order.getProducts()) {
-                if(item.getId() == product.getId()) {
+                if(item.getId().equals(product.getId())) {
                     product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) + 1)));
                     order.getProducts().set(order.getProducts().indexOf(item), product);
                     isFind = true;
@@ -58,7 +69,7 @@ public class OrderManager {
         Boolean isRemove = false;
         Boolean isFind = false;
         for(Product item : order.getProducts()) {
-            if(item.getId() == product.getId()) {
+            if(item.getId().equals(product.getId())) {
                 isFind = true;
 
                 if(Integer.valueOf(item.getQuantity()) > 1) {
@@ -103,5 +114,46 @@ public class OrderManager {
         } else {
             return order.getProducts().size();
         }
+    }
+
+    public void setFinishOrder() {
+        if(!isOrderOk()) {
+            return;
+        }
+
+        order.setStep(Order.Step.FINISH);
+    }
+
+    public void setWaitOrder() {
+        if(!isOrderOk()) {
+            return;
+        }
+
+        order.setStep(Order.Step.WAIT);
+    }
+
+    public void setStartOrder() {
+        if(!isOrderOk()) {
+            return;
+        }
+
+        order.setStep(Order.Step.START);
+    }
+
+    public Boolean isOrderOk() {
+        return order != null;
+    }
+
+    public Boolean isProductOk() {
+        return order != null && order.getProducts() != null && order.getProducts().size() > 0;
+    }
+
+    public void startOrderActivity(Context context) {
+        if(!isProductOk()) {
+            return;
+        }
+
+        Class clazz = order.getStep().equals(Order.Step.START) ? OrderActivity.class : OrderActivity.class;
+        context.startActivity(new Intent(context, clazz));
     }
 }

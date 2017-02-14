@@ -200,7 +200,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mProgressDialog.hide();
     }
 
-    protected View getView() {
+    public View getView() {
         return findViewById(android.R.id.content);
     }
 

@@ -54,12 +54,12 @@
             android:name=".ui.activity.BeaconInfoActivity"
             android:theme="@style/AppTheme.NoActionBarBasic"/>
 
-        <service android:name=".service.SaoFirebaseInstanceIDService">
+        <service android:name=".service.SaoInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".service.SaoFirebaseMessaginService">
+        <service android:name=".service.SaoMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
