@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setCheckedItem(R.id.nav_home);
 
-        mCurrentFragment = new BarsFragment();
+        mCurrentFragment = new HomeFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, mCurrentFragment);
         fragmentTransaction.commit();
