@@ -6,12 +6,14 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Bar;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.ui.base.BaseService;
 
 public class BarNotificationService extends BaseService {
@@ -39,8 +41,10 @@ public class BarNotificationService extends BaseService {
         super.onCreate();
         Log.i(TAG, "on create");
 
+        Intent intent = new Intent(HomeFragment.UPDATE_CURRENT_BAR);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
-        startForeground(BAR_NOTIFICATION_ID, getBarNotification(this, mUserManager.currentBar, mUserManager.currentBar.getBarName(), getString(R.string.notification_no_oder), mUserManager.currentBar.getBarThumbnail()));
+        startForeground(BAR_NOTIFICATION_ID, getBarNotification(this, mUserManager.currentBar, mUserManager.currentBar.getBarName(), getString(R.string.notification_welcome), mUserManager.currentBar.getBarThumbnail()));
     }
 
     public static Notification getBarNotification(Context context, Bar bar, String barTitle, String contentText, String barThumbnail) {
@@ -56,6 +60,8 @@ public class BarNotificationService extends BaseService {
         return new Notification.Builder(context)
                 .setContentTitle(barTitle)
                 .setContentText(contentText)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
                 .setContentIntent(pendingIntent)
                 .build();

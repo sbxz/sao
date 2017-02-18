@@ -59,9 +59,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Picasso.with(mContext).load(bar.getBarThumbnail())
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
-                .transform(new CircleTransformation())
                 .into(homeViewHolder.barThumbnail);
 
+        homeViewHolder.date.setText(actuBar.getDate());
         homeViewHolder.barText.setText(actuBar.getText());
         homeViewHolder.barName.setText(bar.getBarName());
 
@@ -89,6 +89,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public void addListItem(List<ActuBar> listActu) {
+        mItems = listActu;
+        notifyDataSetChanged();
     }
 
     private static class HomeViewHolder extends RecyclerView.ViewHolder {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sao.mobile.sao.ui.activity.ConditionActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="3dp"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum felis lorem, interdum vel maximus in, ultricies eget ex. Praesent facilisis velit eget mi semper, id egestas risus posuere. Donec ut imperdiet ligula. Pellentesque sodales tempus urna quis aliquet. Donec et nulla at ex consequat convallis id sed diam. Nulla ut nisi rutrum, molestie libero eget, vehicula orci. Morbi mollis porttitor nulla a pellentesque. Vestibulum sed quam eget sapien accumsan efficitur vel non libero.
+
+Vestibulum viverra pharetra consequat. Phasellus vitae ex at neque rhoncus luctus. Nunc ac quam mollis, pretium massa nec, luctus ante. Duis hendrerit neque eget sapien molestie maximus. Etiam consequat ut lectus sed mattis. In interdum metus neque, non feugiat neque pharetra eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas ultrices urna dolor, at porttitor odio cursus at. Aliquam vel lorem nec sem tincidunt pellentesque. Vestibulum nec sagittis augue. Suspendisse eget velit nec leo facilisis maximus. Proin dignissim imperdiet lectus, sed tincidunt ipsum accumsan et.
+
+Nulla blandit tempor mi ut congue. Vivamus hendrerit porttitor ullamcorper. Nunc ullamcorper lacus et ex iaculis finibus. Maecenas nec laoreet arcu. Quisque sit amet velit tortor. Aliquam tristique metus nec ex fermentum, quis vehicula nunc sollicitudin. Mauris a sem varius, aliquet dolor eget, pharetra est.
+
+Nulla at ex non augue aliquet porta non quis nisl. Quisque sit amet dictum justo. Integer volutpat nunc mauris, vitae pellentesque mauris aliquam ac. Curabitur porttitor metus vitae urna accumsan mattis. Nullam luctus dui sit amet turpis viverra, a sodales nisi fringilla. Proin libero enim, porta ut leo ac, molestie tempor lacus. Quisque laoreet, nulla eget ultrices convallis, justo dolor finibus nisl, ut convallis enim nisl id sem. Quisque quis condimentum erat. Cras dignissim interdum sapien, vel maximus velit rhoncus eget. In quis euismod est.
+
+Quisque at mi quis odio egestas cursus non vitae nunc. Donec viverra risus tempor rhoncus congue. Fusce sodales ex vitae lacus pharetra semper. Donec blandit consequat arcu eget molestie. Vestibulum interdum semper dignissim. Proin auctor magna lacus, id malesuada ex faucibus nec. Aenean ac facilisis felis, sit amet vulputate nisl. Donec nunc augue, efficitur eu dui imperdiet, fringilla ullamcorper felis. Aliquam a imperdiet orci. Mauris laoreet accumsan lacus, ut fermentum dui fringilla id. Cras sagittis ac arcu vitae aliquam. Morbi bibendum ullamcorper mi ultricies consectetur. Ut sit amet congue turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit."/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

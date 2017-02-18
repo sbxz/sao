@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:foreground="?attr/selectableItemBackground"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="10dp">
 
@@ -28,20 +29,26 @@
                 android:layout_height="50dp"
                 android:scaleType="centerCrop"/>
 
-            <TextView
-                android:id="@+id/barName"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/barName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="La Kolok"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/colorPrimaryDark"/>
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|right"
-                android:layout_weight="1"
-                android:text="5min"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11:50"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <TextView

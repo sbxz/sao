@@ -74,31 +74,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         initServices();
     }
 
-    protected void initMobileClientService() {
-        if(SaoMobileService.client != null) {
-            return;
-        }
-
-        try {
-            SaoMobileService.client = new MobileServiceClient(
-                    SaoConstants.AZURE_URL,
-                    mContext);
-
-            // Extend timeout from default of 10s to 20s
-            SaoMobileService.client.setAndroidHttpClientFactory(new OkHttpClientFactory() {
-                @Override
-                public OkHttpClient createOkHttpClient() {
-                    OkHttpClient client = new OkHttpClient();
-                    client.setReadTimeout(20, TimeUnit.SECONDS);
-                    client.setWriteTimeout(20, TimeUnit.SECONDS);
-                    return client;
-                }
-            });
-        } catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-        }
-    }
-
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
         if (makeTranslucent) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

@@ -38,7 +38,13 @@ import com.sao.mobile.sao.service.BeaconService;
 import com.sao.mobile.sao.service.api.BarService;
 import com.sao.mobile.sao.service.api.LoginService;
 import com.sao.mobile.sao.service.api.UserService;
+import com.sao.mobile.sao.ui.activity.AboutActivity;
+import com.sao.mobile.sao.ui.activity.BarInfoActivity;
+import com.sao.mobile.sao.ui.activity.ConditionActivity;
+import com.sao.mobile.sao.ui.activity.EditProfileActivity;
 import com.sao.mobile.sao.ui.activity.LoginActivity;
+import com.sao.mobile.sao.ui.activity.ProblemActivity;
+import com.sao.mobile.sao.ui.activity.SettingsActivity;
 import com.sao.mobile.sao.ui.fragment.BarsFragment;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
@@ -94,6 +100,14 @@ public class MainActivity extends BaseActivity
         initServices();
 
         startServices();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mCurrentFragment != null) {
+            mCurrentFragment.onResume();
+        }
     }
 
     private void startServices() {
@@ -177,6 +191,7 @@ public class MainActivity extends BaseActivity
         mUserThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(EditProfileActivity.class);
             }
         });
     }
@@ -205,9 +220,18 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_home) {
             mCurrentFragment = new HomeFragment();
+            setTitle(R.string.home_name);
         } else if (id == R.id.nav_bar) {
             mCurrentFragment = new BarsFragment();
             setTitle(R.string.menu_bars);
+        } else if (id == R.id.nav_settings) {
+            startActivity(SettingsActivity.class);
+        }  else if (id == R.id.nav_condition) {
+            startActivity(ConditionActivity.class);
+        } else if (id == R.id.nav_problem) {
+            startActivity(ProblemActivity.class);
+        } else if (id == R.id.nav_about) {
+            startActivity(AboutActivity.class);
         } else if (id == R.id.nav_logout) {
             logout();
         }

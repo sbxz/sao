@@ -20,4 +20,8 @@ public interface BarService {
     @Headers("ZUMO-API-VERSION: 2.0.0")
     @GET("api/values")
     Call<Void> leaveBar();
+
+    @Headers("ZUMO-API-VERSION: 2.0.0")
+    @GET("api/values")
+    Call<Void> retrieveNewsInfo();
 }

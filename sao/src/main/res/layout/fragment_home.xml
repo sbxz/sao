@@ -9,8 +9,8 @@
         style="?android:attr/android:progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -19,22 +19,23 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/currentBarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="visible"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
-                android:id="@+id/currentBarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingTop="14dp"
-                android:paddingBottom="54dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:visibility="visible"
@@ -49,8 +50,8 @@
                         android:id="@+id/barThumbnail"
                         android:layout_width="88dp"
                         android:layout_height="88dp"
-                        android:background="@mipmap/ic_launcher"
-                        android:layout_marginRight="16dp" />
+                        android:layout_marginRight="16dp"
+                        android:background="@mipmap/ic_launcher" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -63,7 +64,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#ffffff"
+                            android:text="La kolok"
+                            android:layout_marginBottom="10dp"
                             android:textSize="24sp" />
+
+                        <TextView
+                            android:id="@+id/orderStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -71,17 +81,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/homeRecycerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/homeRecycerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

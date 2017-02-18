@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -82,6 +85,24 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         setupCatalog();
 
         updateCart();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bar_infos_menu, menu);
+
+        MenuItem infoItem = menu.findItem(R.id.action_info);
+        MenuItemCompat.setActionView(infoItem, R.layout.action_icon_info);
+
+        View view = MenuItemCompat.getActionView(infoItem);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(BarInfoActivity.class);
+            }
+        });
+
+        return true;
     }
 
     @Override
