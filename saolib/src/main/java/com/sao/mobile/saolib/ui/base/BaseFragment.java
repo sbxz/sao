@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sao.mobile.saolib.SaoConstants;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by Seb on 03/08/2016.
@@ -70,8 +74,13 @@ public abstract class BaseFragment extends Fragment {
      * Initialize retrofit for api call
      */
     public void initRetrofit() {
+        Gson mGson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(SaoConstants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
         initServices();

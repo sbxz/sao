@@ -44,7 +44,7 @@ public class BarNotificationService extends BaseService {
         Intent intent = new Intent(HomeFragment.UPDATE_CURRENT_BAR);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
-        startForeground(BAR_NOTIFICATION_ID, getBarNotification(this, mUserManager.currentBar, mUserManager.currentBar.getBarName(), getString(R.string.notification_welcome), mUserManager.currentBar.getBarThumbnail()));
+        startForeground(BAR_NOTIFICATION_ID, getBarNotification(this, mUserManager.currentBar, mUserManager.currentBar.getName(), getString(R.string.notification_welcome), mUserManager.currentBar.getThumbnail()));
     }
 
     public static Notification getBarNotification(Context context, Bar bar, String barTitle, String contentText, String barThumbnail) {

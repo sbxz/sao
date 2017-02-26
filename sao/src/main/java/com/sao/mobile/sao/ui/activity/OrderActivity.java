@@ -107,15 +107,13 @@ public class OrderActivity extends BaseActivity {
                     .setAction("Action", null).show();
         }
 
-        Call<Void> barCall = mBarService.launchTraderOrder();
-        barCall.enqueue(new Callback<Void>() {
+        Call<Order> barCall = mBarService.startOrder(mOrderManager.order);
+        barCall.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Order> call, Response<Order> response) {
                 Log.i(TAG, "Success confirm order");
-                Snackbar.make(getView(), getString(R.string.order_step_wait), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
 
-                mOrderManager.setWaitOrder();
+                mOrderManager.order = response.body();
                 updateViewByStep();
 
                 NotificationManager notificationManager =
@@ -123,11 +121,11 @@ public class OrderActivity extends BaseActivity {
 
                 notificationManager.notify(
                         BarNotificationService.BAR_NOTIFICATION_ID,
-                        BarNotificationService.getBarNotification(mContext, mUserManager.currentBar, mUserManager.currentBar.getBarName(), getString(R.string.order_step_wait), mUserManager.currentBar.getBarThumbnail()));
+                        BarNotificationService.getBarNotification(mContext, mUserManager.currentBar, mUserManager.currentBar.getName(), getString(R.string.order_step_wait), mUserManager.currentBar.getThumbnail()));
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Order> call, Throwable t) {
                 Log.e(TAG, "Fail confirm order. Message= " + t.getMessage());
                 Snackbar.make(getView(), "Fail", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();

@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import com.sao.mobile.saolib.SaoConstants;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by Seb on 11/02/2017.
@@ -26,6 +28,8 @@ public abstract class BaseService extends Service {
     public void initRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(SaoConstants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
         initServices();

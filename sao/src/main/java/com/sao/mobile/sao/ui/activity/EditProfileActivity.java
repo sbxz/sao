@@ -25,7 +25,7 @@ public class EditProfileActivity extends BaseActivity {
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar(toolbar);
-        getSupportActionBar().setTitle(mUserManager.userName);
+        getSupportActionBar().setTitle(mUserManager.currentUser.getName());
     }
     @Override
     protected void initServices() {

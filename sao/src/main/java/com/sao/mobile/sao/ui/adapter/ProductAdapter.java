@@ -33,14 +33,14 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LayoutInflater mLayoutInflater;
 
     private List<Product> mItems;
-    private String mBarId;
+    private Long mBarId;
     private Context mContext;
     private OnItemClickListener mListener;
 
     private OrderManager mOrderManager = OrderManager.getInstance();
     private UserManager mUserManager = UserManager.getInstance();
 
-    public ProductAdapter(Context context, String barId, List<Product> items, OnItemClickListener listener) {
+    public ProductAdapter(Context context, Long barId, List<Product> items, OnItemClickListener listener) {
         this.mBarId = barId;
         this.mContext = context;
         this.mItems = items != null ? items : new ArrayList<Product>();
@@ -64,11 +64,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         productViewHolder.productName.setText(product.getName());
         productViewHolder.productDesc.setText(product.getDescription());
-        productViewHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
+        productViewHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice().toString()));
         productViewHolder.quantityFrameLayout.setVisibility(View.GONE);
-        productViewHolder.productQuantity.setText(product.getQuantity());
+        productViewHolder.productQuantity.setText(String.valueOf(product.getQuantity()));
 
-        productViewHolder.quantityFrameLayout.setVisibility(Double.parseDouble(product.getQuantity()) > 0 ? View.VISIBLE : View.GONE);
+        productViewHolder.quantityFrameLayout.setVisibility(product.getQuantity() > 0 ? View.VISIBLE : View.GONE);
 
         productViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,14 +83,14 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 productViewHolder.quantityFrameLayout.setVisibility(View.VISIBLE);
-                productViewHolder.productQuantity.setText(product.getQuantity());
+                productViewHolder.productQuantity.setText(String.valueOf(product.getQuantity()));
                 mListener.onItemClick(product);
             }
         });
     }
 
     private boolean isOrderOk() {
-        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getId())) {
+        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getBarId())) {
             return false;
         }
 
@@ -113,7 +113,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void updateProductList() {
-        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getId())) {
+        if (mUserManager.currentBar == null || !mBarId.equals(mUserManager.currentBar.getBarId())) {
             return;
         }
 
@@ -122,7 +122,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             isFind = false;
             if (mOrderManager.order != null && mOrderManager.order.getProducts() != null) {
                 for (Product orderProduct : mOrderManager.order.getProducts()) {
-                    if (product.getId().equals(orderProduct.getId())) {
+                    if (product.getProductId().equals(orderProduct.getProductId())) {
                         isFind = true;
                         product.setQuantity(orderProduct.getQuantity());
                     }
@@ -130,7 +130,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             if (!isFind) {
-                product.setQuantity("0");
+                product.setQuantity(0);
             }
 
         }

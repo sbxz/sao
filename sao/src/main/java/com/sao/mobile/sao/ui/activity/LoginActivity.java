@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.entities.User;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.api.LoginService;
 import com.sao.mobile.sao.ui.MainActivity;
@@ -97,8 +98,7 @@ public class LoginActivity extends BaseActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.i(TAG, "Success login");
                 LocalStore.writePreferences(mContext, LocalStore.SESSION_ID, "LOCAL_SESSION_ID");
-                mUserManager.userThumbnail = "http://i.imgur.com/CqmBjo5.jpg";
-                mUserManager.userName = "Seb";
+                mUserManager.currentUser = new User( "Seb", "http://i.imgur.com/CqmBjo5.jpg");
                 startActivity(MainActivity.class);
                 hideProgressDialog();
             }

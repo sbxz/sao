@@ -19,7 +19,10 @@ import java.util.Map;
 public class SaoMessagingService extends FirebaseMessagingService {
     private static final String TAG = SaoMessagingService.class.getSimpleName();
 
-    public static final String ORDER_FINISH = "orderFinish";
+    public static final String KEY_TYPE = "type";
+
+    public static final String TYPE_ORDER_FINISH = "orderFinish";
+    public static final String TYPE_ORDER_WAIT = "orderWait";
 
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
@@ -48,18 +51,21 @@ public class SaoMessagingService extends FirebaseMessagingService {
      * @param data payload with our key values
      */
     private void parseNotification(Map<String, String> data) {
-        String type = data.get("type");
+        String type = data.get(KEY_TYPE);
 
         switch (type)
         {
-            case ORDER_FINISH:
+            case TYPE_ORDER_FINISH:
+                orderFinish(data);
+                break;
+            case TYPE_ORDER_WAIT:
                 orderFinish(data);
                 break;
         }
     }
 
     private void orderFinish(Map<String, String> data) {
-        Intent intent = new Intent(ORDER_FINISH);
+        Intent intent = new Intent(TYPE_ORDER_FINISH);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
         NotificationManager notificationManager =
@@ -67,6 +73,6 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(
                 BarNotificationService.BAR_NOTIFICATION_ID,
-                BarNotificationService.getBarNotification(getBaseContext(), mUserManager.currentBar, mUserManager.currentBar.getBarName(), getString(R.string.order_step_finish), mUserManager.currentBar.getBarThumbnail()));
+                BarNotificationService.getBarNotification(getBaseContext(), mUserManager.currentBar, mUserManager.currentBar.getName(), getString(R.string.order_step_finish), mUserManager.currentBar.getThumbnail()));
     }
 }

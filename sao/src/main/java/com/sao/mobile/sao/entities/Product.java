@@ -1,24 +1,40 @@
 package com.sao.mobile.sao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
  * Created by Seb on 23/01/2017.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Serializable {
-    private String id;
-    private String name;
-    private String description;
-    private String price;
-    private String quantity;
+    @SerializedName("productId")
+    private Long productId;
 
-    public Product(String id, String name, String description, String price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.quantity = "0";
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("price")
+    private Double price;
+
+    @SerializedName("quantity")
+    private int quantity = 0;
+
+    public Product() {
+
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -29,14 +45,6 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -45,25 +53,23 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public String getId() {
-        return id;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     public void incrementQuantity() {
-        Integer quantityInt = Integer.parseInt(this.quantity);
-        quantityInt++;
-        quantity = quantityInt.toString();
+        quantity++;
     }
 }

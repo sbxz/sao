@@ -32,6 +32,8 @@ import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by Seb on 03/08/2016.
@@ -69,6 +71,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void initRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(SaoConstants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
         initServices();

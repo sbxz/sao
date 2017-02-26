@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.ActuBar;
+import com.sao.mobile.sao.entities.News;
 import com.sao.mobile.sao.entities.Bar;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
-import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,14 +32,14 @@ import java.util.List;
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<ActuBar> mItems;
+    private List<News> mItems;
     private Context mContext;
 
     private LayoutInflater mLayoutInflater;
 
-    public HomeAdapter(Context context, List<ActuBar> items) {
+    public HomeAdapter(Context context, List<News> items) {
         this.mContext = context;
-        this.mItems = items != null ? items : new ArrayList<ActuBar>();
+        this.mItems = items != null ? items : new ArrayList<News>();
     }
 
     @Override
@@ -52,18 +55,26 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final HomeViewHolder homeViewHolder = (HomeViewHolder) holder;
-        ActuBar actuBar = (ActuBar) mItems.get(position);
-        final Bar bar = actuBar.getBar();
+        News news = (News) mItems.get(position);
+        final Bar bar = news.getBar();
 
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
-        Picasso.with(mContext).load(bar.getBarThumbnail())
+        Picasso.with(mContext).load(bar.getThumbnail())
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .into(homeViewHolder.barThumbnail);
 
-        homeViewHolder.date.setText(actuBar.getDate());
-        homeViewHolder.barText.setText(actuBar.getText());
-        homeViewHolder.barName.setText(bar.getBarName());
+        long now = System.currentTimeMillis();
+        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
+                news.getCreated(),
+                now,
+                DateUtils.SECOND_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_RELATIVE);
+
+        homeViewHolder.date.setText(relavetime);
+
+        homeViewHolder.barText.setText(news.getContent());
+        homeViewHolder.barName.setText(bar.getName());
 
         homeViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +102,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mItems.size();
     }
 
-    public void addListItem(List<ActuBar> listActu) {
-        mItems = listActu;
+    public void addListItem(List<News> newsList) {
+        mItems = newsList;
         notifyDataSetChanged();
     }
 

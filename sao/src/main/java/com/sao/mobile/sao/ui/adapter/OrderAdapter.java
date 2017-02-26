@@ -51,8 +51,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final ProductViewHolder orderHolder = (ProductViewHolder) holder;
         final Product product = mItems.get(position);
         orderHolder.productName.setText(product.getName());
-        orderHolder.productPrice.setText(UnitPriceUtils.addEuro(String.valueOf(Double.parseDouble(product.getPrice()) * Double.parseDouble(product.getQuantity()))));
-        orderHolder.productQuantity.setText(product.getQuantity());
+        orderHolder.productPrice.setText(UnitPriceUtils.addEuro(String.valueOf(Double.parseDouble(product.getPrice().toString()) * product.getQuantity())));
+        orderHolder.productQuantity.setText(String.valueOf(product.getQuantity()));
 
         orderHolder.lessQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,8 +62,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 lessQuantity(product);
-                orderHolder.productQuantity.setText(product.getQuantity());
-                orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
+                orderHolder.productQuantity.setText(String.valueOf(product.getQuantity()));
+                orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice().toString()));
             }
         });
 
@@ -75,8 +75,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 moreQuantity(product);
-                orderHolder.productQuantity.setText(product.getQuantity());
-                orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
+                orderHolder.productQuantity.setText(String.valueOf(product.getQuantity()));
+                orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice().toString()));
             }
         });
     }
@@ -84,7 +84,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void moreQuantity(Product product) {
         product = mOrderManager.addProduct(product);
         for (Product item : mItems) {
-            if (item.getId().equals(product.getId())) {
+            if (item.getProductId().equals(product.getProductId())) {
                 int index = mItems.indexOf(item);
                 notifyItemChanged(index);
                 break;
@@ -100,7 +100,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Boolean isFind = false;
 
         for (Product prod : mItems) {
-            if (prod.getId().equals(product.getId())) {
+            if (prod.getProductId().equals(product.getProductId())) {
                 isFind = true;
                 int index = mItems.indexOf(prod);
                 notifyItemChanged(index);

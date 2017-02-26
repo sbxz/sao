@@ -36,21 +36,21 @@ public class OrderManager {
 
         if(order == null) {
             List<Product> products = new ArrayList<>();
-            product.setQuantity("1");
+            product.setQuantity(1);
             products.add(product);
-            order = new Order(calculPrice(product), products);
+            order = new Order(mUserManager.currentBar.getBarId(), calculPrice(product), products);
         } else {
             Boolean isFind = false;
             for(Product item : order.getProducts()) {
-                if(item.getId().equals(product.getId())) {
-                    product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) + 1)));
+                if(item.getProductId().equals(product.getProductId())) {
+                    product.setQuantity(product.getQuantity() + 1);
                     order.getProducts().set(order.getProducts().indexOf(item), product);
                     isFind = true;
                 }
             }
 
             if(!isFind) {
-                product.setQuantity("1");
+                product.setQuantity(1);
                 order.getProducts().add(product);
             }
 
@@ -69,11 +69,11 @@ public class OrderManager {
         Boolean isRemove = false;
         Boolean isFind = false;
         for(Product item : order.getProducts()) {
-            if(item.getId().equals(product.getId())) {
+            if(item.getProductId().equals(product.getProductId())) {
                 isFind = true;
 
                 if(Integer.valueOf(item.getQuantity()) > 1) {
-                    product.setQuantity(String.valueOf((Integer.valueOf(product.getQuantity()) - 1)));
+                    product.setQuantity(product.getQuantity() - 1);
                 } else {
                     isRemove = true;
                     order.getProducts().remove(item);
@@ -95,7 +95,7 @@ public class OrderManager {
     }
 
     private double calculPrice(Product product) {
-        return Double.parseDouble(product.getPrice());
+        return Double.parseDouble(product.getPrice().toString());
     }
 
     public String getTotalQuantityAsString() {

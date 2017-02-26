@@ -171,6 +171,7 @@
     <orderEntry type="library" exported="" name="animated-vector-drawable-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-9.4.0" level="project" />
+    <orderEntry type="library" exported="" name="converter-jackson-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-9.4.0" level="project" />
@@ -178,12 +179,14 @@
     <orderEntry type="library" exported="" name="play-services-vision-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.4.0" level="project" />
+    <orderEntry type="library" exported="" name="jackson-core-2.7.2" level="project" />
     <orderEntry type="library" exported="" name="firebase-messaging-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gass-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="guava-18.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-auth-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-config-9.4.0" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.7.2" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-connection-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-9.4.0" level="project" />
@@ -215,6 +218,7 @@
     <orderEntry type="library" exported="" name="play-services-identity-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="palette-v7-24.1.1" level="project" />
+    <orderEntry type="library" exported="" name="jackson-annotations-2.7.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-24.1.1" level="project" />
@@ -222,11 +226,12 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-9.4.0" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-9.4.0" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.7" level="project" />
     <orderEntry type="library" exported="" name="retrofit-2.1.0" level="project" />
+    <orderEntry type="library" exported="" name="converter-gson-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="azure-mobile-android-3.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-safetynet-9.4.0" level="project" />

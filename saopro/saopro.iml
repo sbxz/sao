@@ -216,10 +216,10 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-9.4.0" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-9.4.0" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.7" level="project" />
     <orderEntry type="library" exported="" name="retrofit-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="azure-mobile-android-3.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-9.4.0" level="project" />
@@ -233,5 +233,10 @@
     <orderEntry type="library" exported="" name="play-services-tagmanager-9.4.0" level="project" />
     <orderEntry type="module" module-name="saolib" exported="" />
     <orderEntry type="library" exported="" name="android-android-24" level="project" />
+    <orderEntry type="library" exported="" name="converter-jackson-2.1.0" level="project" />
+    <orderEntry type="library" exported="" name="jackson-core-2.7.2" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.7.2" level="project" />
+    <orderEntry type="library" exported="" name="jackson-annotations-2.7.0" level="project" />
+    <orderEntry type="library" exported="" name="converter-gson-2.1.0" level="project" />
   </component>
 </module>

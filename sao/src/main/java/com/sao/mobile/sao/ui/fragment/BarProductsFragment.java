@@ -28,7 +28,7 @@ public class BarProductsFragment extends BaseFragment {
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
     private List<Product> mProducts;
-    private String mBarId;
+    private Long mBarId;
 
     @Override
     protected void initServices() {
@@ -37,7 +37,7 @@ public class BarProductsFragment extends BaseFragment {
     public BarProductsFragment() {
     }
 
-    public void addProducts(String barId, List<Product> products) {
+    public void addProducts(Long barId, List<Product> products) {
         this.mProducts = products;
         this.mBarId = barId;
     }

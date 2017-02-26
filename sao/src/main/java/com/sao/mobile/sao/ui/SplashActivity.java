@@ -12,6 +12,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.entities.User;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.api.UserService;
 import com.sao.mobile.sao.ui.activity.LoginActivity;
@@ -61,18 +62,17 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void retrieveUserInfo() {
-        Call<Void> deviceCall = mUserService.retrieveUserInfo();
-        deviceCall.enqueue(new Callback<Void>() {
+        Call<User> deviceCall = mUserService.retrieveUserInfo();
+        deviceCall.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 Log.i(TAG, "Success retrieve user info");
-                mUserManager.userThumbnail = "http://i.imgur.com/CqmBjo5.jpg";
-                mUserManager.userName = "Seb";
+                mUserManager.currentUser = response.body();
                 startMainActivity();
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.e(TAG, "Fail retrieve user info. Message= " + t.getMessage());
                 Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -86,7 +86,7 @@ public class SplashActivity extends BaseActivity {
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "DeviceId: " + deviceId + "DeviceToken: " + deviceToken);
 
-        Call<Void> deviceCall = mUserService.registerDevice();
+        Call<Void> deviceCall = mUserService.registerDevice(deviceId, deviceToken);
         deviceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

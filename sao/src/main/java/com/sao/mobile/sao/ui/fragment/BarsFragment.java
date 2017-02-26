@@ -83,18 +83,17 @@ public class BarsFragment extends BaseFragment {
     }
 
     private void refreshBarsList() {
-        Call<Void> barsCall = mUserService.retrieveBars();
-        barsCall.enqueue(new Callback<Void>() {
+        Call<List<Bar>> barsCall = mUserService.retrieveBars();
+        barsCall.enqueue(new Callback<List<Bar>>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {
                 Log.i(TAG, "Success retrieve bars");
                 hideProgressLoad();
-                List<Bar> bars = parseData();
-                mBarAdapter.addListItem(bars);
+                mBarAdapter.addListItem(response.body());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<List<Bar>> call, Throwable t) {
                 hideProgressLoad();
                 Log.e(TAG, "Fail retrieve user bar. Message= " + t.getMessage());
                 Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
@@ -111,88 +110,5 @@ public class BarsFragment extends BaseFragment {
     private void showProgressLoad() {
         mLoadProgressBar.setVisibility(View.VISIBLE);
         mBarRecyler.setVisibility(View.GONE);
-    }
-
-    private List<Bar> parseData() {
-        List<Product> products = new ArrayList<Product>();
-        products.add(new Product("1", "Bière", "Plein de chose", "2"));
-        products.add(new Product("2", "Café", "Plein de chose","3"));
-        products.add(new Product("3", "Vodka", "Plein de chose","5"));
-        products.add(new Product("4", "Grim", "Plein de chose","10"));
-        products.add(new Product("5", "Pastis", "Plein de chose","7"));
-        products.add(new Product("6", "Ricard", "Plein de chose","6"));
-        products.add(new Product("7", "Eau", "Plein de chose","9"));
-
-        List<Product> products1 = new ArrayList<Product>();
-        products1.add(new Product("8", "Bière", "Plein de chose", "4"));
-        products1.add(new Product("9", "Café", "Plein de chose","5"));
-        products1.add(new Product("10", "Vodka", "Plein de chose","7"));
-        products1.add(new Product("11", "Grim", "Plein de chose","3"));
-        products1.add(new Product("12", "Pastis", "Plein de chose","2"));
-        products1.add(new Product("13", "Ricard", "Plein de chose","5"));
-        products1.add(new Product("14", "Eau", "Plein de chose","10"));
-
-        List<Product> products2 = new ArrayList<Product>();
-        products2.add(new Product("15", "Bière", "Plein de chose", "10"));
-        products2.add(new Product("16", "Café", "Plein de chose","5"));
-        products2.add(new Product("17", "Vodka", "Plein de chose","8"));
-        products2.add(new Product("18", "Grim", "Plein de chose","7"));
-        products2.add(new Product("19", "Pastis", "Plein de chose","3"));
-        products2.add(new Product("20", "Ricard", "Plein de chose","2"));
-        products2.add(new Product("21", "Eau", "Plein de chose","1"));
-
-        List<Product> products3 = new ArrayList<Product>();
-        products3.add(new Product("22", "Bière", "Plein de chose", "10"));
-        products3.add(new Product("23", "Café", "Plein de chose","5"));
-        products3.add(new Product("24", "Vodka", "Plein de chose","8"));
-        products3.add(new Product("25", "Grim", "Plein de chose","7"));
-        products3.add(new Product("26", "Pastis", "Plein de chose","3"));
-        products3.add(new Product("27", "Ricard", "Plein de chose","2"));
-        products3.add(new Product("28", "Eau", "Plein de chose","1"));
-
-        List<Product> products4 = new ArrayList<Product>();
-        products4.add(new Product("29", "Bière", "Plein de chose", "10"));
-        products4.add(new Product("30", "Café", "Plein de chose","5"));
-        products4.add(new Product("31", "Vodka", "Plein de chose","8"));
-        products4.add(new Product("34", "Grim", "Plein de chose","7"));
-        products4.add(new Product("35", "Pastis", "Plein de chose","3"));
-        products4.add(new Product("36", "Ricard", "Plein de chose","2"));
-        products4.add(new Product("37", "Eau", "Plein de chose","1"));
-
-        List<Product> products5 = new ArrayList<Product>();
-        products5.add(new Product("38", "Bière", "Plein de chose", "10"));
-        products5.add(new Product("39", "Café", "Plein de chose","5"));
-        products5.add(new Product("40", "Vodka", "Plein de chose","8"));
-        products5.add(new Product("41", "Grim", "Plein de chose","7"));
-        products5.add(new Product("42", "Pastis", "Plein de chose","3"));
-        products5.add(new Product("43", "Ricard", "Plein de chose","2"));
-        products5.add(new Product("44", "Eau", "Plein de chose","1"));
-
-        List<Product> products6 = new ArrayList<Product>();
-        products6.add(new Product("45", "Bière", "Plein de chose", "10"));
-        products6.add(new Product("46", "Café", "Plein de chose","5"));
-        products6.add(new Product("47", "Vodka", "Plein de chose","8"));
-        products6.add(new Product("48", "Grim", "Plein de chose","7"));
-        products6.add(new Product("49", "Pastis", "Plein de chose","3"));
-        products6.add(new Product("50", "Ricard", "Plein de chose","2"));
-        products6.add(new Product("51", "Eau", "Plein de chose","1"));
-
-        List<Catalog> catalog = new ArrayList<Catalog>();
-        catalog.add(new Catalog("Les Softs", products));
-        catalog.add(new Catalog("Les Klassic", products1));
-        catalog.add(new Catalog("Les Supérior", products2));
-        catalog.add(new Catalog("Les Bières", products3));
-        catalog.add(new Catalog("Les Chaud", products4));
-        catalog.add(new Catalog("Cocktails", products5));
-        catalog.add(new Catalog("Shooters", products6));
-
-        List<Bar> bars = new ArrayList<Bar>();
-        bars.add(new Bar("1", "La kolok", "http://i.imgur.com/CqmBjo5.jpg", "", "", "100", catalog));
-        bars.add(new Bar("2", "Red house", "http://i.imgur.com/9gbQ7YR.jpg", "", "", "100", catalog));
-        bars.add(new Bar("3", "Petit Salon", "http://i.imgur.com/P5JLfjk.jpg", "", "", "100", catalog));
-        bars.add(new Bar("4", "Peroquet bourré", "http://i.imgur.com/FI49ftb.jpg", "", "", "100", catalog));
-        bars.add(new Bar("5", "L'abreuvoir", "http://i.imgur.com/yAdbrLp.jpg", "", "", "100", catalog));
-        bars.add(new Bar("6", "Shamrock", "http://i.imgur.com/DAl0KB8.jpg", "", "", "100", catalog));
-        return bars;
     }
 }

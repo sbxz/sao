@@ -178,11 +178,11 @@ public class MainActivity extends BaseActivity
     private void setupMenuListener() {
         View headerLayout = mNavigationView.getHeaderView(0);
         mUserName = (TextView) headerLayout.findViewById(R.id.user_name);
-        mUserName.setText(mUserManager.userName);
+        mUserName.setText(mUserManager.currentUser.getName());
 
         mUserThumbnail = (ImageView) headerLayout.findViewById(R.id.userThumbnail);
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.menu_bar_avatar_size);
-        Picasso.with(mContext).load(mUserManager.userThumbnail)
+        Picasso.with(mContext).load(mUserManager.currentUser.getThumbnail())
                 .placeholder(R.drawable.sao)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()

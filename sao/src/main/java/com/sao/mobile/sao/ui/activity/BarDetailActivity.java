@@ -117,7 +117,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
 
     private void setCarButtonVisible() {
         ViewGroup.MarginLayoutParams layoutParam = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
-        if(mBar.getId().equals(mUserManager.currentBar.getId()) && mOrderManager.getProductSize() > 0) {
+        if(mUserManager.currentBar != null && mBar.getBarId().equals(mUserManager.currentBar.getBarId()) && mOrderManager.getProductSize() > 0) {
             mCartButton.setVisibility(View.VISIBLE);
             layoutParam.bottomMargin = (int) getResources().getDimension(R.dimen.cart_button_height);
         } else {
@@ -156,10 +156,10 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         setupToolbar(toolbar);
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mCollapsingToolbarLayout.setTitle(mBar.getBarName());
+        mCollapsingToolbarLayout.setTitle(mBar.getName());
 
         mBarThumbnail = (ImageView) findViewById(R.id.barThumbnail);
-        Picasso.with(mContext).load(mBar.getBarThumbnail()).fit().centerCrop().into(mBarThumbnail, new Callback() {
+        Picasso.with(mContext).load(mBar.getThumbnail()).fit().centerCrop().into(mBarThumbnail, new Callback() {
             @Override
             public void onSuccess() {
                 Bitmap bitmap = ((BitmapDrawable) mBarThumbnail.getDrawable()).getBitmap();
@@ -177,7 +177,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         });
 
         mBarPoint = (TextView) findViewById(R.id.barPoint);
-        mBarPoint.setText(mBar.getPoint() + " " + getString(R.string.bar_details_point));
+        //mBarPoint.setText(mBar.getPoint() + " " + getString(R.string.bar_details_point));
         ViewCompat.setTransitionName(mBarPoint, POINT_TRANSITION_NAME);
     }
 
@@ -217,10 +217,10 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         BarProductsFragment barProductsFragment;
-        for (Catalog catalog : mBar.getCatalogs()) {
+        for (String mapKey : mBar.getCatalog().keySet()) {
             barProductsFragment = new BarProductsFragment();
-            barProductsFragment.addProducts(mBar.getId(), catalog.getProducts());
-            adapter.addFragment(barProductsFragment, catalog.getType());
+            barProductsFragment.addProducts(mBar.getBarId(), ((List<Product>) mBar.getCatalog().get(mapKey)));
+            adapter.addFragment(barProductsFragment, mapKey);
         }
 
         mViewPager.setAdapter(adapter);

@@ -1,55 +1,64 @@
 package com.sao.mobile.sao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Seb on 23/01/2017.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bar implements Serializable{
-    private String id;
-    private String barName;
-    private String barThumbnail;
+    @SerializedName("barId")
+    private Long barId;
+
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("address")
     private String address;
+
+    @SerializedName("thumbnail")
+    private String thumbnail;
+
+    @SerializedName("phoneNumber")
     private String phoneNumber;
-    private String point;
-    private List<Catalog> catalogs;
 
-    public Bar(String id, String barName, String barThumbnail, String address, String phoneNumber, String point, List<Catalog> catalogs) {
-        this.id = id;
-        this.barName = barName;
-        this.barThumbnail = barThumbnail;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.point = point;
-        this.catalogs = catalogs;
+    @SerializedName("catalog")
+    private Map<String, List<Product>> catalog;
+
+    public Bar() {
     }
 
-    public String getId() {
-        return id;
+    public Long getBarId() {
+        return barId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBarId(Long barId) {
+        this.barId = barId;
     }
 
-    public String getBarName() {
-        return barName;
+    public String getName() {
+        return name;
     }
 
-    public void setBarName(String barName) {
-        this.barName = barName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getBarThumbnail() {
-        return barThumbnail;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBarThumbnail(String barThumbnail) {
-        this.barThumbnail = barThumbnail;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getAddress() {
@@ -60,6 +69,14 @@ public class Bar implements Serializable{
         this.address = address;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -68,19 +85,11 @@ public class Bar implements Serializable{
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPoint() {
-        return point;
+    public Map<String, List<Product>> getCatalog() {
+        return catalog;
     }
 
-    public void setPoint(String point) {
-        this.point = point;
-    }
-
-    public List<Catalog> getCatalogs() {
-        return catalogs;
-    }
-
-    public void setCatalogs(List<Catalog> catalogs) {
-        this.catalogs = catalogs;
+    public void setCatalog(Map<String, List<Product>> catalog) {
+        this.catalog = catalog;
     }
 }

@@ -1,19 +1,22 @@
 package com.sao.mobile.sao.service.api;
 
+import com.sao.mobile.sao.entities.Bar;
+import com.sao.mobile.sao.entities.User;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Query;
 
 public interface UserService {
-    @Headers("ZUMO-API-VERSION: 2.0.0")
-    @GET("api/values")
-    Call<Void> registerDevice();
+    @GET("device/user/register")
+    Call<Void> registerDevice(@Query("deviceId") String deviceId, @Query("token") String token);
 
-    @Headers("ZUMO-API-VERSION: 2.0.0")
-    @GET("api/values")
-    Call<Void> retrieveUserInfo();
+    @GET("user/")
+    Call<User> retrieveUserInfo();
 
-    @Headers("ZUMO-API-VERSION: 2.0.0")
-    @GET("api/values")
-    Call<Void> retrieveBars();
+    @GET("bar/")
+    Call<List<Bar>> retrieveBars();
 }

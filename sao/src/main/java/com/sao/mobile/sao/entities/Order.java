@@ -1,23 +1,42 @@
 package com.sao.mobile.sao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
  * Created by Seb on 24/01/2017.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
     public enum Step {
         FINISH, WAIT, START
     }
 
-    private int totalQuantity;
+    @SerializedName("orderId")
+    private Long orderId;
+
+    @SerializedName("barId")
+    private Long barId;
+
+    @SerializedName("totalPrice")
     private double totalPrice;
-    private List<Product> products;
+
+    @SerializedName("totalQuantity")
+    private int totalQuantity;
+
+    @SerializedName("step")
     private Step step;
 
+    @SerializedName("products")
+    private List<Product> products;
 
-    public Order(double totalPrice, List<Product> products) {
+    public Order() {
+    }
+
+    public Order(Long barId, double totalPrice, List<Product> products) {
+        this.barId = barId;
         this.totalQuantity = 1;
         this.totalPrice = totalPrice;
         this.products = products;

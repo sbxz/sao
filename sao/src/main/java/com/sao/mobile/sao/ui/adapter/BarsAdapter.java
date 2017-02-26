@@ -52,10 +52,10 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final BarsViewHolder barsViewHolder = (BarsViewHolder) holder;
         final Bar bar = mItems.get(position);
 
-        barsViewHolder.barPoint.setText(bar.getPoint() + " points");
-        barsViewHolder.barName.setText(bar.getBarName());
+        //barsViewHolder.barPoint.setText(bar.get() + " points");
+        barsViewHolder.barName.setText(bar.getName());
 
-        Picasso.with(mContext).load(bar.getBarThumbnail())
+        Picasso.with(mContext).load(bar.getThumbnail())
                 .fit()
                 .centerCrop()
                 .into(barsViewHolder.barThumbnail);
