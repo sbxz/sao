@@ -111,6 +111,11 @@ public class OrderActivity extends BaseActivity {
         barCall.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail confirm order");
+                    return;
+                }
+
                 Log.i(TAG, "Success confirm order");
 
                 mOrderManager.order = response.body();

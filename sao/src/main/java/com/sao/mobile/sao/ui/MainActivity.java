@@ -257,6 +257,11 @@ public class MainActivity extends BaseActivity
         loginCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail logout");
+                    return;
+                }
+
                 Log.i(TAG, "Success logout");
             }
 

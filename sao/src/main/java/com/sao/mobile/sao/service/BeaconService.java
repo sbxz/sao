@@ -126,6 +126,11 @@ public class BeaconService extends BaseService {
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail leave");
+                    return;
+                }
+
                 Log.i(TAG, "Success leave Bar");
             }
 
@@ -184,6 +189,11 @@ public class BeaconService extends BaseService {
         barCall.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail launch order");
+                    return;
+                }
+
                 Log.i(TAG, "Success launch order bar");
             }
 

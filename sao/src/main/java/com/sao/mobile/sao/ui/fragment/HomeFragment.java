@@ -128,8 +128,13 @@ public class HomeFragment extends BaseFragment {
         newsCall.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
-                Log.i(TAG, "Success retrieve news");
                 hideProgressLoad();
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve news");
+                    return;
+                }
+
+                Log.i(TAG, "Success retrieve news");
                 mHomeAdapter.addListItem(response.body());
             }
 

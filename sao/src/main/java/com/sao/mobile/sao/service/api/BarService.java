@@ -28,6 +28,6 @@ public interface BarService {
     @GET("bar/beacon/leave")
     Call<Void> leaveBar(@Query("barId") Long barId);
 
-    @GET("news")
+    @GET("news/")
     Call<List<News>> getNews();
 }

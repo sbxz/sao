@@ -66,6 +66,11 @@ public class SplashActivity extends BaseActivity {
         deviceCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve user info");
+                    return;
+                }
+
                 Log.i(TAG, "Success retrieve user info");
                 mUserManager.currentUser = response.body();
                 startMainActivity();
@@ -90,6 +95,11 @@ public class SplashActivity extends BaseActivity {
         deviceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail register device");
+                    return;
+                }
+
                 Log.i(TAG, "Success register device");
             }
 

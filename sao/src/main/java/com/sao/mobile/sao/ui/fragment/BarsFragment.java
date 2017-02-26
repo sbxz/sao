@@ -87,8 +87,13 @@ public class BarsFragment extends BaseFragment {
         barsCall.enqueue(new Callback<List<Bar>>() {
             @Override
             public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {
-                Log.i(TAG, "Success retrieve bars");
                 hideProgressLoad();
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve bars");
+                    return;
+                }
+
+                Log.i(TAG, "Success retrieve bars");
                 mBarAdapter.addListItem(response.body());
             }
 
