@@ -1,3 +1,4 @@
 <resources>
-
+    <!-- Failure retrieve data-->
+    <string name="failure_data">Erreur pendant le chargement des données</string>
 </resources>

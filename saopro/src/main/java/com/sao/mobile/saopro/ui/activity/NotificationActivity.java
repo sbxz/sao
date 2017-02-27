@@ -1,9 +1,6 @@
 package com.sao.mobile.saopro.ui.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,12 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Order;
-import com.sao.mobile.saopro.service.api.BarService;
+import com.sao.mobile.saopro.manager.ApiManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,15 +26,11 @@ public class NotificationActivity extends BaseActivity {
     public static final int CLIENT_PRESENT = 0;
     public static final int CLIENT_ALL = 0;
 
-    private BarService mBarService;
-
     private Spinner mReceiverSpinner;
     private Button mSendNotification;
     private TextInputLayout mInputMessageLayout;
 
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +78,7 @@ public class NotificationActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
             if(mInputMessageLayout.getEditText().length() >  mInputMessageLayout.getCounterMaxLength()) {
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                SnackBarUtils.showSnackError(getView());
                 return;
             }
             sendNotification();
@@ -97,7 +89,7 @@ public class NotificationActivity extends BaseActivity {
     private void sendNotification() {
         int id = mReceiverSpinner.getId();
         String message = mInputMessageLayout.getEditText().getText().toString();
-        Call<Void> barServiceCall = mBarService.sendNotification();
+        Call<Void> barServiceCall = mApiManager.barService.sendNotification();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -107,9 +99,8 @@ public class NotificationActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail send notification. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail send notification.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

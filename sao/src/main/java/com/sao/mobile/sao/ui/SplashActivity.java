@@ -1,23 +1,17 @@
 package com.sao.mobile.sao.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.User;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.service.api.UserService;
 import com.sao.mobile.sao.ui.activity.LoginActivity;
-import com.sao.mobile.saolib.service.SaoMobileService;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,14 +21,8 @@ public class SplashActivity extends BaseActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
-    private UserService mUserService;
-
     private UserManager mUserManager = UserManager.getInstance();
-
-    @Override
-    protected void initServices() {
-        mUserService = retrofit.create(UserService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +50,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void retrieveUserInfo() {
-        Call<User> deviceCall = mUserService.retrieveUserInfo();
+        Call<User> deviceCall = mApiManager.userService.retrieveUserInfo();
         deviceCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -78,9 +66,8 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, "Fail retrieve user info. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail retrieve user info.", t);
+                SnackBarUtils.showSnackError(getView());
                 retrieveUserInfo();
             }
         });
@@ -91,7 +78,7 @@ public class SplashActivity extends BaseActivity {
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "DeviceId: " + deviceId + "DeviceToken: " + deviceToken);
 
-        Call<Void> deviceCall = mUserService.registerDevice(deviceId, deviceToken);
+        Call<Void> deviceCall = mApiManager.userService.registerDevice(deviceId, deviceToken);
         deviceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -105,9 +92,8 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail register device. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail register device.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

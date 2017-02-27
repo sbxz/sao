@@ -1,13 +1,9 @@
 package com.sao.mobile.sao.ui.activity;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,21 +13,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Order;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.BarNotificationService;
-import com.sao.mobile.sao.service.api.BarService;
-import com.sao.mobile.sao.ui.adapter.HomeAdapter;
 import com.sao.mobile.sao.ui.adapter.OrderAdapter;
-import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
-import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,12 +45,7 @@ public class OrderActivity extends BaseActivity {
     private CardView mStepOrderCard;
     private TextView mOrderStepText;
 
-    private BarService mBarService;
-
-    @Override
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +96,7 @@ public class OrderActivity extends BaseActivity {
                     .setAction("Action", null).show();
         }
 
-        Call<Order> barCall = mBarService.startOrder(mOrderManager.order);
+        Call<Order> barCall = mApiManager.barService.startOrder(mOrderManager.order);
         barCall.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
@@ -131,9 +120,8 @@ public class OrderActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                Log.e(TAG, "Fail confirm order. Message= " + t.getMessage());
-                Snackbar.make(getView(), "Fail", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail confirm order.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

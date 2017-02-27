@@ -61,10 +61,5 @@ public class BarSelectFragment extends BaseFragment {
     public void bindData(Bar bar) {
         this.bar = bar;
     }
-
-    @Override
-    protected void initServices() {
-
-    }
 }
 

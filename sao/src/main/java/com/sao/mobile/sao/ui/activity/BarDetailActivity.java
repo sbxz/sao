@@ -3,6 +3,7 @@ package com.sao.mobile.sao.ui.activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,11 +12,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,10 +23,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Catalog;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -63,11 +60,6 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     private UserManager mUserManager = UserManager.getInstance();
 
     private Bar mBar;
-
-    @Override
-    protected void initServices() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

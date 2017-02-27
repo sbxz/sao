@@ -15,7 +15,6 @@ import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.Order;
-import com.sao.mobile.saopro.service.api.BarService;
 import com.sao.mobile.saopro.ui.adapter.OrderAdapter;
 
 public class OrderWaitListFragment extends BaseFragment {
@@ -27,16 +26,9 @@ public class OrderWaitListFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
-    private BarService mBarService;
-
     private OrderAdapter mOrderAdapter;
 
     public OrderWaitListFragment() {
-    }
-
-    @Override
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
     }
 
     @Override

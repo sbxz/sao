@@ -1,7 +1,6 @@
 package com.sao.mobile.saopro.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,8 +16,10 @@ import android.widget.Toast;
 
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.LocalStore;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.service.api.LoginService;
+import com.sao.mobile.saopro.manager.ApiManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,11 +36,7 @@ public class LoginActivity extends BaseActivity {
 
     private TextView mTextForgetPassword;
 
-    private LoginService mLoginService;
-
-    protected void initServices() {
-        mLoginService = retrofit.create(LoginService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +67,6 @@ public class LoginActivity extends BaseActivity {
                 submitForm();
             }
         });
-
-        initServices();
     }
 
     private void submitForm() {
@@ -85,7 +80,7 @@ public class LoginActivity extends BaseActivity {
 
         showProgressDialog(getString(R.string.connect_progress));
 
-        Call<Void> loginCall = mLoginService.login();
+        Call<Void> loginCall = mApiManager.loginService.login();
         loginCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -97,9 +92,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail login. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail login.", t);
+                SnackBarUtils.showSnackError(getView());
                 hideProgressDialog();
             }
         });

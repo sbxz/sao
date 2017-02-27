@@ -72,9 +72,4 @@ public class BarNotificationService extends BaseService {
         super.onDestroy();
         Log.i(TAG, "on destroy");
     }
-
-    @Override
-    protected void initServices() {
-
-    }
 }

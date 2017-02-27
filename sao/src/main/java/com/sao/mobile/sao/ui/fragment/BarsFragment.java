@@ -2,8 +2,6 @@ package com.sao.mobile.sao.ui.fragment;
 
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,16 +12,15 @@ import android.widget.ProgressBar;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Catalog;
-import com.sao.mobile.sao.entities.Product;
-import com.sao.mobile.sao.service.api.UserService;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,14 +38,9 @@ public class BarsFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
-    private UserService mUserService;
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     public BarsFragment() {
-    }
-
-    @Override
-    protected void initServices() {
-        mUserService = retrofit.create(UserService.class);
     }
 
     @Override
@@ -83,7 +75,7 @@ public class BarsFragment extends BaseFragment {
     }
 
     private void refreshBarsList() {
-        Call<List<Bar>> barsCall = mUserService.retrieveBars();
+        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars();
         barsCall.enqueue(new Callback<List<Bar>>() {
             @Override
             public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {
@@ -100,9 +92,8 @@ public class BarsFragment extends BaseFragment {
             @Override
             public void onFailure(Call<List<Bar>> call, Throwable t) {
                 hideProgressLoad();
-                Log.e(TAG, "Fail retrieve user bar. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail retrieve user bar.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

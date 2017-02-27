@@ -9,31 +9,14 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
-import com.sao.mobile.saolib.Constants;
-import com.sao.mobile.saolib.SaoConstants;
-import com.sao.mobile.saolib.service.SaoMobileService;
-import com.squareup.okhttp.OkHttpClient;
-
-import java.net.MalformedURLException;
-import java.util.concurrent.TimeUnit;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by Seb on 03/08/2016.
@@ -52,8 +35,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static Boolean isForeground;
 
-    public Retrofit retrofit;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,21 +42,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         isForeground = true;
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        initRetrofit();
-    }
-
-    /**
-     * Initialize retrofit for api call
-     */
-    public void initRetrofit() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(SaoConstants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        initServices();
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
@@ -182,6 +148,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     public View getView() {
         return findViewById(android.R.id.content);
     }
-
-    protected abstract void initServices();
 }

@@ -1,7 +1,6 @@
 package com.sao.mobile.saopro.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -14,9 +13,11 @@ import android.widget.TextView;
 
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.pageTransformer.CustPagerTransformer;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.Bar;
-import com.sao.mobile.saopro.service.api.BarService;
+import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.fragment.BarSelectFragment;
 
 import java.util.ArrayList;
@@ -36,12 +37,7 @@ public class BarSelectActivity extends BaseActivity {
 
     private List<BarSelectFragment> fragments = new ArrayList<>();
 
-    private BarService mBarService;
-
-    @Override
-    protected void initServices() {
-
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +55,7 @@ public class BarSelectActivity extends BaseActivity {
     }
 
     private void retrieveTraderBars() {
-        mBarService = retrofit.create(BarService.class);
-        Call<Void> retrieveBarCall = mBarService.retrieveTraderBars();
+        Call<Void> retrieveBarCall = mApiManager.barService.retrieveTraderBars();
         retrieveBarCall.enqueue(new Callback<Void>() {
 
             @Override
@@ -73,9 +68,8 @@ public class BarSelectActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Failed retrieve trader bar. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Failed retrieve trader bar.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

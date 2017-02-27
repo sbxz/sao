@@ -1,4 +1,4 @@
-package com.sao.mobile.saopro.receiver;
+package com.sao.mobile.saopro.manager;
 
 import com.sao.mobile.saopro.entities.Bar;
 

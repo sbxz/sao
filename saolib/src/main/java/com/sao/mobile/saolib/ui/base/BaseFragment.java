@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sao.mobile.saolib.SaoConstants;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import com.sao.mobile.saolib.R;
 
 /**
  * Created by Seb on 03/08/2016.
@@ -22,8 +18,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public abstract class BaseFragment extends Fragment {
 
     protected BaseActivity mContext;
-
-    public Retrofit retrofit;
 
     @Override
     public void onAttach(Context context) {
@@ -51,7 +45,6 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initRetrofit();
         super.onCreate(savedInstanceState);
     }
 
@@ -70,23 +63,12 @@ public abstract class BaseFragment extends Fragment {
         startActivity(intent);
     }
 
-    /**
-     * Initialize retrofit for api call
-     */
-    public void initRetrofit() {
-        Gson mGson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(SaoConstants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        initServices();
+    protected void showSnackError() {
+        Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
-    protected abstract void initServices();
-
-
+    protected void logApiError(String tag, String message, Throwable t) {
+        Log.e(tag, message + " Message= " + t.getMessage() + " Cause= " + t.getCause());
+    }
 }

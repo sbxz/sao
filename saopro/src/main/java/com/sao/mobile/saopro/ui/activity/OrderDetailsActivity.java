@@ -3,7 +3,6 @@ package com.sao.mobile.saopro.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +17,13 @@ import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.Customer;
 import com.sao.mobile.saopro.entities.Order;
-import com.sao.mobile.saopro.service.api.BarService;
+import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.adapter.OrderDetailsAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -43,14 +44,9 @@ public class OrderDetailsActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
-    private BarService mBarService;
-
     private Order mOrder;
 
-
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +104,7 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void finishOrder() {
-        Call<Void> barServiceCall = mBarService.finishOrder();
+        Call<Void> barServiceCall = mApiManager.barService.finishOrder();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -125,15 +121,14 @@ public class OrderDetailsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail finish orders. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail finish orders.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }
 
     private void confirmOrder() {
-        Call<Void> barServiceCall = mBarService.confirmOrder();
+        Call<Void> barServiceCall = mApiManager.barService.confirmOrder();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -150,9 +145,8 @@ public class OrderDetailsActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail confirm order. Message= " + t.getMessage());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail confirm order.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

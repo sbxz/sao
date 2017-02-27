@@ -4,18 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -27,19 +22,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.estimote.sdk.Beacon;
-import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Region;
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.SaoBeacon;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.BeaconService;
-import com.sao.mobile.sao.service.api.BarService;
-import com.sao.mobile.sao.service.api.LoginService;
-import com.sao.mobile.sao.service.api.UserService;
 import com.sao.mobile.sao.ui.activity.AboutActivity;
-import com.sao.mobile.sao.ui.activity.BarInfoActivity;
 import com.sao.mobile.sao.ui.activity.ConditionActivity;
 import com.sao.mobile.sao.ui.activity.EditProfileActivity;
 import com.sao.mobile.sao.ui.activity.LoginActivity;
@@ -50,9 +38,9 @@ import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,24 +56,11 @@ public class MainActivity extends BaseActivity
     private Toolbar mToolbar;
     private Fragment mCurrentFragment;
 
-    private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
-    private ImageView mUserThumbnail;
-    private TextView mUserName;
 
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
-
-    private LoginService mLoginService;
-    private UserService mUserService;
-    private BarService mBarService;
-
-    @Override
-    protected void initServices() {
-        mLoginService = retrofit.create(LoginService.class);
-        mUserService = retrofit.create(UserService.class);
-        mBarService = retrofit.create(BarService.class);
-    }
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +72,6 @@ public class MainActivity extends BaseActivity
 
         setupNavigationView();
         setupMenuListener();
-        initServices();
 
         startServices();
     }
@@ -115,10 +89,10 @@ public class MainActivity extends BaseActivity
     }
 
     private void setupNavigationView() {
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.setDrawerListener(toggle);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -152,8 +126,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_COARSE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -170,25 +144,24 @@ public class MainActivity extends BaseActivity
                     });
                     builder.show();
                 }
-                return;
             }
         }
     }
 
     private void setupMenuListener() {
         View headerLayout = mNavigationView.getHeaderView(0);
-        mUserName = (TextView) headerLayout.findViewById(R.id.user_name);
-        mUserName.setText(mUserManager.currentUser.getName());
+        TextView userName = (TextView) headerLayout.findViewById(R.id.user_name);
+        userName.setText(mUserManager.currentUser.getName());
 
-        mUserThumbnail = (ImageView) headerLayout.findViewById(R.id.userThumbnail);
+        ImageView userThumbnail = (ImageView) headerLayout.findViewById(R.id.userThumbnail);
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.menu_bar_avatar_size);
         Picasso.with(mContext).load(mUserManager.currentUser.getThumbnail())
                 .placeholder(R.drawable.sao)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .transform(new CircleTransformation())
-                .into(mUserThumbnail);
-        mUserThumbnail.setOnClickListener(new View.OnClickListener() {
+                .into(userThumbnail);
+        userThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(EditProfileActivity.class);
@@ -214,7 +187,7 @@ public class MainActivity extends BaseActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Fragment fragment = null;
 
@@ -253,7 +226,7 @@ public class MainActivity extends BaseActivity
         // Clear preferences for next user
         LocalStore.clearPreferences(mContext);
 
-        Call<Void> loginCall = mLoginService.logout();
+        Call<Void> loginCall = mApiManager.loginService.logout();
         loginCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -267,7 +240,8 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail logout. Message= " + t.getMessage());
+                LoggerUtils.apiFail(TAG, "Fail logout.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
 

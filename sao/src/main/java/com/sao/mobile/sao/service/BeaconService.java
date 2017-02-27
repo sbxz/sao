@@ -1,31 +1,21 @@
 package com.sao.mobile.sao.service;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Catalog;
 import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.Product;
-import com.sao.mobile.sao.entities.SaoBeacon;
 import com.sao.mobile.sao.entities.api.BeaconResponse;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.service.api.BarService;
-import com.sao.mobile.sao.ui.MainActivity;
 import com.sao.mobile.saolib.ui.base.BaseService;
+import com.sao.mobile.saolib.utils.LoggerUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,7 +34,7 @@ public class BeaconService extends BaseService {
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
 
-    private BarService mBarService;
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     public BeaconService() {
     }
@@ -52,11 +42,6 @@ public class BeaconService extends BaseService {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    @Override
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -122,7 +107,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<Void> barCall = mBarService.leaveBar(mUserManager.currentBar.getBarId());
+        Call<Void> barCall = mApiManager.barService.leaveBar(mUserManager.currentBar.getBarId());
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -136,7 +121,7 @@ public class BeaconService extends BaseService {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail leave Bar. Message= " + t.getMessage());
+                LoggerUtils.apiFail(TAG, "Fail leave Bar.", t);
             }
         });
 
@@ -149,7 +134,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<BeaconResponse> barCall = mBarService.scanBeacon(beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
+        Call<BeaconResponse> barCall = mApiManager.barService.scanBeacon(beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
         barCall.enqueue(new Callback<BeaconResponse>() {
             @Override
             public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
@@ -173,7 +158,7 @@ public class BeaconService extends BaseService {
 
             @Override
             public void onFailure(Call<BeaconResponse> call, Throwable t) {
-                Log.e(TAG, "Fail detect Bar. Message= " + t.getMessage());
+                LoggerUtils.apiFail(TAG, "Fail detect Bar.", t);
             }
         });
     }
@@ -185,7 +170,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<Order> barCall = mBarService.startOrder(mOrderManager.order);
+        Call<Order> barCall = mApiManager.barService.startOrder(mOrderManager.order);
         barCall.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {

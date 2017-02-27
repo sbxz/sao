@@ -2,16 +2,11 @@ package com.sao.mobile.saopro.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,28 +18,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.estimote.sdk.cloud.internal.User;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
-import com.sao.mobile.saolib.utils.Utils;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.Bar;
-import com.sao.mobile.saopro.receiver.UserManager;
-import com.sao.mobile.saopro.service.api.LoginService;
-import com.sao.mobile.saopro.service.api.UserService;
+import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.UserManager;
 import com.sao.mobile.saopro.ui.activity.LoginActivity;
 import com.sao.mobile.saopro.ui.activity.NotificationActivity;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +45,6 @@ public class MainActivity extends BaseActivity
     private Toolbar mToolbar;
     private Fragment mCurrentFragment;
 
-    private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
     private ImageView mBarSelector;
     private ImageView mBarThumbnail;
@@ -65,18 +52,10 @@ public class MainActivity extends BaseActivity
 
     private Boolean isBarListVisile = false;
 
-    private LoginService mLoginService;
-    private UserService mUserService;
-
+    private ApiManager mApiManager = ApiManager.getInstance();
     private UserManager mUserManager = UserManager.getInstance();
 
     private Target mTarget;
-
-    @Override
-    protected void initServices() {
-        mLoginService = retrofit.create(LoginService.class);
-        mUserService = retrofit.create(UserService.class);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +76,13 @@ public class MainActivity extends BaseActivity
 
         setupNavigationView();
         setupMenuListener();
-        initServices();
     }
 
     private void setupNavigationView() {
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.setDrawerListener(toggle);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -282,7 +260,7 @@ public class MainActivity extends BaseActivity
         // Clear preferences for next user
         LocalStore.clearPreferences(mContext);
 
-        Call<Void> loginCall = mLoginService.logout();
+        Call<Void> loginCall = mApiManager.loginService.logout();
         loginCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -291,7 +269,8 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail logout. Message= " + t.getMessage());
+                LoggerUtils.apiFail(TAG, "Fail logout.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
 

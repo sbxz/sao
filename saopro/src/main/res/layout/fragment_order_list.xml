@@ -18,10 +18,12 @@
                 android:id="@+id/orderTabs"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="?attr/colorAccent"
-                app:tabIndicatorColor="#5be5ad"
-                app:tabIndicatorHeight="4dp"
+                android:background="@color/white"
                 app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabTextColor="@color/colorPrimary"
+                app:tabSelectedTextColor="@color/colorPrimaryDark"
+                app:tabIndicatorHeight="4dp"
                 app:tabMode="fixed"/>
         </android.support.design.widget.AppBarLayout>
 

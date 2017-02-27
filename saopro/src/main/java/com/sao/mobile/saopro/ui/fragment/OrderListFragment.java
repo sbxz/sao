@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sao.mobile.saolib.ui.base.BaseFragment;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.Customer;
 import com.sao.mobile.saopro.entities.Order;
 import com.sao.mobile.saopro.entities.Product;
-import com.sao.mobile.saopro.service.api.BarService;
+import com.sao.mobile.saopro.manager.ApiManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,12 @@ public class OrderListFragment extends BaseFragment {
     private ViewPager mViewPager;
     private TabLayout mOrderTabs;
 
-    private BarService mBarService;
     private BroadcastReceiver mBroadcastReceiver;
 
     private OrderNewListFragment mOrderNewListFragment;
     private OrderWaitListFragment mOrderWaitListFragment;
+
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     private int[] tabIcons = {
             R.drawable.ic_menu_camera,
@@ -123,13 +125,8 @@ public class OrderListFragment extends BaseFragment {
         });
     }
 
-    @Override
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
-    }
-
     private void refreshOrderList() {
-        Call<Void> barServiceCall = mBarService.retrieveOrderList();
+        Call<Void> barServiceCall = mApiManager.barService.retrieveOrderList();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -147,10 +144,9 @@ public class OrderListFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail retrieve orders. Message= " + t.getMessage());
                 hideProgressLoad();
-                Snackbar.make(mView, R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail retrieve orders.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,15 +24,11 @@ import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.News;
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Catalog;
 import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.SaoMessagingService;
-import com.sao.mobile.sao.service.api.BarService;
-import com.sao.mobile.sao.service.api.UserService;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.sao.ui.adapter.HomeAdapter;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
@@ -41,9 +36,10 @@ import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -71,17 +67,9 @@ public class HomeFragment extends BaseFragment {
 
     private OrderManager mOrderManager = OrderManager.getInstance();
     private UserManager mUserManager = UserManager.getInstance();
-
-    private UserService mUserService;
-    private BarService mBarService;
+    private ApiManager mApiManager = ApiManager.getInstance();
 
     private BroadcastReceiver mBroadcastReceiver;
-
-    @Override
-    protected void initServices() {
-        mUserService = retrofit.create(UserService.class);
-        mBarService = retrofit.create(BarService.class);
-    }
 
     public HomeFragment() {
     }
@@ -124,7 +112,7 @@ public class HomeFragment extends BaseFragment {
 
     private void refreshData() {
         showProgressLoad();
-        Call<List<News>> newsCall = mBarService.getNews();
+        Call<List<News>> newsCall = mApiManager.barService.getNews();
         newsCall.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
@@ -141,9 +129,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
                 hideProgressLoad();
-                Log.e(TAG, "Fail retrieve news. Message= " + t.getMessage() + " Cause= " + t.getCause());
-                Snackbar.make(getView(), R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail retrieve news.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }

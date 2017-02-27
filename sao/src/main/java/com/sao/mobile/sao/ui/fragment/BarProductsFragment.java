@@ -2,7 +2,6 @@ package com.sao.mobile.sao.ui.fragment;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,10 +28,6 @@ public class BarProductsFragment extends BaseFragment {
 
     private List<Product> mProducts;
     private Long mBarId;
-
-    @Override
-    protected void initServices() {
-    }
 
     public BarProductsFragment() {
     }

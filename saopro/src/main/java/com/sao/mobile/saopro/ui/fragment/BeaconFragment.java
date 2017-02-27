@@ -18,9 +18,11 @@ import com.estimote.sdk.Region;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
+import com.sao.mobile.saolib.utils.LoggerUtils;
+import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.SaoBeacon;
-import com.sao.mobile.saopro.service.api.BarService;
+import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.adapter.BeaconAdapter;
 
 import java.util.ArrayList;
@@ -47,10 +49,11 @@ public class BeaconFragment extends BaseFragment {
     private BeaconManager mBeaconManager;
     private Region mRegion;
 
-    private BarService mBarService;
-
     private List<String> mBeaconList;
     private List<String> mBeaconLists;
+
+    private ApiManager mApiManager = ApiManager.getInstance();
+
     public BeaconFragment() {
     }
 
@@ -83,7 +86,7 @@ public class BeaconFragment extends BaseFragment {
 
     private void retrieveBeaconBar() {
         showProgressLoad();
-        Call<Void> barServiceCall = mBarService.retrieveBeaconBar();
+        Call<Void> barServiceCall = mApiManager.barService.retrieveBeaconBar();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -99,9 +102,8 @@ public class BeaconFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail retrieve beacon bar. Message= " + t.getMessage());
-                Snackbar.make(mView, R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail retrieve beacon bar.", t);
+                SnackBarUtils.showSnackError(getView());
                 hideProgressLoad();
             }
         });
@@ -134,7 +136,7 @@ public class BeaconFragment extends BaseFragment {
     }
 
     private void associateBeacon(final SaoBeacon beacon) {
-        Call<Void> barServiceCall = mBarService.associateBeacon();
+        Call<Void> barServiceCall = mApiManager.barService.associateBeacon();
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -148,9 +150,8 @@ public class BeaconFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Fail associate beacon to bar. Message= " + t.getMessage());
-                Snackbar.make(mView, R.string.failure_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                LoggerUtils.apiFail(TAG, "Fail associate beacon to bar.", t);
+                SnackBarUtils.showSnackError(getView());
             }
         });
     }
@@ -174,10 +175,5 @@ public class BeaconFragment extends BaseFragment {
     private void hideProgressLoad() {
         mProgressBar.setVisibility(View.INVISIBLE);
         mBeaconRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void initServices() {
-        mBarService = retrofit.create(BarService.class);
     }
 }

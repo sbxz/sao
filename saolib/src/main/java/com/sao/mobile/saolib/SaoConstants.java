@@ -5,11 +5,8 @@ package com.sao.mobile.saolib;
  */
 public class SaoConstants {
 
-   // public static String BASE_URL = "https://saoserver.azurewebsites.net";
-    public static String BASE_URL = "http://192.168.0.39:8080";
+    public static String BASE_URL = "https://saoserver.azurewebsites.net";
+    //public static String BASE_URL = "http://192.168.0.39:8080";
 
     public static String SaoSenderId = "652823440740";
-    public static String SaoHubName = "SaoNotificationHub";
-    public static String SaoHubListenConnectionString = "Endpoint=sb://saoproject.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=EXXrM6dwF7inFIkayQM/UjOB+g9LQm/4gerfZw6yczk=";
-
 }
