@@ -19,8 +19,10 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
     public static final String KEY_TYPE = "type";
 
-    public static final String TYPE_ORDER_FINISH = "orderFinish";
-    public static final String TYPE_ORDER_WAIT = "orderWait";
+    public static final String TYPE_OPEN_ORDER = "openOrder";
+    public static final String TYPE_ORDER_VALIDATE = "orderValidate";
+    public static final String TYPE_ORDER_READY = "orderReady";
+    public static final String TYPE_ORDER_INPROGRESS = "orderInprogress";
 
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
@@ -53,17 +55,17 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
         switch (type)
         {
-            case TYPE_ORDER_FINISH:
-                orderFinish(data);
+            case TYPE_ORDER_VALIDATE:
+                orderValidate(data);
                 break;
-            case TYPE_ORDER_WAIT:
-                orderFinish(data);
+            case TYPE_ORDER_READY:
+                orderValidate(data);
                 break;
         }
     }
 
-    private void orderFinish(Map<String, String> data) {
-        Intent intent = new Intent(TYPE_ORDER_FINISH);
+    private void orderValidate(Map<String, String> data) {
+        Intent intent = new Intent(TYPE_ORDER_VALIDATE);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
         NotificationManager notificationManager =

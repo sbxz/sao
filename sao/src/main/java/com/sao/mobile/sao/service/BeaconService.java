@@ -7,9 +7,9 @@ import android.util.Log;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.api.BeaconResponse;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -103,7 +103,7 @@ public class BeaconService extends BaseService {
         Log.i(TAG, "leaveBar");
         stopService(new Intent(this, BarNotificationService.class));
 
-        if (mUserManager.currentBeacon == null) {
+        if (mUserManager.currentBeacon == null || mUserManager.currentBar == null) {
             return;
         }
 

@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
@@ -55,7 +55,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         orderHolder.lessQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOrderManager.order != null && (mOrderManager.order.getStep().equals(Order.Step.WAIT) || mOrderManager.order.getStep().equals(Order.Step.FINISH))) {
+                if (mOrderManager.order != null && !mOrderManager.order.getStep().equals(Order.Step.NEW)) {
                     return;
                 }
 
@@ -68,7 +68,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         orderHolder.moreQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOrderManager.order != null && (mOrderManager.order.getStep().equals(Order.Step.WAIT) || mOrderManager.order.getStep().equals(Order.Step.FINISH))) {
+                if (mOrderManager.order != null && !mOrderManager.order.getStep().equals(Order.Step.NEW)) {
                     return;
                 }
 

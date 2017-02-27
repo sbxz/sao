@@ -13,6 +13,11 @@ import java.util.Map;
 public class SaoMessagingService extends FirebaseMessagingService {
     private static final String TAG = SaoMessagingService.class.getSimpleName();
 
+    public static final String TYPE_OPEN_ORDER = "openOrder";
+    public static final String TYPE_ORDER_VALIDATE = "orderValidate";
+    public static final String TYPE_ORDER_READY = "orderReady";
+    public static final String TYPE_ORDER_INPROGRESS = "orderInprogress";
+
     public SaoMessagingService() {
     }
 

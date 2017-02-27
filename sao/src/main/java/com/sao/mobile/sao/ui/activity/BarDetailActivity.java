@@ -2,7 +2,6 @@ package com.sao.mobile.sao.ui.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -14,7 +13,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
@@ -64,7 +62,6 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initActivityTransitions();
         setContentView(R.layout.activity_bar_detail);
         setStatusBarTranslucent(true);
 
@@ -115,15 +112,6 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         } else {
             mCartButton.setVisibility(View.GONE);
             layoutParam.bottomMargin = 0;
-        }
-    }
-
-    private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
         }
     }
 

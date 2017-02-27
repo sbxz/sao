@@ -11,8 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
@@ -91,11 +91,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return false;
         }
 
-        if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.WAIT)) {
+        if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
             Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_wait, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;
-        } else if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.FINISH)) {
+        } else if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.READY)) {
             Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_finish, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;

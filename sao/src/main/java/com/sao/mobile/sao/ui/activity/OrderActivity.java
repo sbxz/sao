@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Order;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -76,14 +76,14 @@ public class OrderActivity extends BaseActivity {
     }
 
     private void updateViewByStep() {
-        if(mOrderManager.order.getStep().equals(Order.Step.START)) {
+        if(mOrderManager.order.getStep().equals(Order.Step.NEW)) {
             mConfirm.setVisibility(View.VISIBLE);
             mStepOrderCard.setVisibility(View.GONE);
-        } else if(mOrderManager.order.getStep().equals(Order.Step.WAIT)){
+        } else if(mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)){
             mConfirm.setVisibility(View.GONE);
             mStepOrderCard.setVisibility(View.VISIBLE);
             mOrderStepText.setText(getString(R.string.order_step_wait));
-        }  else if(mOrderManager.order.getStep().equals(Order.Step.FINISH)){
+        }  else if(mOrderManager.order.getStep().equals(Order.Step.READY)){
             mConfirm.setVisibility(View.GONE);
             mStepOrderCard.setVisibility(View.VISIBLE);
             mOrderStepText.setText(getString(R.string.order_step_finish));

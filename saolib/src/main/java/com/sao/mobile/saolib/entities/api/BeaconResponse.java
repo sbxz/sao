@@ -1,9 +1,9 @@
-package com.sao.mobile.sao.entities.api;
+package com.sao.mobile.saolib.entities.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.SaoBeacon;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.SaoBeacon;
 
 import java.io.Serializable;
 

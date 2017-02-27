@@ -1,4 +1,4 @@
-package com.sao.mobile.sao.entities;
+package com.sao.mobile.saolib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

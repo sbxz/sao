@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.News;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.squareup.picasso.Picasso;
 

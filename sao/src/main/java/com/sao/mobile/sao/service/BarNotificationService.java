@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.Bar;
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;

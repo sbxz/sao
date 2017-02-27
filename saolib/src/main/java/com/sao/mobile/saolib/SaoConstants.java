@@ -5,8 +5,8 @@ package com.sao.mobile.saolib;
  */
 public class SaoConstants {
 
-    public static String BASE_URL = "https://saoserver.azurewebsites.net";
-    //public static String BASE_URL = "http://192.168.0.39:8080";
+    //public static String BASE_URL = "https://saoserver.azurewebsites.net";
+    public static String BASE_URL = "http://192.168.0.39:8080";
 
     public static String SaoSenderId = "652823440740";
 }

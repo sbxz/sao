@@ -8,12 +8,12 @@ import retrofit2.http.Headers;
  * Created by Seb on 05/01/2017.
  */
 
-public interface UserService {
+public interface TraderService {
     @Headers("ZUMO-API-VERSION: 2.0.0")
     @GET("api/values")
     Call<Void> registerDevice();
 
     @Headers("ZUMO-API-VERSION: 2.0.0")
     @GET("api/values")
-    Call<Void> retrieveUserInfo();
+    Call<Void> retrieveTraderInfo();
 }

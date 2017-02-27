@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.sao.mobile.sao.entities.User;
+import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.LoginActivity;

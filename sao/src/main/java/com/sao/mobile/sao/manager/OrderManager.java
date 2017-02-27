@@ -3,8 +3,8 @@ package com.sao.mobile.sao.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.Product;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.ui.activity.OrderActivity;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
@@ -115,28 +115,28 @@ public class OrderManager {
         }
     }
 
-    public void setFinishOrder() {
+    public void setReadyOrder() {
         if(!isOrderOk()) {
             return;
         }
 
-        order.setStep(Order.Step.FINISH);
+        order.setStep(Order.Step.READY);
     }
 
-    public void setWaitOrder() {
+    public void setInprogressOrder() {
         if(!isOrderOk()) {
             return;
         }
 
-        order.setStep(Order.Step.WAIT);
+        order.setStep(Order.Step.INPROGRESS);
     }
 
-    public void setStartOrder() {
+    public void setNewOrder() {
         if(!isOrderOk()) {
             return;
         }
 
-        order.setStep(Order.Step.START);
+        order.setStep(Order.Step.NEW);
     }
 
     public Boolean isOrderOk() {
@@ -152,7 +152,7 @@ public class OrderManager {
             return;
         }
 
-        Class clazz = order.getStep().equals(Order.Step.START) ? OrderActivity.class : OrderActivity.class;
+        Class clazz = order.getStep().equals(Order.Step.NEW) ? OrderActivity.class : OrderActivity.class;
         context.startActivity(new Intent(context, clazz));
     }
 }

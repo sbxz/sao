@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.User;
+import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.MainActivity;

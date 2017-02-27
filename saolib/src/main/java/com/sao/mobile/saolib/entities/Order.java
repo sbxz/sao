@@ -1,4 +1,4 @@
-package com.sao.mobile.sao.entities;
+package com.sao.mobile.saolib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +11,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
     public enum Step {
-        FINISH, WAIT, START
+        NEW, INPROGRESS, READY, VALIDATE
     }
 
     @SerializedName("orderId")
@@ -40,7 +40,7 @@ public class Order {
         this.totalQuantity = 1;
         this.totalPrice = totalPrice;
         this.products = products;
-        this.step = Step.START;
+        this.step = Step.NEW;
     }
 
     public int getTotalQuantity() {

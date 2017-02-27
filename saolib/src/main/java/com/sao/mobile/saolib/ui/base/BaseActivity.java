@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +24,7 @@ import android.widget.Toast;
  * Created by Seb on 03/08/2016.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private final String TAG = "BaseActivity";
+    private final String TAG = BaseActivity.class.getSimpleName();
 
     protected BaseActivity mContext;
 
@@ -42,13 +44,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         isForeground = true;
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        initActivityTransitions();
+    }
+
+    private void initActivityTransitions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Slide transition = new Slide();
+            transition.excludeTarget(android.R.id.statusBarBackground, true);
+            getWindow().setEnterTransition(transition);
+            getWindow().setReturnTransition(transition);
+        }
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (makeTranslucent) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }
         }
     }
 
@@ -80,14 +95,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setupToolbar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-/*        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });*/
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public void startActivity(Class<?> clazz) {
@@ -120,10 +130,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             return task.execute();
         }
-    }
-
-    protected void showBackButton(boolean show) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(show);
     }
 
     public void showProgressDialog(String message) {

@@ -1,7 +1,7 @@
 package com.sao.mobile.sao.service.api;
 
-import com.sao.mobile.sao.entities.Bar;
-import com.sao.mobile.sao.entities.User;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.User;
 
 import java.util.List;
 

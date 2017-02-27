@@ -3,7 +3,7 @@ package com.sao.mobile.saopro.manager;
 import com.sao.mobile.saolib.manager.AbstractApiManager;
 import com.sao.mobile.saopro.service.api.BarService;
 import com.sao.mobile.saopro.service.api.LoginService;
-import com.sao.mobile.saopro.service.api.UserService;
+import com.sao.mobile.saopro.service.api.TraderService;
 
 /**
  * Created by SEB on 27/02/2017.
@@ -20,12 +20,12 @@ public class ApiManager extends AbstractApiManager {
     }
 
     public BarService barService;
-    public UserService userService;
+    public TraderService traderService;
     public LoginService loginService;
 
     @Override
     protected void initServices() {
-        userService = retrofit.create(UserService.class);
+        traderService = retrofit.create(TraderService.class);
         barService = retrofit.create(BarService.class);
         loginService = retrofit.create(LoginService.class);
     }

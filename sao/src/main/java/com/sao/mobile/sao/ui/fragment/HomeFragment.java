@@ -23,8 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.entities.News;
-import com.sao.mobile.sao.entities.Order;
+import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -100,7 +100,7 @@ public class HomeFragment extends BaseFragment {
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(UPDATE_CURRENT_BAR) || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_FINISH)) {
+                if (intent.getAction().equals(UPDATE_CURRENT_BAR) || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_READY)) {
                     setupCurrentBar();
                 }
             }
@@ -168,9 +168,9 @@ public class HomeFragment extends BaseFragment {
 
         String orderStatus = "";
 
-        if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.WAIT)) {
+        if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
             orderStatus = getString(R.string.order_step_wait);
-        } else if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.FINISH)) {
+        } else if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.READY)) {
             orderStatus = getString(R.string.order_step_finish);
         }
 

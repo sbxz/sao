@@ -39,7 +39,7 @@ public class SplashActivity extends BaseActivity {
         Boolean log = true;
 
         if(log) {
-            retrieveUserInfo();
+            retrieveTraderInfo();
             registerDevice();
         } else {
             startLoginActivity();
@@ -55,9 +55,9 @@ public class SplashActivity extends BaseActivity {
         finish();
     }
 
-    private void retrieveUserInfo() {
-        Call<Void> deviceCall = mApiManager.userService.retrieveUserInfo();
-        deviceCall.enqueue(new Callback<Void>() {
+    private void retrieveTraderInfo() {
+        Call<Void> traderCall = mApiManager.traderService.retrieveTraderInfo();
+        traderCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.i(TAG, "Success retrieve user info");
@@ -71,7 +71,7 @@ public class SplashActivity extends BaseActivity {
             public void onFailure(Call<Void> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail retrieve user info.", t);
                 SnackBarUtils.showSnackError(getView());
-                retrieveUserInfo();
+                retrieveTraderInfo();
             }
         });
     }
@@ -81,7 +81,7 @@ public class SplashActivity extends BaseActivity {
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "DeviceId: " + deviceId + "DeviceToken: " + deviceToken);
 
-        Call<Void> deviceCall = mApiManager.userService.registerDevice();
+        Call<Void> deviceCall = mApiManager.traderService.registerDevice();
         deviceCall.enqueue(new Callback<Void>() {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.i(TAG, "Success register device");

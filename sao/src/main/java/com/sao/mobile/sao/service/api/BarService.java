@@ -1,8 +1,8 @@
 package com.sao.mobile.sao.service.api;
 
-import com.sao.mobile.sao.entities.News;
-import com.sao.mobile.sao.entities.Order;
-import com.sao.mobile.sao.entities.api.BeaconResponse;
+import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.api.BeaconResponse;
 
 import java.util.List;
 
