@@ -1,7 +1,6 @@
 package com.sao.mobile.sao.ui.adapter;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
-import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
 import java.util.ArrayList;

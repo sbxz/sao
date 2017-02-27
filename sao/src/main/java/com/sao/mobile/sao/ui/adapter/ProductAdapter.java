@@ -8,17 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
-import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 

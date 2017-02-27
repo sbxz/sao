@@ -3,7 +3,6 @@ package com.sao.mobile.sao.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.estimote.sdk.cloud.internal.User;
 import com.sao.mobile.sao.entities.Order;
 import com.sao.mobile.sao.entities.Product;
 import com.sao.mobile.sao.ui.activity.OrderActivity;

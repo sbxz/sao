@@ -3,7 +3,6 @@ package com.sao.mobile.saolib.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Created by Seb on 01/12/2016.

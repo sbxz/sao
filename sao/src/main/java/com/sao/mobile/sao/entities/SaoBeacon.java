@@ -1,12 +1,9 @@
 package com.sao.mobile.sao.entities;
 
-import com.estimote.sdk.Beacon;
-import com.estimote.sdk.MacAddress;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * Created by Seb on 11/02/2017.
