@@ -25,6 +25,10 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':saolib')
@@ -50,6 +54,7 @@ dependencies {
     compile 'com.estimote:sdk:0.10.8@aar'
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.3'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     testCompile 'junit:junit:4.12'
 }
 
