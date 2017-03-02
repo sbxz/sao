@@ -31,7 +31,7 @@ public class SplashActivity extends BaseActivity {
         Log.i(TAG, "Init Splash Screen");
         setStatusBarTranslucent(true);
 
-        Boolean log = false;
+        Boolean log = true;
 
         if(log) {
             retrieveUserInfo();
