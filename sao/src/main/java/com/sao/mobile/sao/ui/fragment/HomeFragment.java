@@ -93,7 +93,7 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setupCurrentBar();
-        refreshData();
+       // refreshData();
     }
 
     private void registerBroadcastReceiver() {

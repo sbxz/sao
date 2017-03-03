@@ -1,9 +1,15 @@
 package com.sao.mobile.sao.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 
+import com.facebook.AccessToken;
+import com.facebook.Profile;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.sao.manager.ApiManager;
@@ -12,6 +18,9 @@ import com.sao.mobile.sao.ui.activity.LoginActivity;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +40,12 @@ public class SplashActivity extends BaseActivity {
         Log.i(TAG, "Init Splash Screen");
         setStatusBarTranslucent(true);
 
-        Boolean log = false;
+        getKeyHash();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        Profile profile = Profile.getCurrentProfile();
+
+        Boolean log = true;
 
         if(log) {
             retrieveUserInfo();
@@ -96,5 +110,20 @@ public class SplashActivity extends BaseActivity {
                 SnackBarUtils.showSnackError(getView());
             }
         });
+    }
+
+    public void getKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.sao.mobile.sao",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException ignored) {
+            Log.e(TAG, "Key Hash: cause= " + ignored.getCause() + " message= " + ignored.getMessage());
+        }
     }
 }
