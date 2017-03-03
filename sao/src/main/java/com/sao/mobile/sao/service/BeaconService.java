@@ -54,8 +54,7 @@ public class BeaconService extends BaseService {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "on create");
-        //initBeaconScan();
-        leaveBar();
+        //startBarService();
     }
 
     @Override
