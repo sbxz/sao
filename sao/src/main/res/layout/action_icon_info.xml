@@ -16,5 +16,5 @@
         android:layout_margin="0dp"
         android:gravity="center"
         android:padding="3dp"
-        android:src="@drawable/ic_information"/>
+        android:src="@drawable/ic_action_info"/>
 </RelativeLayout>

@@ -4,16 +4,12 @@
     <group android:id="@+id/main_menu" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_beacon"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_bluetooth"
             android:title="@string/menu_beacon" />
-        <item
-            android:id="@+id/nav_stats"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_stats" />
     </group>
 
     <group android:id="@+id/bar_menu" android:checkableBehavior="single" android:visible="false">
@@ -24,23 +20,23 @@
         <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_settings"
                 android:title="@string/menu_settings" />
             <item
                 android:id="@+id/nav_condition"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_menu_condition"
                 android:title="@string/menu_condition" />
             <item
                 android:id="@+id/nav_problem"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_menu_problem"
                 android:title="@string/menu_problem" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_menu_information"
                 android:title="@string/menu_about" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_menu_logout"
                 android:title="@string/menu_logout" />
         </menu>
     </item>

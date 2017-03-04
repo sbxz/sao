@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity
 
         Menu menu = mNavigationView.getMenu();
         for (Bar bar : mUserManager.bars) {
-            menu.add(R.id.bar_menu, Integer.valueOf(bar.getId()), 0, bar.getName()).setIcon(R.drawable.ic_play_dark);
+            menu.add(R.id.bar_menu, Integer.valueOf(bar.getId()), 0, bar.getName()).setIcon(R.drawable.ic_menu_shop);
         }
 
         mCurrentFragment = new OrderListFragment();
