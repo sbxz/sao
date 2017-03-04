@@ -3,18 +3,7 @@ package com.sao.mobile.sao.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -28,24 +17,14 @@ import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.MainActivity;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
-import com.sao.mobile.saolib.utils.LocalStore;
-import com.sao.mobile.saolib.utils.LoggerUtils;
-import com.sao.mobile.saolib.utils.SnackBarUtils;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
 

@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.ui.adapter.ProductAdapter;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;

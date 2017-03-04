@@ -1,6 +1,7 @@
 package com.sao.mobile.saolib.ui.base;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -11,8 +12,11 @@ import android.support.annotation.Nullable;
 
 public abstract class BaseService extends Service {
 
+    protected Context mContext;
+
     public void onCreate() {
         super.onCreate();
+        mContext = this;
     }
 
     @Nullable
@@ -20,4 +24,6 @@ public abstract class BaseService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
 }

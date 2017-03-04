@@ -9,9 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.Product;
-import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
 import java.util.ArrayList;

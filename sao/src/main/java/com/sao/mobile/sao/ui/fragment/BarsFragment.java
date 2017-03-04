@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.ui.adapter.BarsAdapter;
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;

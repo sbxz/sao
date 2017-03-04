@@ -3,9 +3,9 @@ package com.sao.mobile.sao.manager;
 import android.content.Context;
 import android.content.Intent;
 
+import com.sao.mobile.sao.ui.activity.OrderActivity;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.Product;
-import com.sao.mobile.sao.ui.activity.OrderActivity;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 
 import java.util.ArrayList;

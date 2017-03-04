@@ -7,12 +7,12 @@ import android.util.Log;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.sao.mobile.saolib.entities.Bar;
-import com.sao.mobile.saolib.entities.Order;
-import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.saolib.ui.base.BaseService;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 

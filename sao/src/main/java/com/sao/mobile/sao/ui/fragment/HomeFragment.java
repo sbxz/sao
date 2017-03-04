@@ -23,14 +23,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.News;
-import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.SaoMessagingService;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.sao.ui.adapter.HomeAdapter;
+import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.CircleTransformation;

@@ -11,11 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.Order;
-import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 

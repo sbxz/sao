@@ -1,7 +1,5 @@
 package com.sao.mobile.sao.ui.activity;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -14,12 +12,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.BarNotificationService;
 import com.sao.mobile.sao.ui.adapter.OrderAdapter;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
@@ -110,12 +108,7 @@ public class OrderActivity extends BaseActivity {
                 mOrderManager.order = response.body();
                 updateViewByStep();
 
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                notificationManager.notify(
-                        BarNotificationService.BAR_NOTIFICATION_ID,
-                        BarNotificationService.getBarNotification(mContext, mUserManager.currentBar, mUserManager.currentBar.getName(), getString(R.string.order_step_wait), mUserManager.currentBar.getThumbnail()));
+                BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_wait).toString());
             }
 
             @Override

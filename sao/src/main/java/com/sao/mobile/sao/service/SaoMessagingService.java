@@ -1,7 +1,5 @@
 package com.sao.mobile.sao.service;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -68,11 +66,6 @@ public class SaoMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(TYPE_ORDER_VALIDATE);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(
-                BarNotificationService.BAR_NOTIFICATION_ID,
-                BarNotificationService.getBarNotification(getBaseContext(), mUserManager.currentBar, mUserManager.currentBar.getName(), getString(R.string.order_step_finish), mUserManager.currentBar.getThumbnail()));
+        BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_finish).toString());
     }
 }
