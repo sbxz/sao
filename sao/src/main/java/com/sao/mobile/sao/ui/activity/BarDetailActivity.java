@@ -199,7 +199,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
         BarProductsFragment barProductsFragment;
         for (String mapKey : mBar.getCatalog().keySet()) {
             barProductsFragment = new BarProductsFragment();
-            barProductsFragment.addProducts(mBar.getBarId(), ((List<Product>) mBar.getCatalog().get(mapKey)));
+            barProductsFragment.addProducts(mBar.getBarId(), mBar.getCatalog().get(mapKey));
             adapter.addFragment(barProductsFragment, mapKey);
         }
 

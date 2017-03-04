@@ -1,5 +1,7 @@
 package com.sao.mobile.sao.ui.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -14,6 +16,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.sao.manager.ApiManager;
@@ -24,6 +37,12 @@ import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,138 +52,131 @@ public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     private UserManager mUserManager = UserManager.getInstance();
-
-    private EditText mInputMail;
-    private EditText mInputPassword;
-
-    private TextInputLayout mInputLayoutMail;
-    private TextInputLayout mInputLayoutPassword;
-
-    private TextView mTextForgetPassword;
-
     private ApiManager mApiManager = ApiManager.getInstance();
+
+    private LoginButton mLoginButton;
+
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mInputMail = (EditText) findViewById(R.id.input_mail);
-        mInputPassword = (EditText) findViewById(R.id.input_password);
+        mCallbackManager = CallbackManager.Factory.create();
 
-        mInputLayoutMail = (TextInputLayout) findViewById(R.id.input_layout_mail);
-        mInputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
-
-        mInputMail.addTextChangedListener(new LoginTextWatcher(mInputMail));
-        mInputPassword.addTextChangedListener(new LoginTextWatcher(mInputPassword));
-
-        mTextForgetPassword = (TextView) findViewById(R.id.forgetPassword);
-        mTextForgetPassword.setOnClickListener(new View.OnClickListener() {
+        mLoginButton = (LoginButton) findViewById(R.id.fb_button);
+        mLoginButton.setReadPermissions(Arrays.asList("email", "public_profile", "user_friends"));
+        mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "New activity for forget password", Toast.LENGTH_SHORT).show();
+            public void onSuccess(LoginResult loginResult) {
+                loginSuccess(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "On facebook cancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e(TAG, "On facebook error cause= " + error.getCause() + " message= " + error.getMessage());
             }
         });
 
-        Button signUpButton = (Button) findViewById(R.id.btn_signup);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
-            public void onClick(View view) {
-                submitForm();
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                // Set the access token using
+                // currentAccessToken when it's loaded or set.
             }
-        });
-    }
-
-    private void submitForm() {
-        if (!validateMail()) {
-            return;
-        }
-
-        if (!validatePassword()) {
-            return;
-        }
-
-        showProgressDialog(getString(R.string.connect_progress));
-
-        Call<Void> loginCall = mApiManager.loginService.login();
-        loginCall.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success login");
-                LocalStore.writePreferences(mContext, LocalStore.SESSION_ID, "LOCAL_SESSION_ID");
-                mUserManager.currentUser = new User( "Seb", "http://i.imgur.com/CqmBjo5.jpg");
-                startActivity(MainActivity.class);
-                hideProgressDialog();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                hideProgressDialog();
-                LoggerUtils.apiFail(TAG, "Fail login.", t);
-                SnackBarUtils.showSnackError(getView());
-            }
-        });
-    }
-
-    private boolean validateMail() {
-        String mail = mInputMail.getText().toString().trim();
-
-        if (mail.isEmpty() || !isValidMail(mail)) {
-            mInputLayoutMail.setError(getString(R.string.err_msg_mail));
-            requestFocus(mInputMail);
-            return false;
-        } else {
-            mInputLayoutMail.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
-    private boolean validatePassword() {
-        if (mInputPassword.getText().toString().trim().isEmpty()) {
-            mInputLayoutPassword.setError(getString(R.string.err_msg_password));
-            requestFocus(mInputPassword);
-            return false;
-        } else {
-            mInputLayoutPassword.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
-    private static boolean isValidMail(String mail) {
-        return !TextUtils.isEmpty(mail) && Patterns.EMAIL_ADDRESS.matcher(mail).matches();
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        };
+        // If the access token is available already assign it.
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        Profile profile = Profile.getCurrentProfile();
+        Uri uri = profile.getProfilePictureUri(75,75);
+        if(AccessToken.getCurrentAccessToken() != null) {
+            graphFriendRequest();
+            graphUserRequest();
+            graphUserFriendRequest();
+            graphUserFriendListRequest();
         }
     }
 
-    private class LoginTextWatcher implements TextWatcher {
+    private void loginSuccess(LoginResult loginResult) {
+        AccessToken accessToken = loginResult.getAccessToken();
+        String token = accessToken.getToken();
+        String userId = accessToken.getUserId();
+        Date expires = accessToken.getExpires();
+        Date lastRefresh = accessToken.getLastRefresh();
+        Log.i(TAG, "On login success");
 
-        private View view;
+        graphFriendRequest();
 
-        private LoginTextWatcher(View view) {
-            this.view = view;
-        }
+    }
 
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
+    private void graphFriendRequest() {
+        GraphRequest request = GraphRequest.newMyFriendsRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONArrayCallback() {
 
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
+                    @Override
+                    public void onCompleted(JSONArray objects, GraphResponse response) {
+                        Log.i(TAG, "graphFriendRequest " + objects.toString());
+                    }
+                });
 
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_mail:
-                    validateMail();
-                    break;
-                case R.id.input_password:
-                    validatePassword();
-                    break;
-            }
-        }
+        request.executeAsync();
+    }
+
+    private void graphUserRequest() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + Profile.getCurrentProfile().getId(),
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.i(TAG, "graphUserRequest " + response.getJSONObject().toString());
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void graphUserFriendRequest() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + Profile.getCurrentProfile().getId() + "/friends",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.i(TAG, "graphUserFriendRequest " + response.getJSONObject().toString());
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void graphUserFriendListRequest() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + Profile.getCurrentProfile().getId() + "/friendlists",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.i(TAG, "graphUserFriendListRequest " + response.getJSONObject().toString());
+                    }
+                }
+        ).executeAsync();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

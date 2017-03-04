@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.saolib.entities.Bar;
@@ -15,6 +16,7 @@ import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.ui.base.BaseService;
+import com.squareup.picasso.Picasso;
 
 public class BarNotificationService extends BaseService {
     private static final String TAG = BarNotificationService.class.getSimpleName();
@@ -57,7 +59,7 @@ public class BarNotificationService extends BaseService {
         PendingIntent pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return new Notification.Builder(context)
+        Notification notification =  new Notification.Builder(context)
                 .setContentTitle(barTitle)
                 .setContentText(contentText)
                 .setPriority(Notification.PRIORITY_HIGH)
@@ -65,6 +67,10 @@ public class BarNotificationService extends BaseService {
                 .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
                 .setContentIntent(pendingIntent)
                 .build();
+        final RemoteViews contentView = notification.contentView;
+        Picasso.with(context).load(barThumbnail).into(contentView,  android.R.id.icon, BAR_NOTIFICATION_ID, notification);
+
+        return notification;
     }
 
     @Override
