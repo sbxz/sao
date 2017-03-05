@@ -29,6 +29,10 @@ import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.manager.UserManager;
 import com.sao.mobile.saopro.ui.activity.LoginActivity;
 import com.sao.mobile.saopro.ui.activity.NotificationActivity;
+import com.sao.mobile.saopro.ui.activity.AboutActivity;
+import com.sao.mobile.saopro.ui.activity.ConditionActivity;
+import com.sao.mobile.saopro.ui.activity.ProblemActivity;
+import com.sao.mobile.saopro.ui.activity.SettingsActivity;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 import com.squareup.picasso.Picasso;
@@ -194,6 +198,14 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_beacon) {
             mCurrentFragment = new BeaconFragment();
             setTitle(R.string.menu_beacon);
+        } else if (id == R.id.nav_settings) {
+            startActivity(SettingsActivity.class);
+        }  else if (id == R.id.nav_condition) {
+            startActivity(ConditionActivity.class);
+        } else if (id == R.id.nav_problem) {
+            startActivity(ProblemActivity.class);
+        } else if (id == R.id.nav_about) {
+            startActivity(AboutActivity.class);
         } else if (id == R.id.nav_logout) {
             logout();
         }

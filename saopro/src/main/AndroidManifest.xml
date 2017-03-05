@@ -53,6 +53,21 @@
         <activity
             android:name=".ui.activity.BeaconInfoActivity"
             android:theme="@style/AppTheme.NoActionBarBasic"/>
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
+        <activity
+            android:name=".ui.activity.NotificationSettingActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
+        <activity
+            android:name=".ui.activity.ConditionActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
+        <activity
+            android:name=".ui.activity.ProblemActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic" />
 
         <service android:name=".service.SaoInstanceIDService">
             <intent-filter>
