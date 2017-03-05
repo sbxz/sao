@@ -15,7 +15,7 @@
     <FrameLayout
         android:id="@+id/barItemLayout"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/side_nav_bar"
         android:layout_height="150dp">
 
         <ImageView

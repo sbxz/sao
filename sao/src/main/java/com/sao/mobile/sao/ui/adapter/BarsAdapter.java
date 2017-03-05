@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -54,10 +55,12 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         //barsViewHolder.barPoint.setText(bar.get() + " points");
         barsViewHolder.barName.setText(bar.getName());
 
-        Picasso.with(mContext).load(bar.getThumbnail())
-                .fit()
-                .centerCrop()
-                .into(barsViewHolder.barThumbnail);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Picasso.with(mContext).load(bar.getThumbnail())
+                    .fit()
+                    .centerCrop()
+                    .into(barsViewHolder.barThumbnail);
+        }
 
         barsViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
