@@ -6,7 +6,8 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
+import com.google.gson.Gson;
+import com.sao.mobile.saopro.entities.TraderOrder;
 
 import java.util.Map;
 
@@ -46,10 +47,26 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
         switch (type)
         {
-            case OrderListFragment.NEW_ORDER_EXTRA:
-                Intent intent = new Intent(OrderListFragment.NEW_ORDER_EXTRA);
-                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+            case TYPE_OPEN_ORDER:
+                openOrder(data);
+                break;
+            case TYPE_ORDER_INPROGRESS:
+                orderInProgress(data);
                 break;
         }
+    }
+
+    private void openOrder(Map<String, String> data) {
+        TraderOrder traderOrder =  new Gson().fromJson(data.get("order"), TraderOrder.class);
+        Intent intent = new Intent(TYPE_OPEN_ORDER);
+        intent.putExtra("traderOrder", traderOrder);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+    }
+
+    private void orderInProgress(Map<String, String> data) {
+        TraderOrder traderOrder =  new Gson().fromJson(data.get("order"), TraderOrder.class);
+        Intent intent = new Intent(TYPE_ORDER_INPROGRESS);
+        intent.putExtra("traderOrder", traderOrder);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 }

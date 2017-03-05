@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.SaoBeacon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +46,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final BeaconViewHolder beaconHolder = (BeaconViewHolder) holder;
         final SaoBeacon beacon = mItems.get(position);
 
-        beaconHolder.uuid.setText(beacon.getProximityUUID().toString());
-        beaconHolder.rssi.setText(String.valueOf(beacon.getRssi()));
-        beaconHolder.power.setText(String.valueOf(beacon.getMeasuredPower()));
+        beaconHolder.uuid.setText(beacon.getUuid());
         beaconHolder.major.setText(String.valueOf(beacon.getMajor()));
         beaconHolder.minor.setText(String.valueOf(beacon.getMinor()));
 
@@ -92,8 +90,6 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public CardView cardView;
 
         public TextView uuid;
-        public TextView power;
-        public TextView rssi;
         public TextView major;
         public TextView minor;
 
@@ -102,8 +98,6 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             cardView = (CardView) view.findViewById(R.id.card_view);
             uuid = (TextView) view.findViewById(R.id.uuid);
-            rssi = (TextView) view.findViewById(R.id.rssi);
-            power = (TextView) view.findViewById(R.id.power);
             major = (TextView) view.findViewById(R.id.major);
             minor = (TextView) view.findViewById(R.id.minor);
         }

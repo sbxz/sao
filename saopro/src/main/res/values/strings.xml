@@ -28,6 +28,7 @@
 
     <!-- Order Fragment-->
     <string name="order_number">#</string>
+    <string name="order_alert">Accéder à la commande?</string>
     <string name="wait_customer">(En attente du client)</string>
     <string name="not_new_order">Aucune nouvelle commande</string>
     <string name="not_wait_order">Aucune commande en attente</string>

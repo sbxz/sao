@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Customer;
-import com.sao.mobile.saopro.entities.Order;
+import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.squareup.picasso.Picasso;
 
@@ -32,14 +32,14 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static final int REQUEST_CODE = 1;
 
-    private List<Order> mItems;
+    private List<TraderOrder> mItems;
     private Context mContext;
 
     private LayoutInflater mLayoutInflater;
 
-    public OrderAdapter(Context context, List<Order> items) {
+    public OrderAdapter(Context context, List<TraderOrder> items) {
         this.mContext = context;
-        this.mItems = items != null ? items : new ArrayList<Order>();
+        this.mItems = items != null ? items : new ArrayList<TraderOrder>();
     }
 
     @Override
@@ -55,15 +55,14 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final OrderViewHolder orderHolder = (OrderViewHolder) holder;
-        final Order order = mItems.get(position);
+        final TraderOrder order = mItems.get(position);
 
+        //orderHolder.date.setText(new Date(order.getDate()).toString());
+        orderHolder.price.setText(UnitPriceUtils.addEuro(String.valueOf(order.getTotalPrice())));
+        orderHolder.userName.setText(order.getUser().getName());
+        orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getOrderId());
 
-        orderHolder.date.setText(order.getDate());
-        orderHolder.price.setText(UnitPriceUtils.addEuro(order.getTotalPrice()));
-        orderHolder.userName.setText(Customer.getCustomerName(order.getCustomer()));
-        orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getId());
-
-        Picasso.with(mContext).load(order.getCustomer().getThumbnail())
+        Picasso.with(mContext).load(order.getUser().getThumbnail())
                 .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
@@ -76,15 +75,15 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         });
 
-        if(order.getStep().equals(Order.Step.WAIT)) {
+        if(order.getStep().equals(Order.Step.READY)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 orderHolder.orderId.setTextColor(mContext.getColor(R.color.teal_dark));
             }
-            orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getId() + " " + mContext.getString(R.string.wait_customer));
+            orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getOrderId() + " " + mContext.getString(R.string.wait_customer));
         }
     }
 
-    private void goToOrderDetail(OrderViewHolder orderHolder, Order order) {
+    private void goToOrderDetail(OrderViewHolder orderHolder, TraderOrder order) {
         Activity activity = (Activity) mContext;
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
                 new Pair(orderHolder.userImage, OrderDetailsActivity.IMAGE_TRANSITION_NAME),
@@ -98,13 +97,12 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ActivityCompat.startActivityForResult(activity, intent, REQUEST_CODE, options.toBundle());
     }
 
-    public void updateOrderWaitList(Order order) {
-        for (Order ord : mItems) {
-            if(ord.getId().equals(order.getId())) {
+    public void updateOrderWaitList(TraderOrder order) {
+        for (TraderOrder ord : mItems) {
+            if(ord.getOrderId().equals(order.getOrderId())) {
                 int index = mItems.indexOf(ord);
                 mItems.remove(index);
                 mItems.add(0, order);
-
 
                 notifyItemMoved(index, 0);
                 notifyItemChanged(0);
@@ -114,9 +112,9 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void removeOrder(Order order) {
-        for (Order ord : mItems) {
-            if(ord.getId().equals(order.getId())) {
+    public void removeOrder(TraderOrder order) {
+        for (TraderOrder ord : mItems) {
+            if(ord.getOrderId().equals(order.getOrderId())) {
                 int index = mItems.indexOf(ord);
                 mItems.remove(index);
                 notifyItemRemoved(index);
@@ -126,12 +124,12 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void addListItem(List<Order> order) {
-        mItems.addAll(order);
+    public void addListItem(List<TraderOrder> orders) {
+        mItems.addAll(orders);
         notifyDataSetChanged();
     }
 
-    public void addItem(Order order) {
+    public void addItem(TraderOrder order) {
         mItems.add(order);
         notifyDataSetChanged();
     }

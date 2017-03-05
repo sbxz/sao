@@ -2,15 +2,11 @@ package com.sao.mobile.sao.ui.fragment;
 
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +22,6 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.service.SaoMessagingService;
 import com.sao.mobile.sao.ui.activity.BarDetailActivity;
 import com.sao.mobile.sao.ui.adapter.HomeAdapter;
 import com.sao.mobile.saolib.entities.News;
@@ -69,8 +64,6 @@ public class HomeFragment extends BaseFragment {
     private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
-    private BroadcastReceiver mBroadcastReceiver;
-
     public HomeFragment() {
     }
 
@@ -85,7 +78,6 @@ public class HomeFragment extends BaseFragment {
         setupRecyclerView();
 
         refreshData();
-        registerBroadcastReceiver();
 
         return mView;
     }
@@ -96,23 +88,10 @@ public class HomeFragment extends BaseFragment {
        // refreshData();
     }
 
-    private void registerBroadcastReceiver() {
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(UPDATE_CURRENT_BAR) || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_READY)) {
-                    setupCurrentBar();
-                }
-            }
-        };
-
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(UPDATE_CURRENT_BAR));
-    }
 
     private void refreshData() {
         showProgressLoad();
-        Call<List<News>> newsCall = mApiManager.barService.getNews();
+        Call<List<News>> newsCall = mApiManager.barService.getNews(mUserManager.getFacebookUserId());
         newsCall.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
@@ -145,7 +124,7 @@ public class HomeFragment extends BaseFragment {
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void setupCurrentBar() {
+    public void setupCurrentBar() {
         mCurrentBarLayout = (CollapsingToolbarLayout) mView.findViewById(R.id.currentBarLayout);
         mBarThumbnail = (ImageView) mView.findViewById(R.id.barThumbnail);
         mBarName = (TextView) mView.findViewById(R.id.barName);
@@ -169,9 +148,11 @@ public class HomeFragment extends BaseFragment {
         String orderStatus = "";
 
         if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
-            orderStatus = getString(R.string.order_step_wait);
+            orderStatus = getString(R.string.order_step_in_progress);
         } else if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.READY)) {
-            orderStatus = getString(R.string.order_step_finish);
+            orderStatus = getString(R.string.order_step_ready);
+        } else {
+            orderStatus = getString(R.string.order_step_validate);
         }
 
         mOrderStatus.setText(orderStatus);

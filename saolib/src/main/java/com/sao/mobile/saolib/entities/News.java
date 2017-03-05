@@ -13,7 +13,7 @@ public class News implements Serializable{
     @SerializedName("newsId")
     private Long newsId;
 
-    @SerializedName("barVO")
+    @SerializedName("bar")
     private Bar bar;
 
     @SerializedName("created")

@@ -14,11 +14,13 @@ import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Order;
+import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.ui.adapter.OrderAdapter;
 
-public class OrderWaitListFragment extends BaseFragment {
-    private static final String TAG = OrderWaitListFragment.class.getSimpleName();
+import java.util.List;
+
+public class ReadyFragment extends BaseFragment {
+    private static final String TAG = ReadyFragment.class.getSimpleName();
 
     private View mView;
     private ProgressBar mProgressBar;
@@ -28,7 +30,7 @@ public class OrderWaitListFragment extends BaseFragment {
 
     private OrderAdapter mOrderAdapter;
 
-    public OrderWaitListFragment() {
+    public ReadyFragment() {
     }
 
     @Override
@@ -64,13 +66,21 @@ public class OrderWaitListFragment extends BaseFragment {
         mRecyclerView.setAdapter(mOrderAdapter);
     }
 
-    public void removeOrder(Order order) {
+    public void removeOrder(TraderOrder order) {
         mOrderAdapter.removeOrder(order);
         setNotWaitOrderVisible();
     }
 
-    public void addOrder(Order order) {
+    public void addOrder(TraderOrder order) {
         mOrderAdapter.addItem(order);
+        setNotWaitOrderVisible();
+    }
+
+    public void addListOrder(List<TraderOrder> orders) {
+        if(mOrderAdapter == null) {
+            return;
+        }
+        mOrderAdapter.addListItem(orders);
         setNotWaitOrderVisible();
     }
 
@@ -97,4 +107,6 @@ public class OrderWaitListFragment extends BaseFragment {
         mRecyclerView.setVisibility(View.VISIBLE);
         setNotWaitOrderVisible();
     }
+
+
 }

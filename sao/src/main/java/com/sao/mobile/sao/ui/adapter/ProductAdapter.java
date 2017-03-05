@@ -92,11 +92,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
-            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_wait, Snackbar.LENGTH_LONG)
+            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_in_progress, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;
         } else if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.READY)) {
-            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_finish, Snackbar.LENGTH_LONG)
+            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_ready, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;
         }

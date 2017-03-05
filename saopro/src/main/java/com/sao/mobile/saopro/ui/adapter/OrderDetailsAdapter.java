@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Product;
+import com.sao.mobile.saopro.entities.OrderProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ import java.util.List;
 
 public class OrderDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Product> mItems;
+    private List<OrderProduct> mItems;
     private Context mContext;
 
     private LayoutInflater mLayoutInflater;
 
-    public OrderDetailsAdapter(Context context, List<Product> items) {
+    public OrderDetailsAdapter(Context context, List<OrderProduct> items) {
         this.mContext = context;
-        this.mItems = items != null ? items : new ArrayList<Product>();
+        this.mItems = items != null ? items : new ArrayList<OrderProduct>();
     }
 
     @Override
@@ -43,10 +43,10 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ProductViewHolder orderHolder = (ProductViewHolder) holder;
-        final Product product = mItems.get(position);
-        orderHolder.productName.setText(product.getName());
-        orderHolder.productPrice.setText(UnitPriceUtils.addEuro(product.getPrice()));
-        orderHolder.productQuantity.setText(product.getQuantity());
+        final OrderProduct orderProduct = mItems.get(position);
+        orderHolder.productName.setText(orderProduct.getProduct().getName());
+        orderHolder.productPrice.setText(UnitPriceUtils.addEuro(String.valueOf(orderProduct.getPrice())));
+        orderHolder.productQuantity.setText(String.valueOf(orderProduct.getQuantity()));
     }
 
     @Override

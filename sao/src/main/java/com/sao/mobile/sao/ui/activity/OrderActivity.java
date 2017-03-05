@@ -60,7 +60,7 @@ public class OrderActivity extends BaseActivity {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmOrder();
+                startOrder();
             }
         });
 
@@ -80,15 +80,15 @@ public class OrderActivity extends BaseActivity {
         } else if(mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)){
             mConfirm.setVisibility(View.GONE);
             mStepOrderCard.setVisibility(View.VISIBLE);
-            mOrderStepText.setText(getString(R.string.order_step_wait));
+            mOrderStepText.setText(getString(R.string.order_step_in_progress));
         }  else if(mOrderManager.order.getStep().equals(Order.Step.READY)){
             mConfirm.setVisibility(View.GONE);
             mStepOrderCard.setVisibility(View.VISIBLE);
-            mOrderStepText.setText(getString(R.string.order_step_finish));
+            mOrderStepText.setText(getString(R.string.order_step_ready));
         }
     }
 
-    private void confirmOrder() {
+    private void startOrder() {
         if(mUserManager.currentBar == null) {
             Snackbar.make(getView(), R.string.btn_no_bar, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -99,16 +99,16 @@ public class OrderActivity extends BaseActivity {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 if (response.code() != 200) {
-                    Log.i(TAG, "Fail confirm order");
+                    Log.i(TAG, "Fail start order");
                     return;
                 }
 
-                Log.i(TAG, "Success confirm order");
+                Log.i(TAG, "Success start order");
 
                 mOrderManager.order = response.body();
                 updateViewByStep();
 
-                BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_wait).toString());
+                BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_in_progress).toString());
             }
 
             @Override

@@ -9,6 +9,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.saolib.entities.Order;
 
 import java.util.Map;
 
@@ -53,19 +54,30 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
         switch (type)
         {
-            case TYPE_ORDER_VALIDATE:
-                orderValidate(data);
-                break;
             case TYPE_ORDER_READY:
+                orderReady(data);
+                break;
+            case TYPE_ORDER_VALIDATE:
                 orderValidate(data);
                 break;
         }
     }
 
     private void orderValidate(Map<String, String> data) {
+        mOrderManager.removeOrder();
+
         Intent intent = new Intent(TYPE_ORDER_VALIDATE);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
-        BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_finish).toString());
+        BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_validate).toString());
+    }
+
+    private void orderReady(Map<String, String> data) {
+        mOrderManager.order.setStep(Order.Step.READY);
+
+        Intent intent = new Intent(TYPE_ORDER_READY);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+
+        BarNotificationService.notifyBarNotification(getBaseContext(), mUserManager.currentBar, getText(R.string.order_step_ready).toString());
     }
 }

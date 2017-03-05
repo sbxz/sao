@@ -14,14 +14,17 @@ public class User implements Serializable {
     private String name;
     @SerializedName("thumbnail")
     private String thumbnail;
+    @SerializedName("facebookUserId")
+    private String facebookUserId;
 
     public User() {
 
     }
 
-    public User(String name, String thumbnail) {
+    public User(String name, String thumbnail, String facebookUserId) {
         this.name = name;
         this.thumbnail = thumbnail;
+        this.facebookUserId = facebookUserId;
     }
 
     public String getName() {
@@ -38,5 +41,13 @@ public class User implements Serializable {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getFacebookUserId() {
+        return facebookUserId;
+    }
+
+    public void setFacebookUserId(String facebookUserId) {
+        this.facebookUserId = facebookUserId;
     }
 }

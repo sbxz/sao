@@ -8,22 +8,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.frameLayout.DragLayout;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Bar;
+import com.sao.mobile.saopro.manager.TraderManager;
 import com.sao.mobile.saopro.ui.MainActivity;
 import com.squareup.picasso.Picasso;
 
 public class BarSelectFragment extends BaseFragment {
     private static final String TAG = BarSelectFragment.class.getSimpleName();
 
-    private ImageView mImageView;
-    private TextView mAddress;
-    private TextView mPhoneNumber;
-
     private Bar bar;
+
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     public BarSelectFragment() {
     }
@@ -34,22 +33,23 @@ public class BarSelectFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_bar_select, container, false);
 
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
-        mAddress = (TextView) dragLayout.findViewById(R.id.address);
-        mPhoneNumber = (TextView) dragLayout.findViewById(R.id.phoneNumber);
-        mImageView = (ImageView) dragLayout.findViewById(R.id.imageView);
+        TextView address = (TextView) dragLayout.findViewById(R.id.address);
+        TextView phoneNumber = (TextView) dragLayout.findViewById(R.id.phoneNumber);
+        ImageView imageView = (ImageView) dragLayout.findViewById(R.id.imageView);
         Picasso.with(getContext()).load(bar.getThumbnail())
                 .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
-                .into(mImageView);
+                .into(imageView);
 
-        mAddress.setText(bar.getAddress());
-        mPhoneNumber.setText(bar.getPhoneNumber());
+        address.setText(bar.getAddress());
+        phoneNumber.setText(bar.getPhoneNumber());
 
         dragLayout.setGotoBarListener(new DragLayout.GotoBarListener() {
             @Override
             public void gotoBar() {
-                LocalStore.writePreferences(mContext, LocalStore.CURRENT_BAR_ID, bar.getId());
+                mTraderManager.currentBar = bar;
+                LocalStore.writePreferences(mContext, LocalStore.TRADER_BAR_ID, bar.getBarId().toString());
                 getActivity().finish();
                 startActivity(MainActivity.class);
             }

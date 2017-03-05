@@ -1,15 +1,20 @@
 package com.sao.mobile.sao.ui;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,11 +27,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.BeaconService;
+import com.sao.mobile.sao.service.SaoMessagingService;
 import com.sao.mobile.sao.ui.activity.AboutActivity;
 import com.sao.mobile.sao.ui.activity.ConditionActivity;
 import com.sao.mobile.sao.ui.activity.EditProfileActivity;
@@ -35,6 +42,7 @@ import com.sao.mobile.sao.ui.activity.ProblemActivity;
 import com.sao.mobile.sao.ui.activity.SettingsActivity;
 import com.sao.mobile.sao.ui.fragment.BarsFragment;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
+import com.sao.mobile.saolib.LocalBroadcastConstants;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
@@ -62,6 +70,10 @@ public class MainActivity extends BaseActivity
     private OrderManager mOrderManager = OrderManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
+    private BroadcastReceiver mBroadcastReceiver;
+
+    private Boolean mAlertVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,14 +86,101 @@ public class MainActivity extends BaseActivity
         setupMenuListener();
 
         startServices();
+
+        registerBroadcastReceiver();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mCurrentFragment != null) {
+        if (mCurrentFragment != null) {
             mCurrentFragment.onResume();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    private void registerBroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(HomeFragment.UPDATE_CURRENT_BAR)
+                        || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_READY)
+                        || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_VALIDATE)) {
+                    if (mCurrentFragment.isVisible() && mCurrentFragment instanceof HomeFragment) {
+                        ((HomeFragment) mCurrentFragment).setupCurrentBar();
+                    }
+                } else if (intent.getAction().equals(LocalBroadcastConstants.ORDER_BEACON)) {
+                    displayTraderAlert();
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(HomeFragment.UPDATE_CURRENT_BAR));
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(SaoMessagingService.TYPE_ORDER_VALIDATE));
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(SaoMessagingService.TYPE_ORDER_READY));
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(LocalBroadcastConstants.ORDER_BEACON));
+    }
+
+    private void displayTraderAlert() {
+        if(mAlertVisible) {
+            return;
+        }
+
+        mAlertVisible = true;
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+        builder.setTitle("Valider la commande?");
+        builder.setMessage("Envoie une alerte au bar");
+
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        callValidateTraderOrder();
+                        mAlertVisible = false;
+                    }
+                });
+
+        String negativeText = getString(android.R.string.cancel);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAlertVisible = false;
+                    }
+                });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void callValidateTraderOrder() {
+        Call<Void> barCall = mApiManager.barService.orderBeacon(mUserManager.getFacebookUserId(), mUserManager.currentBeacon.getUuid());
+        barCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail launch order");
+                    return;
+                }
+
+                Log.i(TAG, "Success launch order bar");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e(TAG, "Fail launch order bar. Message= " + t.getMessage());
+            }
+        });
     }
 
     private void startServices() {
@@ -105,7 +204,7 @@ public class MainActivity extends BaseActivity
         fragmentTransaction.commit();
         setTitle(R.string.home_name);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("This app needs location access");
@@ -199,7 +298,7 @@ public class MainActivity extends BaseActivity
             setTitle(R.string.menu_bars);
         } else if (id == R.id.nav_settings) {
             startActivity(SettingsActivity.class);
-        }  else if (id == R.id.nav_condition) {
+        } else if (id == R.id.nav_condition) {
             startActivity(ConditionActivity.class);
         } else if (id == R.id.nav_problem) {
             startActivity(ProblemActivity.class);
@@ -226,7 +325,7 @@ public class MainActivity extends BaseActivity
         // Clear preferences for next user
         LocalStore.clearPreferences(mContext);
 
-        Call<Void> loginCall = mApiManager.loginService.logout();
+        Call<Void> loginCall = mApiManager.userService.logout(mUserManager.getFacebookUserId());
         loginCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -245,6 +344,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
+        LoginManager.getInstance().logOut();
         startActivity(LoginActivity.class);
         finish();
     }

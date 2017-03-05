@@ -15,19 +15,19 @@ import android.widget.TextView;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.SaoBeacon;
 import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.TraderManager;
 import com.sao.mobile.saopro.ui.adapter.BeaconAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +53,7 @@ public class BeaconFragment extends BaseFragment {
     private List<String> mBeaconLists;
 
     private ApiManager mApiManager = ApiManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     public BeaconFragment() {
     }
@@ -86,22 +87,23 @@ public class BeaconFragment extends BaseFragment {
 
     private void retrieveBeaconBar() {
         showProgressLoad();
-        Call<Void> barServiceCall = mApiManager.barService.retrieveBeaconBar();
-        barServiceCall.enqueue(new Callback<Void>() {
+        Call<List<SaoBeacon>> barServiceCall = mApiManager.barService.retrieveBeaconBar(mTraderManager.currentBar.getBarId());
+        barServiceCall.enqueue(new Callback<List<SaoBeacon>>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success retrieve beacon bar");
-
+            public void onResponse(Call<List<SaoBeacon>> call, Response<List<SaoBeacon>> response) {
                 hideProgressLoad();
-                List<SaoBeacon> beacons = new ArrayList<SaoBeacon>();
-                beacons.add(new SaoBeacon("1", UUID.randomUUID(), null, 10, 10, 10, 10));
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve order");
+                    return;
+                }
 
-                mBeaconAdapter = new BeaconAdapter(mContext, beacons);
+                Log.i(TAG, "Success retrieve beacon bar");
+                mBeaconAdapter = new BeaconAdapter(mContext, response.body());
                 mBeaconRecyclerView.setAdapter(mBeaconAdapter);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<List<SaoBeacon>> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail retrieve beacon bar.", t);
                 SnackBarUtils.showSnackError(getView());
                 hideProgressLoad();
@@ -116,9 +118,9 @@ public class BeaconFragment extends BaseFragment {
             @Override
             public void onBeaconsDiscovered(Region region, List<Beacon> list) {
                 if (!list.isEmpty()) {
-                    SaoBeacon beacon = (SaoBeacon) list.get(0);
+                    Beacon beacon = list.get(0);
 
-                    if(mBeaconList.indexOf(beacon.getId()) == -1 && beacon.getRssi() > RSSI_THRESHOLD) {
+                    if(beacon.getRssi() > RSSI_THRESHOLD) {
                         associateBeacon(beacon);
                     }
                 }
@@ -135,15 +137,18 @@ public class BeaconFragment extends BaseFragment {
         });
     }
 
-    private void associateBeacon(final SaoBeacon beacon) {
-        Call<Void> barServiceCall = mApiManager.barService.associateBeacon();
+    private void associateBeacon(final Beacon beacon) {
+        SaoBeacon saoBeacon = new SaoBeacon(beacon.getProximityUUID().toString(), beacon.getMacAddress().toString(), beacon.getMajor(), beacon.getMinor(), false, true);
+        Call<Void> barServiceCall = mApiManager.barService.associateBeacon(mTraderManager.currentBar.getBarId() ,saoBeacon);
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve order");
+                    return;
+                }
+
                 Log.i(TAG, "Success save beacon");
-                beacon.setId("2");
-                mBeaconAdapter.addItem(beacon);
-                mBeaconList.add(beacon.getId());
                 Snackbar.make(mView, R.string.beacon_success_save, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

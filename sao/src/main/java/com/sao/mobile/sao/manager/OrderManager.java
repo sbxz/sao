@@ -37,7 +37,7 @@ public class OrderManager {
             List<Product> products = new ArrayList<>();
             product.setQuantity(1);
             products.add(product);
-            order = new Order(mUserManager.currentBar.getBarId(), calculPrice(product), products);
+            order = new Order(mUserManager.getFacebookUserId(), mUserManager.currentBar.getBarId(), calculPrice(product), products);
         } else {
             Boolean isFind = false;
             for(Product item : order.getProducts()) {

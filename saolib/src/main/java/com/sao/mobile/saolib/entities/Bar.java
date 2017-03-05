@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Seb on 23/01/2017.
@@ -30,9 +28,6 @@ public class Bar implements Serializable{
 
     @SerializedName("phoneNumber")
     private String phoneNumber;
-
-    @SerializedName("catalog")
-    private Map<String, List<Product>> catalog;
 
     public Bar() {
     }
@@ -85,11 +80,4 @@ public class Bar implements Serializable{
         this.phoneNumber = phoneNumber;
     }
 
-    public Map<String, List<Product>> getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Map<String, List<Product>> catalog) {
-        this.catalog = catalog;
-    }
 }

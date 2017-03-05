@@ -65,27 +65,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Minor"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="Rssi: "/>
-            <TextView
-                android:id="@+id/rssi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rssi"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="Power: "/>
-            <TextView
-                android:id="@+id/power"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="power"/>
         </LinearLayout>
 
     </LinearLayout>

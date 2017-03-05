@@ -63,6 +63,7 @@
             app:tabTextColor="@color/colorPrimary"
             app:tabSelectedTextColor="@color/colorPrimaryDark"
             app:tabIndicatorHeight="4dp"
+            android:visibility="gone"
             app:tabMode="scrollable" />
 
     </android.support.design.widget.AppBarLayout>
@@ -71,6 +72,7 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <RelativeLayout
@@ -125,5 +127,12 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/loadProgressBar"
+        style="?android:attr/android:progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
 </android.support.design.widget.CoordinatorLayout>

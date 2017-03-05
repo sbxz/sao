@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
+import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
@@ -38,6 +39,7 @@ public class BarsFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
+    private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
     public BarsFragment() {
@@ -75,7 +77,7 @@ public class BarsFragment extends BaseFragment {
     }
 
     private void refreshBarsList() {
-        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars();
+        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars(mUserManager.getFacebookUserId());
         barsCall.enqueue(new Callback<List<Bar>>() {
             @Override
             public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {

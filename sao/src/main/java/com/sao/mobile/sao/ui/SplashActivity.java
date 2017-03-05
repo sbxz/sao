@@ -9,7 +9,6 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.AccessToken;
-import com.facebook.Profile;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -43,11 +42,9 @@ public class SplashActivity extends BaseActivity {
         getKeyHash();
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        Profile profile = Profile.getCurrentProfile();
 
-        Boolean log = true;
-
-        if(log) {
+        Boolean log = false;
+        if(accessToken != null) {
             retrieveUserInfo();
             registerDevice();
         } else {
@@ -64,17 +61,18 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void retrieveUserInfo() {
-        Call<User> deviceCall = mApiManager.userService.retrieveUserInfo();
+        Call<User> deviceCall = mApiManager.userService.retrieveUserInfo(mUserManager.getFacebookUserId());
         deviceCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail retrieve user info");
+                    startLoginActivity();
                     return;
                 }
 
                 Log.i(TAG, "Success retrieve user info");
-                mUserManager.currentUser = response.body();
+                mUserManager.currentUser = new User(mUserManager.getName(), mUserManager.getThumbnail(), mUserManager.getFacebookUserId());
                 startMainActivity();
             }
 
@@ -82,7 +80,7 @@ public class SplashActivity extends BaseActivity {
             public void onFailure(Call<User> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail retrieve user info.", t);
                 SnackBarUtils.showSnackError(getView());
-                retrieveUserInfo();
+                startLoginActivity();
             }
         });
     }
@@ -92,7 +90,7 @@ public class SplashActivity extends BaseActivity {
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "DeviceId: " + deviceId + "DeviceToken: " + deviceToken);
 
-        Call<Void> deviceCall = mApiManager.userService.registerDevice(deviceId, deviceToken);
+        Call<Void> deviceCall = mApiManager.userService.registerDevice(mUserManager.getFacebookUserId(), deviceId, deviceToken);
         deviceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

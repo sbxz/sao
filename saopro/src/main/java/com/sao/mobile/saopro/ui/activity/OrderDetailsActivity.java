@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
@@ -21,8 +22,7 @@ import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Customer;
-import com.sao.mobile.saopro.entities.Order;
+import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.adapter.OrderDetailsAdapter;
 import com.squareup.picasso.Picasso;
@@ -44,7 +44,7 @@ public class OrderDetailsActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
-    private Order mOrder;
+    private TraderOrder mOrder;
 
     private ApiManager mApiManager = ApiManager.getInstance();
 
@@ -53,17 +53,17 @@ public class OrderDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
 
-        mOrder = (Order) getIntent().getSerializableExtra(ORDER_EXTRA);
+        mOrder = (TraderOrder) getIntent().getSerializableExtra(ORDER_EXTRA);
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
-        if(mOrder.getStep().equals(Order.Step.WAIT)) {
+        if(mOrder.getStep().equals(Order.Step.READY)) {
             confirmButton.setText(mContext.getString(R.string.finish_order));
         }
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mOrder.getStep().equals(Order.Step.WAIT)) {
-                    finishOrder();
+                if(mOrder.getStep().equals(Order.Step.READY)) {
+                    validateOrder();
                 } else {
                     confirmOrder();
                 }
@@ -77,19 +77,19 @@ public class OrderDetailsActivity extends BaseActivity {
 
     private void setupInfo() {
         TextView totalPrice = (TextView) findViewById(R.id.totalPrice);
-        totalPrice.setText(UnitPriceUtils.addEuro(mOrder.getTotalPrice()));
+        totalPrice.setText(UnitPriceUtils.addEuro(String.valueOf(mOrder.getTotalPrice())));
         ViewCompat.setTransitionName(totalPrice, PRICE_TRANSITION_NAME);
 
         TextView userName = (TextView) findViewById(R.id.userName);
-        userName.setText(Customer.getCustomerName(mOrder.getCustomer()));
+        userName.setText(mOrder.getUser().getName());
         ViewCompat.setTransitionName(userName, NAME_TRANSITION_NAME);
 
         TextView date = (TextView) findViewById(R.id.date);
-        date.setText(mOrder.getDate());
+        //date.setText(new Date(mOrder.getDate()).toString());
         ViewCompat.setTransitionName(date, DATE_TRANSITION_NAME);
 
         ImageView thumbnail = (ImageView) findViewById(R.id.userImage);
-        Picasso.with(mContext).load(mOrder.getCustomer().getThumbnail())
+        Picasso.with(mContext).load(mOrder.getUser().getThumbnail())
                 .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
@@ -100,17 +100,22 @@ public class OrderDetailsActivity extends BaseActivity {
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.order_number) + mOrder.getId());
+        getSupportActionBar().setTitle(getString(R.string.order_number) + mOrder.getOrderId());
     }
 
-    private void finishOrder() {
-        Call<Void> barServiceCall = mApiManager.barService.finishOrder();
+    private void validateOrder() {
+        Call<Void> barServiceCall = mApiManager.barService.validateOrder(mOrder.getOrderId());
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success finish order orders");
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail validate order");
+                    return;
+                }
 
-                mOrder.setStep(Order.Step.FINISH);
+                Log.i(TAG, "Success validate order orders");
+
+                mOrder.setStep(Order.Step.VALIDATE);
 
                 Intent intent = new Intent();
                 intent.putExtra(ORDER_EXTRA, mOrder);
@@ -128,13 +133,17 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void confirmOrder() {
-        Call<Void> barServiceCall = mApiManager.barService.confirmOrder();
+        Call<Void> barServiceCall = mApiManager.barService.confirmOrder(mOrder.getOrderId());
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success retrieve orders");
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail confirm order");
+                    return;
+                }
 
-                mOrder.setStep(Order.Step.WAIT);
+                Log.i(TAG, "Success confirm orders");
+                mOrder.setStep(Order.Step.READY);
 
                 Intent intent = new Intent();
                 intent.putExtra(ORDER_EXTRA, mOrder);
@@ -166,6 +175,6 @@ public class OrderDetailsActivity extends BaseActivity {
         };
 
         mRecyclerView.addOnScrollListener(mEndlessRecyclerScrollListener);
-        mRecyclerView.setAdapter(new OrderDetailsAdapter(mContext, mOrder.getProducts()));
+        mRecyclerView.setAdapter(new OrderDetailsAdapter(mContext, mOrder.getOrderProducts()));
     }
 }

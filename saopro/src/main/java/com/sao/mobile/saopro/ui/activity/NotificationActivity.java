@@ -10,11 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.TraderManager;
+
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +35,7 @@ public class NotificationActivity extends BaseActivity {
     private TextInputLayout mInputMessageLayout;
 
     private ApiManager mApiManager = ApiManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +94,16 @@ public class NotificationActivity extends BaseActivity {
     private void sendNotification() {
         int id = mReceiverSpinner.getId();
         String message = mInputMessageLayout.getEditText().getText().toString();
-        Call<Void> barServiceCall = mApiManager.barService.sendNotification();
+        News news = new News(mTraderManager.currentBar, (new Date()).getTime(), message);
+        Call<Void> barServiceCall = mApiManager.barService.sendNotification(news);
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail send notification");
+                    return;
+                }
+
                 Log.i(TAG, "Success send notification");
                 finish();
             }

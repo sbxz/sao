@@ -11,9 +11,11 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Trader implements Serializable{
-    @SerializedName("name")
+    @SerializedName("traderId")
+    private Long traderId;
+    @SerializedName("lastName")
     private String lastName;
-    @SerializedName("name")
+    @SerializedName("firstName")
     private String firstName;
     @SerializedName("bars")
     private List<Bar> bars;
@@ -21,10 +23,19 @@ public class Trader implements Serializable{
     public Trader() {
     }
 
-    public Trader(String lastName, String firstName, List<Bar> bars) {
+    public Trader(Long traderId, String lastName, String firstName, List<Bar> bars) {
+        this.traderId = traderId;
         this.lastName = lastName;
         this.firstName = firstName;
         this.bars = bars;
+    }
+
+    public Long getTraderId() {
+        return traderId;
+    }
+
+    public void setTraderId(Long traderId) {
+        this.traderId = traderId;
     }
 
     public String getLastName() {

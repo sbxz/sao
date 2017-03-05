@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Trader;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
-import com.sao.mobile.saopro.entities.Bar;
 import com.sao.mobile.saopro.manager.ApiManager;
-import com.sao.mobile.saopro.manager.UserManager;
+import com.sao.mobile.saopro.manager.TraderManager;
+import com.sao.mobile.saopro.ui.activity.BarSelectActivity;
 import com.sao.mobile.saopro.ui.activity.LoginActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +25,7 @@ public class SplashActivity extends BaseActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
 
     private ApiManager mApiManager = ApiManager.getInstance();
-    private UserManager mUserManager = UserManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +34,10 @@ public class SplashActivity extends BaseActivity {
         Log.i(TAG, "Init Splash Screen");
         setStatusBarTranslucent(true);
 
-        Boolean log = true;
+        String traderId = mTraderManager.getTraderId(mContext);
 
-        if(log) {
+        if(traderId != null) {
             retrieveTraderInfo();
-            registerDevice();
         } else {
             startLoginActivity();
         }
@@ -52,55 +49,43 @@ public class SplashActivity extends BaseActivity {
 
     private void startMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
-        finish();
     }
 
     private void retrieveTraderInfo() {
-        Call<Void> traderCall = mApiManager.traderService.retrieveTraderInfo();
-        traderCall.enqueue(new Callback<Void>() {
+        String traderId = mTraderManager.getTraderId(mContext);
+        if(traderId == null) {
+            startLoginActivity();
+            return;
+        }
+
+        Call<Trader> traderCall = mApiManager.traderService.retrieveTraderInfo(traderId);
+        traderCall.enqueue(new Callback<Trader>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Trader> call, Response<Trader> response) {
                 Log.i(TAG, "Success retrieve user info");
-                List<Bar> bars = parseData();
-                mUserManager.bars = bars;
-                mUserManager.currentBar = bars.get(0);
+                mTraderManager.trader = response.body();
+                String barId = mTraderManager.getBarId(mContext);
+
+                if(barId == null) {
+                    startActivity(BarSelectActivity.class);
+                }
+
+                for(Bar bar : mTraderManager.trader.getBars()) {
+                    if(bar.getBarId().toString().equals(barId)) {
+                        mTraderManager.currentBar = bar;
+                        break;
+                    }
+                }
+
                 startMainActivity();
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Trader> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail retrieve user info.", t);
                 SnackBarUtils.showSnackError(getView());
                 retrieveTraderInfo();
             }
         });
-    }
-
-    private void registerDevice() {
-        String deviceId = FirebaseInstanceId.getInstance().getId();
-        String deviceToken = FirebaseInstanceId.getInstance().getToken();
-        Log.i(TAG, "DeviceId: " + deviceId + "DeviceToken: " + deviceToken);
-
-        Call<Void> deviceCall = mApiManager.traderService.registerDevice();
-        deviceCall.enqueue(new Callback<Void>() {
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success register device");
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                LoggerUtils.apiFail(TAG, "Fail register device.", t);
-                SnackBarUtils.showSnackError(getView());
-            }
-        });
-    }
-
-    private List<Bar> parseData() {
-        List<Bar> bars = new ArrayList<>();
-        bars.add(new Bar("1", "Red house", "http://i.imgur.com/CqmBjo5.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-        bars.add(new Bar("2", "BreakBar", "http://i.imgur.com/zkaAooq.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-        bars.add(new Bar("3", "La Kolok", "http://i.imgur.com/0gqnEaY.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-
-        return bars;
     }
 }

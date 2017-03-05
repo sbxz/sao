@@ -29,8 +29,9 @@
     <string name="barCatalog">CATALOGUE DU BAR</string>
     <string name="order_name">Ma commande</string>
     <string name="btn_no_bar">Vous devez être dans un bar pour effectuer une commande.</string>
-    <string name="order_step_wait">Votre commande est en cours de préparation.</string>
-    <string name="order_step_finish">Votre commande est prête, vous pouvez la récupérer.</string>
+    <string name="order_step_in_progress">Commande est en cours de préparation.</string>
+    <string name="order_step_ready">Commande prête, vous pouvez la récupérer.</string>
+    <string name="order_step_validate">Aucune commande en cours</string>
 
     <!-- Bar info Activity-->
     <string name="bar_info_title">Informations</string>
@@ -45,7 +46,7 @@
     <string name="err_msg_password">Entrer votre mot de passe</string>
 
     <!-- Bar notification service -->
-    <string name="notification_welcome">Vous venez d\'arriver dans ce bar</string>
+    <string name="notification_welcome">Appuyez pour effectuer une commande !</string>
     <string name="notification_no_oder">Aucune commande en cours</string>
     <string name="notification_order_in_progress">Votre commande est en cours de traitement</string>
     <string name="notification_order_finish">Votre commande est prête. Vous pouvez la récupérer</string>

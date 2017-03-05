@@ -1,7 +1,6 @@
 package com.sao.mobile.sao.manager;
 
 import com.sao.mobile.sao.service.api.BarService;
-import com.sao.mobile.sao.service.api.LoginService;
 import com.sao.mobile.sao.service.api.UserService;
 import com.sao.mobile.saolib.manager.AbstractApiManager;
 
@@ -17,7 +16,6 @@ public class ApiManager extends AbstractApiManager {
 
     public UserService userService;
     public BarService barService;
-    public LoginService loginService;
 
     private ApiManager() {
         super();
@@ -27,6 +25,5 @@ public class ApiManager extends AbstractApiManager {
     protected void initServices() {
         userService = retrofit.create(UserService.class);
         barService = retrofit.create(BarService.class);
-        loginService = retrofit.create(LoginService.class);
     }
 }

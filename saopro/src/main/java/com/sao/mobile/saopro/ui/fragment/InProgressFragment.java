@@ -15,13 +15,13 @@ import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Order;
+import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.ui.adapter.OrderAdapter;
 
 import java.util.List;
 
-public class OrderNewListFragment extends BaseFragment {
-    private static final String TAG = OrderNewListFragment.class.getSimpleName();
+public class InProgressFragment extends BaseFragment {
+    private static final String TAG = InProgressFragment.class.getSimpleName();
 
     private View mView;
     private ProgressBar mProgressBar;
@@ -31,8 +31,7 @@ public class OrderNewListFragment extends BaseFragment {
 
     private OrderAdapter mOrderAdapter;
 
-
-    public OrderNewListFragment() {
+    public InProgressFragment() {
     }
 
     @Override
@@ -68,7 +67,7 @@ public class OrderNewListFragment extends BaseFragment {
         mRecyclerView.setAdapter(mOrderAdapter);
     }
 
-    public void addListOrder(List<Order> orders) {
+    public void addListOrder(List<TraderOrder> orders) {
         if(mOrderAdapter == null) {
             return;
         }
@@ -76,12 +75,12 @@ public class OrderNewListFragment extends BaseFragment {
         setNotNewOrderVisible();
     }
 
-    public void addOrder(Order order) {
+    public void addOrder(TraderOrder order) {
         mOrderAdapter.addItem(order);
         setNotNewOrderVisible();
     }
 
-    public void removeOrder(Order order) {
+    public void removeOrder(TraderOrder order) {
         mOrderAdapter.removeOrder(order);
         setNotNewOrderVisible();
     }

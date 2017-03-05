@@ -5,27 +5,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.pageTransformer.CustPagerTransformer;
-import com.sao.mobile.saolib.utils.LoggerUtils;
-import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Bar;
 import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.TraderManager;
 import com.sao.mobile.saopro.ui.fragment.BarSelectFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BarSelectActivity extends BaseActivity {
     private static final String TAG = BarSelectActivity.class.getSimpleName();
@@ -38,6 +32,7 @@ public class BarSelectActivity extends BaseActivity {
     private List<BarSelectFragment> fragments = new ArrayList<>();
 
     private ApiManager mApiManager = ApiManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,29 +44,7 @@ public class BarSelectActivity extends BaseActivity {
         mIndicatorTextView = (TextView) findViewById(R.id.indicator);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        retrieveTraderBars();
-
-        showProgressLoad();
-    }
-
-    private void retrieveTraderBars() {
-        Call<Void> retrieveBarCall = mApiManager.barService.retrieveTraderBars();
-        retrieveBarCall.enqueue(new Callback<Void>() {
-
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success retrieve trader bar");
-                hideProgressLoad();
-                List<Bar> bars = parseBarData();
-                fillViewPager(bars);
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                LoggerUtils.apiFail(TAG, "Failed retrieve trader bar.", t);
-                SnackBarUtils.showSnackError(getView());
-            }
-        });
+        fillViewPager(mTraderManager.trader.getBars());
     }
 
     private void fillViewPager(final List<Bar> bars) {
@@ -132,13 +105,5 @@ public class BarSelectActivity extends BaseActivity {
         mViewPager.setVisibility(View.VISIBLE);
         mIndicatorTextView.setVisibility(View.VISIBLE);
         mLinearLaout.setVisibility(View.VISIBLE);
-    }
-
-    private List<Bar> parseBarData() {
-        List<Bar> bars = new ArrayList<Bar>();
-        bars.add(new Bar("1", "Red house", "http://i.imgur.com/CqmBjo5.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-        bars.add(new Bar("2", "BreakBar", "http://i.imgur.com/zkaAooq.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-        bars.add(new Bar("3", "La Kolok", "http://i.imgur.com/0gqnEaY.jpg", "56 rue de l'abondance, 69003, Lyon", "0668370384"));
-        return bars;
     }
 }

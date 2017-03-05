@@ -6,8 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.sao.mobile.saopro.R;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saopro.R;
 
 public class NotificationSettingActivity extends BaseActivity {
     private static final String TAG = NotificationSettingActivity.class.getSimpleName();

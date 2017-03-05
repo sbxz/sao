@@ -2,6 +2,7 @@ package com.sao.mobile.sao.service;
 
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.estimote.sdk.Beacon;
@@ -10,6 +11,7 @@ import com.estimote.sdk.Region;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.saolib.LocalBroadcastConstants;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
@@ -26,7 +28,7 @@ public class BeaconService extends BaseService {
     private static final String TAG = BeaconService.class.getSimpleName();
 
     public static final Integer RSSI_THRESHOLD = -50;
-    public static final Integer LEAVE_RSSI = -70;
+    public static final Integer LEAVE_RSSI = -100;
 
     private BeaconManager mBeaconManager;
     private Region mRegion;
@@ -46,7 +48,7 @@ public class BeaconService extends BaseService {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "on startCommand");
-        //initBeaconScan();
+        initBeaconScan();
         return START_STICKY;
     }
 
@@ -106,7 +108,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<Void> barCall = mApiManager.barService.leaveBar(mUserManager.currentBar.getBarId());
+        Call<Void> barCall = mApiManager.barService.leaveBar(mUserManager.getFacebookUserId());
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -133,7 +135,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<BeaconResponse> barCall = mApiManager.barService.scanBeacon(beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
+        Call<BeaconResponse> barCall = mApiManager.barService.scanBeacon(mUserManager.getFacebookUserId(), beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
         barCall.enqueue(new Callback<BeaconResponse>() {
             @Override
             public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
@@ -169,23 +171,12 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Call<Order> barCall = mApiManager.barService.startOrder(mOrderManager.order);
-        barCall.enqueue(new Callback<Order>() {
-            @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response.code() != 200) {
-                    Log.i(TAG, "Fail launch order");
-                    return;
-                }
+        if(!mOrderManager.order.getStep().equals(Order.Step.READY)) {
+            return;
+        }
 
-                Log.i(TAG, "Success launch order bar");
-            }
-
-            @Override
-            public void onFailure(Call<Order> call, Throwable t) {
-                Log.e(TAG, "Fail launch order bar. Message= " + t.getMessage());
-            }
-        });
+        Intent intent = new Intent(LocalBroadcastConstants.ORDER_BEACON);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
     private void startBarService() {

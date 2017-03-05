@@ -1,8 +1,10 @@
 package com.sao.mobile.saopro.ui.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -18,17 +20,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.Customer;
-import com.sao.mobile.saopro.entities.Order;
-import com.sao.mobile.saopro.entities.Product;
+import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.TraderManager;
+import com.sao.mobile.saopro.service.SaoMessagingService;
+import com.sao.mobile.saopro.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,18 +44,15 @@ import static com.sao.mobile.saopro.ui.activity.OrderDetailsActivity.ORDER_EXTRA
 public class OrderListFragment extends BaseFragment {
     private static final String TAG = OrderListFragment.class.getSimpleName();
 
-    public static final String NEW_ORDER_EXTRA = "new_order_extra";
-
     private View mView;
     private ViewPager mViewPager;
     private TabLayout mOrderTabs;
 
-    private BroadcastReceiver mBroadcastReceiver;
-
-    private OrderNewListFragment mOrderNewListFragment;
-    private OrderWaitListFragment mOrderWaitListFragment;
+    private InProgressFragment mInProgressFragment;
+    private ReadyFragment mReadyFragment;
 
     private ApiManager mApiManager = ApiManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     private int[] tabIcons = {
             R.drawable.ic_menu_camera,
@@ -67,38 +69,19 @@ public class OrderListFragment extends BaseFragment {
 
         setupTabs();
         refreshOrderList();
-        registerBroadcastReceiver();
 
         return mView;
-    }
-
-    private void registerBroadcastReceiver() {
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(NEW_ORDER_EXTRA)) {
-                    List<Product> products = new ArrayList<Product>();
-                    products.add(new Product("Bière", "5", "2"));
-                    products.add(new Product("Coca", "5", "2"));
-                    products.add(new Product("Cafe", "5", "2"));
-                    mOrderNewListFragment.addOrder(new Order("2", new Customer("", "", "Seb", "http://i.imgur.com/FI49ftb.jpg"), "15", products, "18:58", Order.Step.START));
-                }
-            }
-        };
-
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(NEW_ORDER_EXTRA));
     }
 
     private void setupTabs() {
         mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
 
-        mOrderNewListFragment = new OrderNewListFragment();
-        mOrderWaitListFragment = new OrderWaitListFragment();
+        mInProgressFragment = new InProgressFragment();
+        mReadyFragment = new ReadyFragment();
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(mContext.getSupportFragmentManager());
-        adapter.addFragment(mOrderNewListFragment, "Nouvelles");
-        adapter.addFragment(mOrderWaitListFragment, "En attente");
+        adapter.addFragment(mInProgressFragment, "Nouvelles");
+        adapter.addFragment(mReadyFragment, "En attente");
         mViewPager.setAdapter(adapter);
 
         mOrderTabs = (TabLayout) mView.findViewById(R.id.orderTabs);
@@ -126,24 +109,23 @@ public class OrderListFragment extends BaseFragment {
     }
 
     private void refreshOrderList() {
-        Call<Void> barServiceCall = mApiManager.barService.retrieveOrderList();
-        barServiceCall.enqueue(new Callback<Void>() {
+        Call<Map<String, List<TraderOrder>>> barServiceCall = mApiManager.barService.retrieveOrderList(mTraderManager.currentBar.getBarId());
+        barServiceCall.enqueue(new Callback<Map<String, List<TraderOrder>>>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success retrieve orders");
+            public void onResponse(Call<Map<String, List<TraderOrder>>> call, Response<Map<String, List<TraderOrder>>> response) {
                 hideProgressLoad();
-                List<Product> products = new ArrayList<Product>();
-                products.add(new Product("Bière", "5", "2"));
-                products.add(new Product("Coca", "5", "2"));
-                products.add(new Product("Cafe", "5", "2"));
-                List<Order> orders = new ArrayList<Order>();
-                orders.add(new Order("1", new Customer("", "", "Sebas", "http://i.imgur.com/FI49ftb.jpg"), "15", products, "18:58", Order.Step.START));
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve order");
+                    return;
+                }
 
-                mOrderNewListFragment.addListOrder(orders);
+                Log.i(TAG, "Success retrieve orders");
+                mInProgressFragment.addListOrder(response.body().get("inProgress"));
+                mReadyFragment.addListOrder(response.body().get("ready"));
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Map<String, List<TraderOrder>>> call, Throwable t) {
                 hideProgressLoad();
                 LoggerUtils.apiFail(TAG, "Fail retrieve orders.", t);
                 SnackBarUtils.showSnackError(getView());
@@ -152,34 +134,42 @@ public class OrderListFragment extends BaseFragment {
     }
 
     private void shopwProgressLoad() {
-        mOrderNewListFragment.showProgressLoad();
-        mOrderWaitListFragment.showProgressLoad();
+        mInProgressFragment.showProgressLoad();
+        mReadyFragment.showProgressLoad();
     }
 
     private void hideProgressLoad() {
-        mOrderNewListFragment.hideProgressLoad();
-        mOrderWaitListFragment.hideProgressLoad();
+        mInProgressFragment.hideProgressLoad();
+        mReadyFragment.hideProgressLoad();
     }
 
     public void updateOrderList(Intent intent) {
-        Order order = (Order) intent.getSerializableExtra(ORDER_EXTRA);
-        if(order.getStep().equals(Order.Step.WAIT)) {
-            mOrderWaitListFragment.addOrder(order);
-            mOrderNewListFragment.removeOrder(order);
-        } else if(order.getStep().equals(Order.Step.FINISH)) {
-            mOrderWaitListFragment.removeOrder(order);
+        TraderOrder order = (TraderOrder) intent.getSerializableExtra(ORDER_EXTRA);
+        if (order.getStep().equals(Order.Step.READY)) {
+            mReadyFragment.addOrder(order);
+            mInProgressFragment.removeOrder(order);
+        } else if (order.getStep().equals(Order.Step.VALIDATE)) {
+            mReadyFragment.removeOrder(order);
         }
     }
 
     public void removeFragment() {
-        if(mOrderNewListFragment == null) {
+        if (mInProgressFragment == null) {
             return;
         }
 
         FragmentTransaction fragmentTransaction = mContext.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(mOrderNewListFragment);
-        fragmentTransaction.remove(mOrderWaitListFragment);
+        fragmentTransaction.remove(mInProgressFragment);
+        fragmentTransaction.remove(mReadyFragment);
         fragmentTransaction.commit();
+    }
+
+    public void addOrder(TraderOrder traderOrder) {
+        if(mInProgressFragment == null) {
+            return;
+        }
+
+        mInProgressFragment.addOrder(traderOrder);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

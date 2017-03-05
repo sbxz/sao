@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sao.mobile.saolib.entities.Trader;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.manager.ApiManager;
+import com.sao.mobile.saopro.manager.TraderManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +39,7 @@ public class LoginActivity extends BaseActivity {
     private TextView mTextForgetPassword;
 
     private ApiManager mApiManager = ApiManager.getInstance();
+    private TraderManager mTraderManager = TraderManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +83,27 @@ public class LoginActivity extends BaseActivity {
 
         showProgressDialog(getString(R.string.connect_progress));
 
-        Call<Void> loginCall = mApiManager.loginService.login();
-        loginCall.enqueue(new Callback<Void>() {
+        Call<Trader> loginCall = mApiManager.traderService.login(mInputMail.getText().toString().trim(), mInputPassword.getText().toString().trim());
+        loginCall.enqueue(new Callback<Trader>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i(TAG, "Success login");
-                LocalStore.writePreferences(mContext, LocalStore.SESSION_ID, "LOCAL_SESSION_ID");
-                startActivity(BarSelectActivity.class);
+            public void onResponse(Call<Trader> call, Response<Trader> response) {
                 hideProgressDialog();
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail sao pro login");
+                    SnackBarUtils.showSnackError(getView());
+                    return;
+                }
+
+                Log.i(TAG, "Success login");
+
+                LocalStore.writePreferences(mContext, LocalStore.TRADER_ID, response.body().getTraderId().toString());
+                mTraderManager.trader = response.body();
+
+                startActivity(BarSelectActivity.class);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Trader> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail login.", t);
                 SnackBarUtils.showSnackError(getView());
                 hideProgressDialog();
