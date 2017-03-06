@@ -35,6 +35,8 @@
 
     <!-- Bar info Activity-->
     <string name="bar_info_title">Informations</string>
+    <string name="bar_news_title">News</string>
+    <string name="bar_friend_title">Friends</string>
 
     <!-- Login Activity -->
     <string name="btn_sign_up">Connexion</string>
@@ -77,4 +79,6 @@
     <string name="title_activity_edit_profile">EditProfileActivity</string>
 
     <string name="facebook_app_id">1439619132775969</string>
+    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_friend_bar">FriendBarActivity</string>
 </resources>

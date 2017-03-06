@@ -63,7 +63,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getOrderId());
 
         Picasso.with(mContext).load(order.getUser().getThumbnail())
-                .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
                 .into(orderHolder.userImage);

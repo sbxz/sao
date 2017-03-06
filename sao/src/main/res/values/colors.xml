@@ -22,5 +22,15 @@
     <!-- Teal -->
     <color name="teal_dark">#00695C</color>
 
+    <color name="fab_blue">#3F51B5</color>
+    <color name="fab_blue_press">#5C6BC0</color>
+
+    <color name="fab_green">#4CAF50</color>
+    <color name="fab_green_press">#66BB6A</color>
+
+    <color name="fab_orange">#FF9800</color>
+    <color name="fab_orange_press">#FFA726</color>
+
     <color name="accent_translucent">#37474F</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

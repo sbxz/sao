@@ -37,7 +37,6 @@ public class BarSelectFragment extends BaseFragment {
         TextView phoneNumber = (TextView) dragLayout.findViewById(R.id.phoneNumber);
         ImageView imageView = (ImageView) dragLayout.findViewById(R.id.imageView);
         Picasso.with(getContext()).load(bar.getThumbnail())
-                .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
                 .into(imageView);

@@ -90,7 +90,6 @@ public class OrderDetailsActivity extends BaseActivity {
 
         ImageView thumbnail = (ImageView) findViewById(R.id.userImage);
         Picasso.with(mContext).load(mOrder.getUser().getThumbnail())
-                .placeholder(R.drawable.sao)
                 .fit()
                 .centerCrop()
                 .into(thumbnail);

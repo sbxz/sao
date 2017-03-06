@@ -18,6 +18,7 @@ import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.saolib.ui.base.BaseService;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,6 +39,8 @@ public class BeaconService extends BaseService {
 
     private ApiManager mApiManager = ApiManager.getInstance();
 
+    private List<Beacon> mBlackBeacon;
+
     public BeaconService() {
     }
 
@@ -48,6 +51,7 @@ public class BeaconService extends BaseService {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "on startCommand");
+        mBlackBeacon = new ArrayList<>();
         initBeaconScan();
         return START_STICKY;
     }
@@ -56,7 +60,6 @@ public class BeaconService extends BaseService {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "on create");
-        //startBarService();
     }
 
     @Override
@@ -131,6 +134,7 @@ public class BeaconService extends BaseService {
     }
 
     private void scanBeacon(final Beacon beacon) {
+        isAvailableBeacon(beacon);
         if (mUserManager.currentBeacon != null && mUserManager.currentBeacon.getUuid().equals(beacon.getProximityUUID().toString())) {
             return;
         }
@@ -141,6 +145,7 @@ public class BeaconService extends BaseService {
             public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
                 if (response.code() != 200) {
                     Log.i(TAG, "Beacon not found uuid= " + beacon.getProximityUUID().toString());
+                    putBeaconBlackList(beacon);
                     return;
                 }
 
@@ -162,6 +167,20 @@ public class BeaconService extends BaseService {
                 LoggerUtils.apiFail(TAG, "Fail detect Bar.", t);
             }
         });
+    }
+
+    private Boolean isAvailableBeacon(Beacon beacon) {
+        for(Beacon b : mBlackBeacon) {
+            if(b.getProximityUUID().toString().equals(beacon.getProximityUUID().toString())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void putBeaconBlackList(Beacon beacon) {
+        mBlackBeacon.add(beacon);
     }
 
     private void launchTraderOrder(Beacon beacon) {

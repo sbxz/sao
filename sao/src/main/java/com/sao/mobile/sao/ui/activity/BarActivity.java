@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.BarProductManager;
@@ -31,6 +33,7 @@ import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Product;
+import com.sao.mobile.saolib.entities.api.FriendBar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.LoggerUtils;
@@ -60,6 +63,10 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
     private RelativeLayout mCartButton;
     private ProgressBar mLoadProgressBar;
 
+    private FloatingActionsMenu mFABMenu;
+    private FloatingActionButton mFABFriend;
+    private FloatingActionButton mFABNews;
+
     private TextView mCartQuantity;
     private TextView mCartPrice;
 
@@ -85,6 +92,7 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         setupHeader();
         setupTabs();
         setupFooter();
+        setupFAB();
 
         Map<String, List<Product>> catalog = mBarProductManager.getBarCatalog(mBar);
         if(catalog == null) {
@@ -94,6 +102,26 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         }
 
         updateCart();
+    }
+
+    private void setupFAB() {
+        mFABMenu = (FloatingActionsMenu) findViewById(R.id.fab_multiple_actions);
+        mFABFriend = (FloatingActionButton) findViewById(R.id.fabFriend);
+        mFABFriend.setIcon(R.drawable.ic_people_white);
+        mFABFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(FriendBarActivity.class);
+            }
+        });
+        mFABNews = (FloatingActionButton) findViewById(R.id.fabNews);
+        mFABNews.setIcon(R.drawable.ic_notifications_white);
+        mFABNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(NewsActivity.class);
+            }
+        });
     }
 
     @Override

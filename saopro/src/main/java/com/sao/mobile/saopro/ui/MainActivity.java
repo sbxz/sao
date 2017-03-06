@@ -251,7 +251,6 @@ public class MainActivity extends BaseActivity
         mBarThumbnail = (ImageView) headerLayout.findViewById(R.id.barThumbnail);
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.menu_bar_avatar_size);
         Picasso.with(mContext).load(mTraderManager.currentBar.getThumbnail())
-                .placeholder(R.drawable.sao)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .transform(new CircleTransformation())
@@ -376,7 +375,6 @@ public class MainActivity extends BaseActivity
 
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.menu_bar_avatar_size);
         Picasso.with(mContext).load(mTraderManager.currentBar.getThumbnail())
-                .placeholder(R.drawable.sao)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .transform(new CircleTransformation())
