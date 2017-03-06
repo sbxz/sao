@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -22,6 +23,8 @@ import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.MainActivity;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import java.util.Arrays;
 
@@ -33,6 +36,10 @@ public class LoginActivity extends BaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
+    private CarouselView mCarouselView;
+
+    private int[] mTutoImage = {R.drawable.background_splash, R.drawable.background_splash, R.drawable.background_splash, R.drawable.background_splash, R.drawable.background_splash};
+
     private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
@@ -43,7 +50,19 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setupCarouselView();
         setupFacebook();
+    }
+
+    private void setupCarouselView() {
+        mCarouselView = (CarouselView) findViewById(R.id.carouselView);
+        mCarouselView.setPageCount(mTutoImage.length);
+        mCarouselView.setImageListener(new ImageListener() {
+            @Override
+            public void setImageForPosition(int position, ImageView imageView) {
+                imageView.setImageResource(mTutoImage[position]);
+            }
+        });
     }
 
     private void setupFacebook() {
