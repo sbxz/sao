@@ -33,7 +33,6 @@ import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Product;
-import com.sao.mobile.saolib.entities.api.FriendBar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.utils.LoggerUtils;
