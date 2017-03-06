@@ -54,6 +54,7 @@ public class LoginActivity extends BaseActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(final LoginResult loginResult) {
+                        showProgressDialog(getString(R.string.connect_progress));
                         if (Profile.getCurrentProfile() == null) {
                             new ProfileTracker() {
                                 @Override
@@ -69,20 +70,17 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCancel() {
                         Log.i(TAG, "On facebook cancel");
-                        hideProgressDialog();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         Log.e(TAG, "On facebook error cause= " + exception.getCause() + " message= " + exception.getMessage());
-                        hideProgressDialog();
                     }
                 });
 
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressDialog(getString(R.string.connect_progress));
                 LoginManager.getInstance().logInWithReadPermissions(mContext, Arrays.asList("email", "public_profile", "user_friends"));
             }
         });
