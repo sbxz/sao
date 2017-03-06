@@ -45,8 +45,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class BarDetailActivity extends BaseActivity implements OnItemClickListener {
-    private static final String TAG = BarDetailActivity.class.getSimpleName();
+public class BarActivity extends BaseActivity implements OnItemClickListener {
+    private static final String TAG = BarActivity.class.getSimpleName();
 
     public static final String BAR_EXTRA = "barExtra";
 
@@ -75,7 +75,7 @@ public class BarDetailActivity extends BaseActivity implements OnItemClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bar_detail);
+        setContentView(R.layout.activity_bar);
         setStatusBarTranslucent(true);
 
         mLoadProgressBar = (ProgressBar) findViewById(R.id.loadProgressBar);

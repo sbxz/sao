@@ -27,8 +27,8 @@ import retrofit2.Response;
 public class BeaconService extends BaseService {
     private static final String TAG = BeaconService.class.getSimpleName();
 
-    public static final Integer RSSI_THRESHOLD = -50;
-    public static final Integer LEAVE_RSSI = -100;
+    public static final Integer RSSI_THRESHOLD = -60;
+    public static final Integer LEAVE_RSSI = -90;
 
     private BeaconManager mBeaconManager;
     private Region mRegion;
@@ -140,7 +140,7 @@ public class BeaconService extends BaseService {
             @Override
             public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
                 if (response.code() != 200) {
-                    Log.i(TAG, "Beacon not found");
+                    Log.i(TAG, "Beacon not found uuid= " + beacon.getProximityUUID().toString());
                     return;
                 }
 

@@ -27,6 +27,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected BaseActivity mContext;
 
+    public static BaseActivity currentActivity;
+
     private Toolbar mToolbar;
     private Menu mMenu;
     private ProgressDialog mProgressDialog;
@@ -39,8 +41,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
-        isForeground = true;
+
+        this.currentActivity = this;
+        this.mContext = this;
+        this.isForeground = true;
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -64,6 +68,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        currentActivity = this;
     }
 
     public Menu getMenu() {

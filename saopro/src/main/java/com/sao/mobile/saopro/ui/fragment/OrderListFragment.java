@@ -1,19 +1,13 @@
 package com.sao.mobile.saopro.ui.fragment;
 
 
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,8 +22,6 @@ import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.manager.TraderManager;
-import com.sao.mobile.saopro.service.SaoMessagingService;
-import com.sao.mobile.saopro.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

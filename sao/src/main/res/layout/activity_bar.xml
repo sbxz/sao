@@ -8,7 +8,7 @@
     android:layout_alignParentTop="true"
     android:fitsSystemWindows="true"
     app:statusBarScrim="@android:color/transparent"
-    tools:context="com.sao.mobile.sao.ui.activity.BarDetailActivity">
+    tools:context="com.sao.mobile.sao.ui.activity.BarActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"

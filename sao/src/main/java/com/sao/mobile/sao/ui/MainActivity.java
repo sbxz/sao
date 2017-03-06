@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -136,7 +135,7 @@ public class MainActivity extends BaseActivity
         }
 
         mAlertVisible = true;
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(BaseActivity.currentActivity);
         builder.setTitle("Valider la commande?");
         builder.setMessage("Envoie une alerte au bar");
 

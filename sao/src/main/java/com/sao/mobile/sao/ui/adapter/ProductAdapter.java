@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
@@ -92,11 +92,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
-            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_in_progress, Snackbar.LENGTH_LONG)
+            Snackbar.make(((BarActivity) mContext).getView(), R.string.order_step_in_progress, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;
         } else if(mOrderManager.order != null && mOrderManager.order.getStep().equals(Order.Step.READY)) {
-            Snackbar.make(((BarDetailActivity) mContext).getView(), R.string.order_step_ready, Snackbar.LENGTH_LONG)
+            Snackbar.make(((BarActivity) mContext).getView(), R.string.order_step_ready, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             return false;
         }

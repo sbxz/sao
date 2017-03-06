@@ -14,7 +14,7 @@ import android.util.Log;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseService;
@@ -71,11 +71,11 @@ public class BarNotificationService extends BaseService {
     }
 
     public static Notification getBarNotification(Context context, Bar bar, String contentText, Bitmap barBitmap) {
-        Intent notificationIntent = new Intent(context, BarDetailActivity.class);
-        notificationIntent.putExtra(BarDetailActivity.BAR_EXTRA, bar);
+        Intent notificationIntent = new Intent(context, BarActivity.class);
+        notificationIntent.putExtra(BarActivity.BAR_EXTRA, bar);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(BarDetailActivity.class);
+        stackBuilder.addParentStack(BarActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
         PendingIntent pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

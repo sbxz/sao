@@ -22,7 +22,7 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.adapter.HomeAdapter;
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.Order;
@@ -168,11 +168,11 @@ public class HomeFragment extends BaseFragment {
     private void goToCurrentBar() {
         Activity activity = (Activity) mContext;
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                new Pair(mBarThumbnail, BarDetailActivity.IMAGE_TRANSITION_NAME)
+                new Pair(mBarThumbnail, BarActivity.IMAGE_TRANSITION_NAME)
         );
 
-        Intent intent = new Intent(activity, BarDetailActivity.class);
-        intent.putExtra(BarDetailActivity.BAR_EXTRA, mUserManager.currentBar);
+        Intent intent = new Intent(activity, BarActivity.class);
+        intent.putExtra(BarActivity.BAR_EXTRA, mUserManager.currentBar);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 

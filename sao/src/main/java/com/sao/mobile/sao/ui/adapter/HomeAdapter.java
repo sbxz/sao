@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.ui.activity.BarDetailActivity;
+import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.News;
 import com.squareup.picasso.Picasso;
@@ -85,11 +85,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void goToBarDetail(HomeViewHolder barsViewHolder, Bar bar) {
         Activity activity = (Activity) mContext;
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                new Pair(barsViewHolder.barThumbnail, BarDetailActivity.IMAGE_TRANSITION_NAME)
+                new Pair(barsViewHolder.barThumbnail, BarActivity.IMAGE_TRANSITION_NAME)
         );
 
-        Intent intent = new Intent(activity, BarDetailActivity.class);
-        intent.putExtra(BarDetailActivity.BAR_EXTRA, bar);
+        Intent intent = new Intent(activity, BarActivity.class);
+        intent.putExtra(BarActivity.BAR_EXTRA, bar);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
