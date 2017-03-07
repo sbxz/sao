@@ -91,7 +91,8 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorAccent"/>
 
         <TextView
             android:id="@+id/barAdress"
@@ -100,7 +101,8 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingTop="5dp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            android:textColor="@color/colorAccent"/>
     </LinearLayout>
 
     <RelativeLayout

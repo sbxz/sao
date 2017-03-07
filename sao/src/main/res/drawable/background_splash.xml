@@ -5,7 +5,7 @@
         android:drawable="@color/colorPrimaryDark"/>
 
     <item>
-        <bitmap
+          <bitmap
             android:gravity="center"
             android:src="@drawable/sao"/>
     </item>

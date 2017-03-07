@@ -155,16 +155,16 @@
             android:id="@+id/fabFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_orange"
-            app:fab_colorPressed="@color/fab_orange_press"
+            app:fab_colorNormal="@color/fab_blue_light"
+            app:fab_colorPressed="@color/fab_blue_light_press"
             app:fab_title="Friend"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_green"
-            app:fab_colorPressed="@color/fab_green_press"
+            app:fab_colorNormal="@color/fab_blue_light"
+            app:fab_colorPressed="@color/fab_blue_light_press"
             app:fab_title="News"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>

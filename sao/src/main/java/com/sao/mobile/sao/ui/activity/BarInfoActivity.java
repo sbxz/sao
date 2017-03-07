@@ -56,7 +56,7 @@ public class BarInfoActivity extends BaseActivity {
         mbarDetails = (TextView) findViewById(R.id.barDetails);
         mbarDetails.setText(mBar.getDescription());
         mBarTime = (TextView) findViewById(R.id.barTime);
-        mBarTime.setText(" Horaire : 9h / 18h");
+        mBarTime.setText("Horaire : 9h / 18h");
         mBarAdress = (TextView) findViewById(R.id.barAdress);
         mBarAdress.setText(mBar.getAddress());
     }
