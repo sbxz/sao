@@ -57,6 +57,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.synnapps:carouselview:0.0.10'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
     testCompile 'junit:junit:4.12'
 }
 
