@@ -1,13 +1,18 @@
 package com.sao.mobile.sao.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -30,6 +35,7 @@ import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.BarProductManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Product;
@@ -134,11 +140,19 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(BarInfoActivity.class);
+                goToBarInfo();
             }
         });
 
         return true;
+    }
+
+    private void goToBarInfo() {
+        Activity activity = (Activity) mContext;
+
+        Intent intent = new Intent(activity, BarInfoActivity.class);
+        intent.putExtra(BarActivity.BAR_EXTRA, mBar);
+        ActivityCompat.startActivity(activity, intent, null);
     }
 
     @Override
