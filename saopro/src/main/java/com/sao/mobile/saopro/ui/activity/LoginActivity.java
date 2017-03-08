@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.manager.TraderManager;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +32,9 @@ import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
+
+    private CarouselView mCarouselView;
+    private int[] mTutoImage = {R.drawable.ic_font_login_dark_1, R.drawable.ic_font_login_dark_2, R.drawable.ic_font_login_dark_3, R.drawable.ic_font_login_dark_4};
 
     private EditText mInputMail;
     private EditText mInputPassword;
@@ -45,6 +51,16 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        mCarouselView = (CarouselView) findViewById(R.id.carouselView1);
+        mCarouselView.setPageCount(mTutoImage.length);
+        mCarouselView.setImageListener(new ImageListener() {
+            @Override
+            public void setImageForPosition(int position, ImageView imageView) {
+                imageView.setImageResource(mTutoImage[position]);
+            }
+        });
 
         mInputMail = (EditText) findViewById(R.id.input_mail);
         mInputPassword = (EditText) findViewById(R.id.input_password);

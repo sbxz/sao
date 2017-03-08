@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimaryLight">#b4b4b4</color>
-    <color name="colorPrimary">#37474F</color>
+    <color name="colorPrimary">#d937474f</color>
     <color name="colorPrimaryDark">#263238</color>
 
-    <color name="colorBackgroundPrimary">#455A64</color>
-    <color name="colorBackgroundAccent">#546E7A</color>
+    <color name="colorBackgroundPrimary">#64B5F6</color>
+    <color name="colorBackgroundAccent">#90CAF9</color>
 
     <color name="windowBackground">#FFFFFF</color>
     <color name="textIconColorPrimary">#FFFFFF</color>
@@ -13,12 +13,15 @@
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#727272</color>
 
-    <color name="colorAccentLight">#d437474f</color>
-    <color name="colorAccent">#517384</color>
-    <color name="colorAccentDark">#2c383e</color>
+    <color name="colorAccentLight">#1565C0</color>
+    <color name="colorAccent">#1976D2</color>
+    <color name="colorAccentDark">#0D47A1</color>
 
     <color name="white">#ffffff</color>
 
     <!-- Teal -->
     <color name="teal_dark">#00695C</color>
+
+    <color name="accent_translucent">#37474F</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

@@ -37,7 +37,6 @@ public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     private CarouselView mCarouselView;
-
     private int[] mTutoImage = {R.drawable.ic_font_login_dark_1, R.drawable.ic_font_login_dark_2, R.drawable.ic_font_login_dark_3, R.drawable.ic_font_login_dark_4};
 
     private UserManager mUserManager = UserManager.getInstance();

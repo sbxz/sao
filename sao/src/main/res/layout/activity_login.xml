@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/black_semi_transparent">
 
-    <com.synnapps.carouselview.CarouselView
+    <com.CarouselView
         android:id="@+id/carouselView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

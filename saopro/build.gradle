@@ -49,6 +49,7 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.bignerdranch.android:expandablerecyclerview:2.1.1'
     compile 'com.estimote:sdk:0.10.+@aar'
+    compile 'com.synnapps:carouselview:0.0.10'
     testCompile 'junit:junit:4.12'
 }
 
