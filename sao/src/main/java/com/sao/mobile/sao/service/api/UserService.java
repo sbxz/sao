@@ -5,6 +5,7 @@ import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.entities.api.FriendBar;
+import com.sao.mobile.saolib.entities.api.MyOrder;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public interface UserService {
 
     @GET("bar/")
     Call<List<Bar>> retrieveBars(@Query("facebookUserId") String facebookUserId);
+
+    @GET("bar/me/order")
+    Call<List<MyOrder>> retrieveFinishOrder(@Query("facebookUserId") String facebookUserId);
 
     @GET("user/friend")
     Call<List<FriendBar>> retrieveFriendBar(@Query("facebookUserId") String facebookUserId);
