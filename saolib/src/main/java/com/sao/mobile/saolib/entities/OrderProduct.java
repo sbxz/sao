@@ -1,8 +1,7 @@
-package com.sao.mobile.saopro.entities;
+package com.sao.mobile.saolib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
-import com.sao.mobile.saolib.entities.Product;
 
 import java.io.Serializable;
 
