@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity
         }
 
         mAlertVisible = true;
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getApplicationContext());
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
         builder.setTitle("Valider la commande?");
         builder.setMessage("Envoie une alerte au bar");
 
@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void callValidateTraderOrder() {
-        Call<Void> barCall = mApiManager.barService.orderBeacon(mUserManager.getFacebookUserId(), mUserManager.currentBeacon.getUuid());
+        Call<Void> barCall = mApiManager.barService.orderBeacon(mUserManager.getFacebookUserId(), mUserManager.currentBeacon.getUuid(), mUserManager.currentBeacon.getMajor(), mUserManager.currentBeacon.getMinor());
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -366,10 +366,10 @@ public class MainActivity extends BaseActivity
                     return;
                 }
 
-                Log.i(TAG, "Success Order");
-                if (response.body() != null) {
-                    // TODO
-                    mOrderManager.order = response.body();
+                Order order = response.body();
+                if (order != null && !order.getStep().equals(Order.Step.VALIDATE)) {
+                    Log.i(TAG, "Success Order");
+                    mOrderManager.order = order;
                 }
             }
 

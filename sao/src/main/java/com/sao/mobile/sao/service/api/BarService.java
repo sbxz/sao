@@ -27,7 +27,7 @@ public interface BarService {
     Call<Order> startOrder(@Body Order order);
 
     @GET("bar/beacon/order")
-    Call<Void> orderBeacon(@Query("facebookUserId") String facebookUserId, @Query("uuid") String uuid);
+    Call<Void> orderBeacon(@Query("facebookUserId") String facebookUserId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor);
 
     @GET("bar/beacon/leave")
     Call<Void> leaveBar(@Query("facebookUserId") String facebookUserId);

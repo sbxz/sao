@@ -38,11 +38,11 @@ public interface BarService {
     Call<Void> sendNotification(@Body News news);
 
     @GET("bar/beacon/forOrder")
-    Call<Void> beaconForOrder(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("forOrder") Boolean forOrder);
+    Call<Void> beaconForOrder(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor, @Query("forOrder") Boolean forOrder);
 
     @GET("bar/beacon/enable")
-    Call<Void> beaconEnable(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("enable") Boolean enable);
+    Call<Void> beaconEnable(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor, @Query("enable") Boolean enable);
 
     @GET("bar/beacon/delete")
-    Call<Void> deleteBeacon(@Query("barId") Long barId, @Query("uuid") String uuid);
+    Call<Void> deleteBeacon(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor);
 }
