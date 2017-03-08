@@ -13,25 +13,57 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseService;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
 public class BarNotificationService extends BaseService {
-    private static final String TAG = BarNotificationService.class.getSimpleName();
-
     public static final int BAR_NOTIFICATION_ID = 1000;
-
+    private static final String TAG = BarNotificationService.class.getSimpleName();
     private static Notification.Builder notificationBuilder;
 
+    private OrderManager mOrderManager = OrderManager.getInstance();
     private UserManager mUserManager = UserManager.getInstance();
 
     public BarNotificationService() {
+    }
+
+    public static void notifyBarNotification(Context context, Bar bar, String contentText) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationBuilder.setContentText(contentText);
+
+        notificationManager.notify(
+                BarNotificationService.BAR_NOTIFICATION_ID, notificationBuilder.build());
+    }
+
+    public static Notification getBarNotification(Context context, Bar bar, String contentText, Bitmap barBitmap) {
+        Intent notificationIntent = new Intent(context, BarActivity.class);
+        notificationIntent.putExtra(BarActivity.BAR_EXTRA, bar);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(BarActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationBuilder = new Notification.Builder(context)
+                .setContentTitle(bar.getName())
+                .setContentText(contentText)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setLargeIcon(barBitmap)
+                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
+                .setContentIntent(pendingIntent);
+        return notificationBuilder.build();
     }
 
     @Override
@@ -55,40 +87,19 @@ public class BarNotificationService extends BaseService {
         new DownloadImageTask(mContext, mUserManager.currentBar.getThumbnail()).execute();
     }
 
-    public static void notifyBarNotification(Context context, Bar bar, String contentText) {
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationBuilder.setContentText(contentText);
-
-        notificationManager.notify(
-                BarNotificationService.BAR_NOTIFICATION_ID, notificationBuilder.build());
-    }
-
     private void startNotification(Bitmap bitmap) {
-        Notification notification = getBarNotification(mContext, mUserManager.currentBar, getString(R.string.notification_welcome), bitmap);
+        String orderStatus = "";
+
+        if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.INPROGRESS)) {
+            orderStatus = getString(R.string.order_step_in_progress);
+        } else if (mOrderManager.isProductOk() && mOrderManager.order.getStep().equals(Order.Step.READY)) {
+            orderStatus = getString(R.string.order_step_ready);
+        } else {
+            orderStatus = getString(R.string.notification_welcome);
+        }
+
+        Notification notification = getBarNotification(mContext, mUserManager.currentBar, orderStatus, bitmap);
         startForeground(BAR_NOTIFICATION_ID, notification);
-    }
-
-    public static Notification getBarNotification(Context context, Bar bar, String contentText, Bitmap barBitmap) {
-        Intent notificationIntent = new Intent(context, BarActivity.class);
-        notificationIntent.putExtra(BarActivity.BAR_EXTRA, bar);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(BarActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
-        PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notificationBuilder = new Notification.Builder(context)
-                .setContentTitle(bar.getName())
-                .setContentText(contentText)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setLargeIcon(barBitmap)
-                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
-                .setContentIntent(pendingIntent);
-        return notificationBuilder.build();
     }
 
     @Override

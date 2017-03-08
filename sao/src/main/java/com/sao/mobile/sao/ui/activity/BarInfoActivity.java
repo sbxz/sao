@@ -1,64 +1,91 @@
 package com.sao.mobile.sao.ui.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.sao.mobile.sao.R;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import static com.sao.mobile.sao.ui.activity.BarActivity.IMAGE_TRANSITION_NAME;
+
 public class BarInfoActivity extends BaseActivity {
+    public static final String BAR_EXTRA = "barExtra";
     private static final String TAG = BarInfoActivity.class.getSimpleName();
     private ImageView mBarThumbnail;
-    private TextView mBarNom;
+    private TextView mBarName;
     private TextView mbarDetails;
-    private TextView mBarAdress;
-    private TextView mBarTime;
+    private TextView mBarAddress;
+    private TextView mBarScheduled;
 
-    static final LatLng PARIS = new LatLng(48.858093, 2.294694);
-
-    public static final String BAR_EXTRA = "barExtra";
     private Bar mBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_info);
+        setStatusBarTranslucent(true);
+
         mBar = (Bar) getIntent().getSerializableExtra(BAR_EXTRA);
 
         setupHeader();
-        setupFooter();
+        setupBody();
         setupMap();
     }
 
     private void setupHeader() {
+        ViewCompat.setTransitionName(findViewById(R.id.app_bar_layout), IMAGE_TRANSITION_NAME);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar(toolbar);
-        getSupportActionBar().setTitle(mBar.getName());
+        getSupportActionBar().setTitle("");
 
         mBarThumbnail = (ImageView) findViewById(R.id.barThumbnail);
-        Picasso.with(mContext).load(mBar.getThumbnail()).fit().centerCrop().into(mBarThumbnail);
+        Picasso.with(mContext).load(mBar.getThumbnail()).fit().centerCrop().into(mBarThumbnail, new Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = ((BitmapDrawable) mBarThumbnail.getDrawable()).getBitmap();
+                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                    public void onGenerated(Palette palette) {
+                        applyPalette(palette);
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
-    private void setupFooter() {
+    private void setupBody() {
+        mBarName = (TextView) findViewById(R.id.barName);
+        mBarName.setText(mBar.getName());
+
         mbarDetails = (TextView) findViewById(R.id.barDetails);
         mbarDetails.setText(mBar.getDescription());
-        mBarTime = (TextView) findViewById(R.id.barTime);
-        mBarTime.setText("Horaire : 9h / 18h");
-        mBarAdress = (TextView) findViewById(R.id.barAdress);
-        mBarAdress.setText(mBar.getAddress());
+
+        mBarScheduled = (TextView) findViewById(R.id.barSheduled);
+        mBarScheduled.setText("   " + mBar.getSchedule());
+
+        mBarAddress = (TextView) findViewById(R.id.barAddress);
+        mBarAddress.setText("   " + mBar.getAddress());
     }
 
     private void setupMap() {
@@ -66,11 +93,22 @@ public class BarInfoActivity extends BaseActivity {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                googleMap.addMarker(new MarkerOptions().title("Paris").position(PARIS));
+                LatLng latLng = new LatLng(mBar.getLatitude(), mBar.getLongitude());
 
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PARIS, 15));
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+                googleMap.addMarker(new MarkerOptions().title(mBar.getName()).position(latLng));
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
             }
         });
+    }
+
+    private void applyPalette(Palette palette) {
+        int primaryDark = getResources().getColor(R.color.colorPrimaryDark);
+        int primary = getResources().getColor(R.color.colorPrimary);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setContentScrimColor(primary);
+        collapsingToolbarLayout.setStatusBarScrimColor(primary);
+        supportStartPostponedEnterTransition();
     }
 }

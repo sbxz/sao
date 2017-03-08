@@ -43,7 +43,6 @@ public class SplashActivity extends BaseActivity {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        Boolean log = false;
         if(accessToken != null) {
             retrieveUserInfo();
             registerDevice();

@@ -25,11 +25,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NotificationActivity extends BaseActivity {
-    private static final String TAG = NotificationActivity.class.getSimpleName();
-
     public static final int CLIENT_PRESENT = 0;
     public static final int CLIENT_ALL = 0;
-
+    private static final String TAG = NotificationActivity.class.getSimpleName();
     private Spinner mReceiverSpinner;
     private Button mSendNotification;
     private TextInputLayout mInputMessageLayout;
@@ -101,6 +99,7 @@ public class NotificationActivity extends BaseActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail send notification");
+                    SnackBarUtils.showSnackError(getView());
                     return;
                 }
 

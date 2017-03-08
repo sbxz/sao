@@ -3,6 +3,7 @@ package com.sao.mobile.sao.service.api;
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.Product;
+import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
 
 import java.util.List;
@@ -36,4 +37,10 @@ public interface BarService {
 
     @GET("bar/catalog")
     Call<Map<String, List<Product>>> retrieveCatalog(@Query("barId") Long barId);
+
+    @GET("bar/friend")
+    Call<List<User>> retrieveBarFriends(@Query("facebookUserId") String facebookUserId, @Query("barId") Long barId);
+
+    @GET("bar/news")
+    Call<List<News>> retrieveNewsBar(@Query("barId") Long barId);
 }

@@ -35,7 +35,6 @@ import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.BarProductManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.sao.ui.fragment.BarProductsFragment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Product;
@@ -54,13 +53,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class BarActivity extends BaseActivity implements OnItemClickListener {
-    private static final String TAG = BarActivity.class.getSimpleName();
-
     public static final String BAR_EXTRA = "barExtra";
-
     public static final String IMAGE_TRANSITION_NAME = "imageTransition";
     public static final String POINT_TRANSITION_NAME = "pointTransition";
-
+    private static final String TAG = BarActivity.class.getSimpleName();
     private ImageView mBarThumbnail;
     private TextView mBarPoint;
     private TabLayout mBarInfosTab;
@@ -116,7 +112,9 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         mFABFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(FriendBarActivity.class);
+                Intent intent = new Intent(mContext, FriendBarActivity.class);
+                intent.putExtra(BarActivity.BAR_EXTRA, mBar);
+                startActivity(intent);
             }
         });
         mFABNews = (FloatingActionButton) findViewById(R.id.fabNews);
@@ -124,7 +122,9 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         mFABNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(NewsActivity.class);
+                Intent intent = new Intent(mContext, NewsActivity.class);
+                intent.putExtra(BarActivity.BAR_EXTRA, mBar);
+                startActivity(intent);
             }
         });
     }
@@ -149,10 +149,13 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
 
     private void goToBarInfo() {
         Activity activity = (Activity) mContext;
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                new Pair<View, String>(mBarThumbnail, BarActivity.IMAGE_TRANSITION_NAME)
+        );
 
         Intent intent = new Intent(activity, BarInfoActivity.class);
         intent.putExtra(BarActivity.BAR_EXTRA, mBar);
-        ActivityCompat.startActivity(activity, intent, null);
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
     @Override

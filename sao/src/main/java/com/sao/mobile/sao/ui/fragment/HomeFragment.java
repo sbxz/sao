@@ -43,9 +43,8 @@ import retrofit2.Response;
 
 
 public class HomeFragment extends BaseFragment {
-    private static final String TAG = HomeFragment.class.getSimpleName();
     public static final String UPDATE_CURRENT_BAR = "updateCurrentBar";
-
+    private static final String TAG = HomeFragment.class.getSimpleName();
     private View mView;
 
     private CollapsingToolbarLayout mCurrentBarLayout;
@@ -85,7 +84,7 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setupCurrentBar();
-       // refreshData();
+        // refreshData();
     }
 
 
@@ -174,6 +173,14 @@ public class HomeFragment extends BaseFragment {
         Intent intent = new Intent(activity, BarActivity.class);
         intent.putExtra(BarActivity.BAR_EXTRA, mUserManager.currentBar);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
+    }
+
+    public void addNews(News news) {
+        if (mHomeAdapter == null) {
+            return;
+        }
+
+        mHomeAdapter.addItem(news);
     }
 
     private void setupRecyclerView() {

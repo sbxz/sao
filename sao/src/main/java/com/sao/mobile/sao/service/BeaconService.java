@@ -11,7 +11,7 @@ import com.estimote.sdk.Region;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.saolib.LocalBroadcastConstants;
+import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
@@ -26,11 +26,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BeaconService extends BaseService {
-    private static final String TAG = BeaconService.class.getSimpleName();
-
     public static final Integer RSSI_THRESHOLD = -60;
     public static final Integer LEAVE_RSSI = -90;
-
+    private static final String TAG = BeaconService.class.getSimpleName();
     private BeaconManager mBeaconManager;
     private Region mRegion;
 
@@ -76,6 +74,10 @@ public class BeaconService extends BaseService {
             public void onBeaconsDiscovered(Region region, List<Beacon> list) {
                 if (!list.isEmpty()) {
                     Beacon beacon = list.get(0);
+                    if (!isAvailableBeacon(beacon)) {
+                        return;
+                    }
+
                     Log.i(TAG, "beacon RSSI: " + beacon.getRssi());
 
                     if (beacon.getRssi() > RSSI_THRESHOLD) {
@@ -134,7 +136,6 @@ public class BeaconService extends BaseService {
     }
 
     private void scanBeacon(final Beacon beacon) {
-        isAvailableBeacon(beacon);
         if (mUserManager.currentBeacon != null && mUserManager.currentBeacon.getUuid().equals(beacon.getProximityUUID().toString())) {
             return;
         }
@@ -170,6 +171,10 @@ public class BeaconService extends BaseService {
     }
 
     private Boolean isAvailableBeacon(Beacon beacon) {
+        if (mBlackBeacon.size() == 0) {
+            return true;
+        }
+
         for(Beacon b : mBlackBeacon) {
             if(b.getProximityUUID().toString().equals(beacon.getProximityUUID().toString())) {
                 return true;
@@ -194,7 +199,7 @@ public class BeaconService extends BaseService {
             return;
         }
 
-        Intent intent = new Intent(LocalBroadcastConstants.ORDER_BEACON);
+        Intent intent = new Intent(NotificationConstants.TYPE_OPEN_ORDER);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 

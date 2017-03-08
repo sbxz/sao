@@ -133,8 +133,7 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAmZdoMDzyJxQm05JJdeUWYcjs70_eFCYI"
-            />
+            android:value="@string/maps_api_key" />
 
     </application>
 

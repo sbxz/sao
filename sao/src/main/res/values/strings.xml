@@ -29,7 +29,7 @@
     <string name="barCatalog">CATALOGUE DU BAR</string>
     <string name="order_name">Ma commande</string>
     <string name="btn_no_bar">Vous devez être dans un bar pour effectuer une commande.</string>
-    <string name="order_step_in_progress">Commande est en cours de préparation.</string>
+    <string name="order_step_in_progress">Commande en cours de préparation.</string>
     <string name="order_step_ready">Commande prête, vous pouvez la récupérer.</string>
     <string name="order_step_validate">Aucune commande en cours</string>
 
@@ -77,8 +77,10 @@
     <string name="title_activity_condition">ConditionActivity</string>
     <string name="title_activity_problem">ProblemActivity</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
-
-    <string name="facebook_app_id">1439619132775969</string>
     <string name="title_activity_news">NewsActivity</string>
     <string name="title_activity_friend_bar">FriendBarActivity</string>
+
+    <string name="facebook_app_id">1439619132775969</string>
+    <string name="maps_api_key">AIzaSyAmZdoMDzyJxQm05JJdeUWYcjs70_eFCYI</string>
+
 </resources>

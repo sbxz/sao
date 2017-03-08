@@ -6,11 +6,13 @@ import com.facebook.login.LoginResult;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Seb on 04/03/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FacebookResult {
+public class FacebookResult implements Serializable {
     @SerializedName("firstName")
     private String firstName;
 

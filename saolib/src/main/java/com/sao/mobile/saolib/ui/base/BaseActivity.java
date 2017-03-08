@@ -23,26 +23,19 @@ import android.widget.Toast;
  * Created by Seb on 03/08/2016.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    public static Boolean isForeground;
     private final String TAG = BaseActivity.class.getSimpleName();
-
     protected BaseActivity mContext;
-
-    public static BaseActivity currentActivity;
-
+    protected Resources mRes;
+    protected SharedPreferences mPrefs;
     private Toolbar mToolbar;
     private Menu mMenu;
     private ProgressDialog mProgressDialog;
-
-    protected Resources mRes;
-    protected SharedPreferences mPrefs;
-
-    public static Boolean isForeground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.currentActivity = this;
         this.mContext = this;
         this.isForeground = true;
 
@@ -74,7 +67,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        currentActivity = this;
     }
 
     public Menu getMenu() {

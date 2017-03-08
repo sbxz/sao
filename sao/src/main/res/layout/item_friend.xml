@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!-- item_feed.xml -->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="5dp"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/base_card_view_margin_top_bottom"
+        android:paddingLeft="@dimen/base_card_view_margin_left_right"
+        android:paddingRight="@dimen/base_card_view_margin_left_right"
+        android:paddingTop="@dimen/base_card_view_margin_top_bottom">
+
+        <ImageView
+            android:id="@+id/friendThumbnail"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/side_nav_bar" />
+
+        <TextView
+            android:id="@+id/friendName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="20dp"
+            android:text="La Kolok"
+            android:textColor="@color/colorPrimaryDark" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

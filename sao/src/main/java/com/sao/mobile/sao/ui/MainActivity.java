@@ -32,7 +32,6 @@ import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.service.BeaconService;
-import com.sao.mobile.sao.service.SaoMessagingService;
 import com.sao.mobile.sao.ui.activity.AboutActivity;
 import com.sao.mobile.sao.ui.activity.ConditionActivity;
 import com.sao.mobile.sao.ui.activity.EditProfileActivity;
@@ -41,7 +40,9 @@ import com.sao.mobile.sao.ui.activity.ProblemActivity;
 import com.sao.mobile.sao.ui.activity.SettingsActivity;
 import com.sao.mobile.sao.ui.fragment.BarsFragment;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
-import com.sao.mobile.saolib.LocalBroadcastConstants;
+import com.sao.mobile.saolib.NotificationConstants;
+import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
@@ -85,8 +86,8 @@ public class MainActivity extends BaseActivity
         setupMenuListener();
 
         startServices();
-
         registerBroadcastReceiver();
+        getCurrentOrder();
     }
 
     @Override
@@ -108,13 +109,18 @@ public class MainActivity extends BaseActivity
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(HomeFragment.UPDATE_CURRENT_BAR)
-                        || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_READY)
-                        || intent.getAction().equals(SaoMessagingService.TYPE_ORDER_VALIDATE)) {
+                        || intent.getAction().equals(NotificationConstants.TYPE_ORDER_READY)
+                        || intent.getAction().equals(NotificationConstants.TYPE_ORDER_VALIDATE)) {
                     if (mCurrentFragment.isVisible() && mCurrentFragment instanceof HomeFragment) {
                         ((HomeFragment) mCurrentFragment).setupCurrentBar();
                     }
-                } else if (intent.getAction().equals(LocalBroadcastConstants.ORDER_BEACON)) {
+                } else if (intent.getAction().equals(NotificationConstants.TYPE_OPEN_ORDER)) {
                     displayTraderAlert();
+                } else if (intent.getAction().equals(NotificationConstants.TYPE_BAR_NEWS)) {
+                    News news = (News) intent.getSerializableExtra(NotificationConstants.TYPE_BAR_NEWS);
+                    if (mCurrentFragment.isVisible() && mCurrentFragment instanceof HomeFragment) {
+                        ((HomeFragment) mCurrentFragment).addNews(news);
+                    }
                 }
             }
         };
@@ -122,20 +128,22 @@ public class MainActivity extends BaseActivity
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
                 new IntentFilter(HomeFragment.UPDATE_CURRENT_BAR));
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(SaoMessagingService.TYPE_ORDER_VALIDATE));
+                new IntentFilter(NotificationConstants.TYPE_ORDER_VALIDATE));
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(SaoMessagingService.TYPE_ORDER_READY));
+                new IntentFilter(NotificationConstants.TYPE_ORDER_READY));
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(LocalBroadcastConstants.ORDER_BEACON));
+                new IntentFilter(NotificationConstants.TYPE_OPEN_ORDER));
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(NotificationConstants.TYPE_BAR_NEWS));
     }
 
     private void displayTraderAlert() {
-        if(mAlertVisible) {
+        if (mAlertVisible) {
             return;
         }
 
         mAlertVisible = true;
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(BaseActivity.currentActivity);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getApplicationContext());
         builder.setTitle("Valider la commande?");
         builder.setMessage("Envoie une alerte au bar");
 
@@ -346,5 +354,30 @@ public class MainActivity extends BaseActivity
         LoginManager.getInstance().logOut();
         startActivity(LoginActivity.class);
         finish();
+    }
+
+    public void getCurrentOrder() {
+        Call<Order> loginCall = mApiManager.userService.getCurrentOrder(mUserManager.getFacebookUserId());
+        loginCall.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail Order");
+                    return;
+                }
+
+                Log.i(TAG, "Success Order");
+                if (response.body() != null) {
+                    // TODO
+                    mOrderManager.order = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                LoggerUtils.apiFail(TAG, "Fail Order.", t);
+                SnackBarUtils.showSnackError(getView());
+            }
+        });
     }
 }

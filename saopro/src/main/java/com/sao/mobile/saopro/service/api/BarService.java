@@ -36,4 +36,13 @@ public interface BarService {
 
     @POST("news/")
     Call<Void> sendNotification(@Body News news);
+
+    @GET("bar/beacon/forOrder")
+    Call<Void> beaconForOrder(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("forOrder") Boolean forOrder);
+
+    @GET("bar/beacon/enable")
+    Call<Void> beaconEnable(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("enable") Boolean enable);
+
+    @GET("bar/beacon/delete")
+    Call<Void> deleteBeacon(@Query("barId") Long barId, @Query("uuid") String uuid);
 }

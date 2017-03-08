@@ -2,6 +2,7 @@ package com.sao.mobile.sao.service.api;
 
 import com.sao.mobile.sao.entities.FacebookResult;
 import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.entities.api.FriendBar;
 
@@ -31,4 +32,7 @@ public interface UserService {
 
     @GET("user/friend")
     Call<List<FriendBar>> retrieveFriendBar(@Query("facebookUserId") String facebookUserId);
+
+    @GET("user/currentOrder")
+    Call<Order> getCurrentOrder(@Query("facebookUserId") String facebookUserId);
 }

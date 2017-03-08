@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?><!-- item_feed.xml -->
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:foreground="?attr/selectableItemBackground"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="10dp">
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingRight="@dimen/base_card_view_margin_left_right"
+        android:paddingBottom="@dimen/base_card_view_margin_top_bottom"
         android:paddingLeft="@dimen/base_card_view_margin_left_right"
-        android:paddingTop="@dimen/base_card_view_margin_top_bottom"
-        android:paddingBottom="@dimen/base_card_view_margin_top_bottom">
+        android:paddingRight="@dimen/base_card_view_margin_left_right"
+        android:paddingTop="@dimen/base_card_view_margin_top_bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,20 +25,20 @@
                 android:id="@+id/barThumbnail"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/side_nav_bar"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/side_nav_bar" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
                 <TextView
                     android:id="@+id/barName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="La Kolok"
                     android:layout_marginBottom="5dp"
+                    android:text="La Kolok"
                     android:textColor="@color/colorPrimaryDark"/>
 
                 <TextView

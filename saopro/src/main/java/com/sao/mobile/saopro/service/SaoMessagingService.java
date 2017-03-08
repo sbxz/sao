@@ -7,17 +7,13 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saopro.entities.TraderOrder;
 
 import java.util.Map;
 
 public class SaoMessagingService extends FirebaseMessagingService {
     private static final String TAG = SaoMessagingService.class.getSimpleName();
-
-    public static final String TYPE_OPEN_ORDER = "openOrder";
-    public static final String TYPE_ORDER_VALIDATE = "orderValidate";
-    public static final String TYPE_ORDER_READY = "orderReady";
-    public static final String TYPE_ORDER_INPROGRESS = "orderInprogress";
 
     public SaoMessagingService() {
     }
@@ -43,30 +39,32 @@ public class SaoMessagingService extends FirebaseMessagingService {
      * @param data payload with our key values
      */
     private void parseNotification(Map<String, String> data) {
-        String type = data.get("type");
+        String type = data.get(NotificationConstants.KEY_TYPE);
 
         switch (type)
         {
-            case TYPE_OPEN_ORDER:
+            case NotificationConstants.TYPE_OPEN_ORDER:
+                Log.i(TAG, "Open order");
                 openOrder(data);
                 break;
-            case TYPE_ORDER_INPROGRESS:
+            case NotificationConstants.TYPE_ORDER_INPROGRESS:
+                Log.i(TAG, "Order in progress");
                 orderInProgress(data);
                 break;
         }
     }
 
     private void openOrder(Map<String, String> data) {
-        TraderOrder traderOrder =  new Gson().fromJson(data.get("order"), TraderOrder.class);
-        Intent intent = new Intent(TYPE_OPEN_ORDER);
-        intent.putExtra("traderOrder", traderOrder);
-        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+        TraderOrder traderOrder = new Gson().fromJson(data.get(NotificationConstants.KEY_ORDER), TraderOrder.class);
+        Intent intent = new Intent(NotificationConstants.TYPE_OPEN_ORDER);
+        intent.putExtra(NotificationConstants.KEY_ORDER, traderOrder);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     private void orderInProgress(Map<String, String> data) {
-        TraderOrder traderOrder =  new Gson().fromJson(data.get("order"), TraderOrder.class);
-        Intent intent = new Intent(TYPE_ORDER_INPROGRESS);
-        intent.putExtra("traderOrder", traderOrder);
-        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+        TraderOrder traderOrder = new Gson().fromJson(data.get(NotificationConstants.KEY_ORDER), TraderOrder.class);
+        Intent intent = new Intent(NotificationConstants.TYPE_ORDER_INPROGRESS);
+        intent.putExtra(NotificationConstants.KEY_ORDER, traderOrder);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 }

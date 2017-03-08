@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
@@ -40,7 +41,6 @@ import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.manager.TraderManager;
-import com.sao.mobile.saopro.service.SaoMessagingService;
 import com.sao.mobile.saopro.ui.activity.AboutActivity;
 import com.sao.mobile.saopro.ui.activity.ConditionActivity;
 import com.sao.mobile.saopro.ui.activity.LoginActivity;
@@ -106,11 +106,11 @@ public class MainActivity extends BaseActivity
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(SaoMessagingService.TYPE_OPEN_ORDER)) {
-                    TraderOrder traderOrder = (TraderOrder) intent.getSerializableExtra("traderOrder");
+                if (intent.getAction().equals(NotificationConstants.TYPE_OPEN_ORDER)) {
+                    TraderOrder traderOrder = (TraderOrder) intent.getSerializableExtra(NotificationConstants.KEY_ORDER);
                     showOrderAlert(traderOrder);
-                } else if (intent.getAction().equals(SaoMessagingService.TYPE_ORDER_INPROGRESS)) {
-                    TraderOrder traderOrder = (TraderOrder) intent.getSerializableExtra("traderOrder");
+                } else if (intent.getAction().equals(NotificationConstants.TYPE_ORDER_INPROGRESS)) {
+                    TraderOrder traderOrder = (TraderOrder) intent.getSerializableExtra(NotificationConstants.KEY_ORDER);
                     if(mCurrentFragment instanceof  OrderListFragment) {
                         ((OrderListFragment) mCurrentFragment).addOrder(traderOrder);
                     }
@@ -119,9 +119,9 @@ public class MainActivity extends BaseActivity
         };
 
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(SaoMessagingService.TYPE_ORDER_INPROGRESS));
+                new IntentFilter(NotificationConstants.TYPE_ORDER_INPROGRESS));
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(SaoMessagingService.TYPE_OPEN_ORDER));
+                new IntentFilter(NotificationConstants.TYPE_OPEN_ORDER));
     }
 
     private void showOrderAlert(final TraderOrder traderOrder) {

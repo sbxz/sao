@@ -79,7 +79,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 goToBarDetail(homeViewHolder, bar);
             }
         });
-
     }
 
     private void goToBarDetail(HomeViewHolder barsViewHolder, Bar bar) {
@@ -93,7 +92,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-
     @Override
     public int getItemCount() {
         return mItems.size();
@@ -102,6 +100,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addListItem(List<News> newsList) {
         mItems = newsList;
         notifyDataSetChanged();
+    }
+
+    public void addItem(News news) {
+        mItems.add(0, news);
+        notifyItemInserted(0);
     }
 
     private static class HomeViewHolder extends RecyclerView.ViewHolder {
