@@ -92,6 +92,11 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
     private void barNews(String newsStr) {
         News news = new Gson().fromJson(newsStr, News.class);
+
+        if (news == null) {
+            return;
+        }
+
         notificationManager.displayNewsNotification(getApplicationContext(), news);
 
         Intent intent = new Intent(NotificationConstants.TYPE_BAR_NEWS);
@@ -101,6 +106,11 @@ public class SaoMessagingService extends FirebaseMessagingService {
 
     private void friendBar(String friendStr) {
         FriendBarResponse friendBarResponse = new Gson().fromJson(friendStr, FriendBarResponse.class);
+
+        if (friendBarResponse == null) {
+            return;
+        }
+
         notificationManager.displayFriendBarNotification(getApplicationContext(), friendBarResponse);
     }
 }

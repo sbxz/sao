@@ -51,7 +51,7 @@ public class SaoNotificationManager extends AbstractSaoNotificationManager {
                 new Intent(context, MainActivity.class), 0);
 
         Notification.Builder builder = getBaseNotification(context, friendBarResponse.getFriend().getName(), "vient d'arriver à " + friendBarResponse.getBar().getName(), bitmap, pendingIntent);
-        showNotification(context, Integer.parseInt(friendBarResponse.getFriend().getFacebookUserId()) / 2, builder.build());
+        showNotification(context, 1, builder.build());
     }
 
     private void showNotification(Context context, int notificationId, Notification notification) {
