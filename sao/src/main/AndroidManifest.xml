@@ -77,6 +77,12 @@
         <activity
             android:name=".ui.activity.FriendBarActivity"
             android:theme="@style/AppTheme.NoActionBarBasic2" />
+        <activity
+            android:name=".ui.activity.PaymentActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic2" />
+        <activity
+            android:name=".ui.activity.AddPaymentActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic2" />
 
         <service android:name=".service.SaoInstanceIDService">
             <intent-filter>
