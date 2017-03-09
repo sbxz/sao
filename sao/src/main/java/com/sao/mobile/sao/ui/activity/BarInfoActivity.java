@@ -29,7 +29,7 @@ public class BarInfoActivity extends BaseActivity {
     private static final String TAG = BarInfoActivity.class.getSimpleName();
     private ImageView mBarThumbnail;
     private TextView mBarName;
-    private TextView mbarDetails;
+    private TextView mBarDetails;
     private TextView mBarAddress;
     private TextView mBarScheduled;
 
@@ -78,8 +78,8 @@ public class BarInfoActivity extends BaseActivity {
         mBarName = (TextView) findViewById(R.id.barName);
         mBarName.setText(mBar.getName());
 
-        mbarDetails = (TextView) findViewById(R.id.barDetails);
-        mbarDetails.setText(mBar.getDescription());
+        mBarDetails = (TextView) findViewById(R.id.barDetails);
+        mBarDetails.setText(mBar.getDescription());
 
         mBarScheduled = (TextView) findViewById(R.id.barSheduled);
         mBarScheduled.setText("   " + mBar.getSchedule());

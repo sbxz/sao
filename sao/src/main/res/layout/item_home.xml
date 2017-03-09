@@ -30,8 +30,8 @@
                 android:id="@+id/barThumbnail"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/side_nav_bar"
-                android:scaleType="fitCenter" />
+                android:src="@drawable/side_nav_bar"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

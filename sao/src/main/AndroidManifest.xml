@@ -78,6 +78,9 @@
             android:name=".ui.activity.FriendBarActivity"
             android:theme="@style/AppTheme.NoActionBarBasic2" />
         <activity
+            android:name=".ui.activity.ConsumptionActivity"
+            android:theme="@style/AppTheme.NoActionBarBasic2" />
+        <activity
             android:name=".ui.activity.PaymentActivity"
             android:theme="@style/AppTheme.NoActionBarBasic2" />
         <activity

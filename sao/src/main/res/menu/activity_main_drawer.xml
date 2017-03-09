@@ -12,6 +12,10 @@
             android:icon="@drawable/ic_menu_shop"
             android:title="@string/menu_bars" />
         <item
+            android:id="@+id/nav_consumption"
+            android:icon="@drawable/ic_menu_local_bar"
+            android:title="@string/menu_consumption" />
+        <item
             android:id="@+id/nav_payment"
             android:icon="@drawable/ic_credit_card_black_24dp"
             android:title="@string/menu_payment" />

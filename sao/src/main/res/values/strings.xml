@@ -4,6 +4,7 @@
     <!-- Menu -->
     <string name="menu_home">Accueil</string>
     <string name="menu_bars">Mes bars</string>
+    <string name="menu_consumption">Mes consommations</string>
     <string name="menu_payment">Moyen de paiement</string>
     <string name="menu_stats">Statistique</string>
     <string name="menu_type_settings">Aide et paramètres</string>
