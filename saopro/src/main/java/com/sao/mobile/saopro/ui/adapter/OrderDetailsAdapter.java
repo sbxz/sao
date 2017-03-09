@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.OrderProduct;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.OrderProduct;
 
 import java.util.ArrayList;
 import java.util.List;

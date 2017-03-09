@@ -16,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.squareup.picasso.Picasso;
 

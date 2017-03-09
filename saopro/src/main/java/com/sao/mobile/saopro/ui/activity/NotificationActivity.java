@@ -90,6 +90,7 @@ public class NotificationActivity extends BaseActivity {
     }
 
     private void sendNotification() {
+        showProgressDialog("Envoie de la news en cours...");
         int id = mReceiverSpinner.getId();
         String message = mInputMessageLayout.getEditText().getText().toString();
         News news = new News(mTraderManager.currentBar, (new Date()).getTime(), message);
@@ -97,6 +98,7 @@ public class NotificationActivity extends BaseActivity {
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                hideProgressDialog();
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail send notification");
                     SnackBarUtils.showSnackError(getView());
@@ -109,6 +111,7 @@ public class NotificationActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                hideProgressDialog();
                 LoggerUtils.apiFail(TAG, "Fail send notification.", t);
                 SnackBarUtils.showSnackError(getView());
             }

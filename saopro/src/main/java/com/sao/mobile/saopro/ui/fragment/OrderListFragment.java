@@ -15,11 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.manager.TraderManager;
 

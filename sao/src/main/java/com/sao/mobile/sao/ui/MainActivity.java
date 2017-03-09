@@ -31,6 +31,7 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.service.BarNotificationService;
 import com.sao.mobile.sao.service.BeaconService;
 import com.sao.mobile.sao.ui.activity.AboutActivity;
 import com.sao.mobile.sao.ui.activity.ConditionActivity;
@@ -191,6 +192,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void startServices() {
+        stopService(new Intent(this, BeaconService.class));
         startService(new Intent(this, BeaconService.class));
     }
 
@@ -350,6 +352,12 @@ public class MainActivity extends BaseActivity
                 SnackBarUtils.showSnackError(getView());
             }
         });
+
+        stopService(new Intent(this, BarNotificationService.class));
+        stopService(new Intent(this, BeaconService.class));
+
+        mUserManager.logout();
+        mOrderManager.removeOrder();
 
         LoginManager.getInstance().logOut();
         startActivity(LoginActivity.class);

@@ -33,6 +33,7 @@ public class BarSelectFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_bar_select, container, false);
 
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
+        TextView name = (TextView) dragLayout.findViewById(R.id.name);
         TextView address = (TextView) dragLayout.findViewById(R.id.address);
         TextView phoneNumber = (TextView) dragLayout.findViewById(R.id.phoneNumber);
         ImageView imageView = (ImageView) dragLayout.findViewById(R.id.imageView);
@@ -41,6 +42,7 @@ public class BarSelectFragment extends BaseFragment {
                 .centerCrop()
                 .into(imageView);
 
+        name.setText(bar.getName());
         address.setText(bar.getAddress());
         phoneNumber.setText(bar.getPhoneNumber());
 

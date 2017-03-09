@@ -62,12 +62,20 @@ public class SplashActivity extends BaseActivity {
         traderCall.enqueue(new Callback<Trader>() {
             @Override
             public void onResponse(Call<Trader> call, Response<Trader> response) {
-                Log.i(TAG, "Success retrieve user info");
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve trader info");
+                    startLoginActivity();
+                    return;
+                }
+
+                Log.i(TAG, "Success retrieve trader info");
+
                 mTraderManager.trader = response.body();
                 String barId = mTraderManager.getBarId(mContext);
 
                 if(barId == null) {
                     startActivity(BarSelectActivity.class);
+                    return;
                 }
 
                 for(Bar bar : mTraderManager.trader.getBars()) {
@@ -82,9 +90,9 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Trader> call, Throwable t) {
-                LoggerUtils.apiFail(TAG, "Fail retrieve user info.", t);
+                LoggerUtils.apiFail(TAG, "Fail retrieve trader info.", t);
                 SnackBarUtils.showSnackError(getView());
-                retrieveTraderInfo();
+                startLoginActivity();
             }
         });
     }

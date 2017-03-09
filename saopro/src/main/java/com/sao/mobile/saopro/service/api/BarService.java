@@ -2,7 +2,7 @@ package com.sao.mobile.saopro.service.api;
 
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.SaoBeacon;
-import com.sao.mobile.saopro.entities.TraderOrder;
+import com.sao.mobile.saolib.entities.TraderOrder;
 
 import java.util.List;
 import java.util.Map;
@@ -28,14 +28,17 @@ public interface BarService {
     @GET("bar/order/validate")
     Call<Void> validateOrder(@Query("orderId") Long orderId);
 
+    @POST("news/")
+    Call<Void> sendNotification(@Body News news);
+
     @POST("bar/beacon")
     Call<Void> associateBeacon(@Query("barId") Long barId, @Body SaoBeacon saoBeacon);
 
+    @POST("bar/beacon/update")
+    Call<Void> updateBeacon(@Query("barId") Long barId, @Body SaoBeacon saoBeacon);
+
     @GET("bar/beacon")
     Call<List<SaoBeacon>> retrieveBeaconBar(@Query("barId") Long barId);
-
-    @POST("news/")
-    Call<Void> sendNotification(@Body News news);
 
     @GET("bar/beacon/forOrder")
     Call<Void> beaconForOrder(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor, @Query("forOrder") Boolean forOrder);
@@ -45,4 +48,7 @@ public interface BarService {
 
     @GET("bar/beacon/delete")
     Call<Void> deleteBeacon(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor);
+
+    @GET("bar/users")
+    Call<Void> getUsersBar(@Query("barId") Long barId);
 }

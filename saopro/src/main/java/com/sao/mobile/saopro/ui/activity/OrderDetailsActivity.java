@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
@@ -22,7 +23,6 @@ import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.adapter.OrderDetailsAdapter;
 import com.squareup.picasso.Picasso;
@@ -32,15 +32,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OrderDetailsActivity extends BaseActivity {
-    private static final String TAG = OrderDetailsActivity.class.getSimpleName();
-
     public static final String ORDER_EXTRA = "orderExtra";
-
     public static final String IMAGE_TRANSITION_NAME = "imageTransition";
     public static final String NAME_TRANSITION_NAME = "nameTransition";
     public static final String DATE_TRANSITION_NAME = "dateTransition";
     public static final String PRICE_TRANSITION_NAME = "priceTransition";
-
+    private static final String TAG = OrderDetailsActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 

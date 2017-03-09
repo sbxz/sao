@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saopro.R;
-import com.sao.mobile.saopro.entities.TraderOrder;
 import com.sao.mobile.saopro.ui.adapter.OrderAdapter;
 
 import java.util.List;

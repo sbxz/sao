@@ -8,7 +8,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.sao.mobile.saolib.NotificationConstants;
-import com.sao.mobile.saopro.entities.TraderOrder;
+import com.sao.mobile.saolib.entities.TraderOrder;
 
 import java.util.Map;
 

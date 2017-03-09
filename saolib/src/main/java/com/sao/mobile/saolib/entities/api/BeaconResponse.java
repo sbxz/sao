@@ -6,6 +6,7 @@ import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.SaoBeacon;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Seb on 26/02/2017.
@@ -15,14 +16,14 @@ public class BeaconResponse implements Serializable {
     @SerializedName("bar")
     private Bar bar;
     @SerializedName("beacon")
-    private SaoBeacon saoBeacon;
+    private List<SaoBeacon> saoBeacons;
 
     public BeaconResponse() {
     }
 
-    public BeaconResponse(Bar bar, SaoBeacon saoBeacon) {
+    public BeaconResponse(Bar bar, List<SaoBeacon> saoBeacons) {
         this.bar = bar;
-        this.saoBeacon = saoBeacon;
+        this.saoBeacons = saoBeacons;
     }
 
     public Bar getBar() {
@@ -33,11 +34,11 @@ public class BeaconResponse implements Serializable {
         this.bar = bar;
     }
 
-    public SaoBeacon getSaoBeacon() {
-        return saoBeacon;
+    public List<SaoBeacon> getSaoBeacons() {
+        return saoBeacons;
     }
 
-    public void setSaoBeacon(SaoBeacon saoBeacon) {
-        this.saoBeacon = saoBeacon;
+    public void setSaoBeacons(List<SaoBeacon> saoBeacon) {
+        this.saoBeacons = saoBeacon;
     }
 }

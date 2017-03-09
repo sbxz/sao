@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SaoBeacon implements Serializable {
+    @SerializedName("name")
+    private String name;
     @SerializedName("uuid")
     private String uuid;
     @SerializedName("macAddress")
@@ -26,13 +28,22 @@ public class SaoBeacon implements Serializable {
     public SaoBeacon() {
     }
 
-    public SaoBeacon(String uuid, String macAddress, int major, int minor, Boolean forOrder, Boolean enable) {
+    public SaoBeacon(String uuid, String macAddress, int major, int minor, Boolean forOrder, Boolean enable, String name) {
+        this.name = name;
         this.uuid = uuid;
         this.macAddress = macAddress;
         this.major = major;
         this.minor = minor;
         this.forOrder = forOrder;
         this.enable = enable;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUuid() {
@@ -82,4 +93,14 @@ public class SaoBeacon implements Serializable {
     public void setEnable(Boolean enable) {
         this.enable = enable;
     }
+
+    public boolean isEqualsTo(SaoBeacon beacon) {
+        if (uuid.equals(beacon.getUuid()) && major == beacon.getMajor() && minor == beacon.getMinor()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

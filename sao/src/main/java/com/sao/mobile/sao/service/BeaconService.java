@@ -1,5 +1,7 @@
 package com.sao.mobile.sao.service;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -11,9 +13,10 @@ import com.estimote.sdk.Region;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.NotificationConstants;
-import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.saolib.ui.base.BaseService;
 import com.sao.mobile.saolib.utils.LoggerUtils;
@@ -27,7 +30,7 @@ import retrofit2.Response;
 
 public class BeaconService extends BaseService {
     public static final Integer RSSI_THRESHOLD = -60;
-    public static final Integer LEAVE_RSSI = -90;
+    public static final Integer LEAVE_RSSI = -80;
     private static final String TAG = BeaconService.class.getSimpleName();
     private BeaconManager mBeaconManager;
     private Region mRegion;
@@ -37,7 +40,10 @@ public class BeaconService extends BaseService {
 
     private ApiManager mApiManager = ApiManager.getInstance();
 
-    private List<Beacon> mBlackBeacon;
+    private List<Beacon> mBlackBeacons;
+
+    private Boolean isScanning = false;
+    private Boolean isLeaving = false;
 
     public BeaconService() {
     }
@@ -49,7 +55,7 @@ public class BeaconService extends BaseService {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "on startCommand");
-        mBlackBeacon = new ArrayList<>();
+        mBlackBeacons = new ArrayList<>();
         initBeaconScan();
         return START_STICKY;
     }
@@ -62,6 +68,7 @@ public class BeaconService extends BaseService {
 
     @Override
     public void onDestroy() {
+        mBeaconManager.disconnect();
         super.onDestroy();
         Log.i(TAG, "on destroy");
     }
@@ -71,24 +78,9 @@ public class BeaconService extends BaseService {
         mBeaconManager = new BeaconManager(getApplicationContext());
         mBeaconManager.setRangingListener(new BeaconManager.RangingListener() {
             @Override
-            public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-                if (!list.isEmpty()) {
-                    Beacon beacon = list.get(0);
-                    if (!isAvailableBeacon(beacon)) {
-                        return;
-                    }
-
-                    Log.i(TAG, "beacon RSSI: " + beacon.getRssi());
-
-                    if (beacon.getRssi() > RSSI_THRESHOLD) {
-                        launchTraderOrder(beacon);
-                    }
-
-                    if (beacon.getRssi() < LEAVE_RSSI) {
-                        leaveBar();
-                    } else {
-                        scanBeacon(beacon);
-                    }
+            public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
+                if (!beacons.isEmpty()) {
+                    beaconsDiscovered(beacons);
                 } else {
                     leaveBar();
                 }
@@ -105,6 +97,63 @@ public class BeaconService extends BaseService {
         });
     }
 
+    private void beaconsDiscovered(List<Beacon> beacons) {
+        Beacon nearBeacon = beacons.get(0);
+
+        SaoBeacon newCurrentBeacon = mUserManager.getBeacon(nearBeacon);
+        if (newCurrentBeacon != null) {
+            mUserManager.currentBeacon = newCurrentBeacon;
+
+            if (isMyServiceRunning(BarNotificationService.class) && newCurrentBeacon.getForOrder() && nearBeacon.getRssi() >= RSSI_THRESHOLD) {
+                launchTraderOrder(nearBeacon);
+            } else if (nearBeacon.getRssi() <= LEAVE_RSSI) {
+                leaveBar();
+            }
+
+            return;
+        }
+
+        if (mBlackBeacons.size() != 0 && !isAvailableBeacon(nearBeacon)) {
+            return;
+        }
+
+        Log.i(TAG, "beacon RSSI: " + nearBeacon.getRssi());
+        if (nearBeacon.getRssi() >= LEAVE_RSSI) {
+            scanBeacon(nearBeacon);
+        }
+    }
+
+    private void scanBeacon(final Beacon beacon) {
+        if (isScanning) {
+            return;
+        }
+
+        isScanning = true;
+        Call<BeaconResponse> barCall = mApiManager.barService.scanBeacon(mUserManager.getFacebookUserId(), beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
+        barCall.enqueue(new Callback<BeaconResponse>() {
+            @Override
+            public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
+                isScanning = false;
+                if (response.code() != 200) {
+                    Log.i(TAG, "Beacon not found uuid= " + beacon.getProximityUUID().toString() + " major= " + beacon.getMajor() + " minor= " + beacon.getMinor());
+                    putBeaconBlackList(beacon);
+                    return;
+                }
+
+                Log.i(TAG, "Success detect bar");
+                mUserManager.saoBeacons = response.body().getSaoBeacons();
+                mUserManager.currentBar = response.body().getBar();
+                startBarService();
+            }
+
+            @Override
+            public void onFailure(Call<BeaconResponse> call, Throwable t) {
+                LoggerUtils.apiFail(TAG, "Fail detect Bar.", t);
+                isScanning = false;
+            }
+        });
+    }
+
     private void leaveBar() {
         Log.i(TAG, "leaveBar");
         stopService(new Intent(this, BarNotificationService.class));
@@ -113,10 +162,16 @@ public class BeaconService extends BaseService {
             return;
         }
 
+        if (isLeaving) {
+            return;
+        }
+
+        isLeaving = true;
         Call<Void> barCall = mApiManager.barService.leaveBar(mUserManager.getFacebookUserId());
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                isLeaving = false;
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail leave");
                     return;
@@ -128,74 +183,51 @@ public class BeaconService extends BaseService {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 LoggerUtils.apiFail(TAG, "Fail leave Bar.", t);
+                isLeaving = false;
             }
         });
 
+        Intent intent = new Intent(HomeFragment.UPDATE_CURRENT_BAR);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+
+        mUserManager.saoBeacons = null;
         mUserManager.currentBeacon = null;
         mUserManager.currentBar = null;
     }
 
-    private void scanBeacon(final Beacon beacon) {
-        if (mUserManager.currentBeacon != null && mUserManager.currentBeacon.getUuid().equals(beacon.getProximityUUID().toString())) {
-            return;
-        }
-
-        Call<BeaconResponse> barCall = mApiManager.barService.scanBeacon(mUserManager.getFacebookUserId(), beacon.getProximityUUID().toString(), beacon.getMajor(), beacon.getMinor());
-        barCall.enqueue(new Callback<BeaconResponse>() {
-            @Override
-            public void onResponse(Call<BeaconResponse> call, Response<BeaconResponse> response) {
-                if (response.code() != 200) {
-                    Log.i(TAG, "Beacon not found uuid= " + beacon.getProximityUUID().toString());
-                    putBeaconBlackList(beacon);
-                    return;
-                }
-
-                Log.i(TAG, "Success detect bar");
-
-                Bar bar = response.body().getBar();
-                mUserManager.currentBeacon = response.body().getSaoBeacon();
-
-                if (mUserManager.currentBar != null && mUserManager.currentBar.getBarId().equals(bar.getBarId())) {
-                    return;
-                }
-
-                mUserManager.currentBar = bar;
-                startBarService();
-            }
-
-            @Override
-            public void onFailure(Call<BeaconResponse> call, Throwable t) {
-                LoggerUtils.apiFail(TAG, "Fail detect Bar.", t);
-            }
-        });
-    }
-
     private Boolean isAvailableBeacon(Beacon beacon) {
-        if (mBlackBeacon.size() == 0) {
-            return true;
+        if (mBlackBeacons.size() == 0) {
+            return false;
         }
 
-        for(Beacon b : mBlackBeacon) {
-            if(b.getProximityUUID().toString().equals(beacon.getProximityUUID().toString())) {
-                return true;
+        for (Beacon b : mBlackBeacons) {
+            if (mUserManager.equalsBeacon(b, beacon)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private void putBeaconBlackList(Beacon beacon) {
-        mBlackBeacon.add(beacon);
-    }
-
-    private void launchTraderOrder(Beacon beacon) {
-        if (mUserManager.currentBeacon == null ||
-                !mUserManager.currentBeacon.getUuid().equals(beacon.getProximityUUID().toString()) ||
-                mOrderManager.order == null) {
-            return;
+        Boolean isFind = false;
+        for (Beacon b : mBlackBeacons) {
+            if (mUserManager.equalsBeacon(b, beacon)) {
+                isFind = true;
+            }
         }
 
-        if(!mOrderManager.order.getStep().equals(Order.Step.READY)) {
+        if (!isFind) {
+            mBlackBeacons.add(beacon);
+        }
+    }
+
+    private void launchTraderOrder(Beacon nearBeacon) {
+        if (mUserManager.currentBeacon == null ||
+                !mUserManager.currentBeacon.getUuid().equals(nearBeacon.getProximityUUID().toString()) ||
+                !mUserManager.currentBeacon.getForOrder() ||
+                mOrderManager.order == null ||
+                !mOrderManager.order.getStep().equals(Order.Step.READY)) {
             return;
         }
 
@@ -204,7 +236,21 @@ public class BeaconService extends BaseService {
     }
 
     private void startBarService() {
+        if (mUserManager.currentBar == null) {
+            return;
+        }
+
         stopService(new Intent(this, BarNotificationService.class));
         startService(new Intent(this, BarNotificationService.class));
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

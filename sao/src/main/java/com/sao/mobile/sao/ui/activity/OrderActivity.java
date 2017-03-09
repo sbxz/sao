@@ -94,10 +94,12 @@ public class OrderActivity extends BaseActivity {
                     .setAction("Action", null).show();
         }
 
+        showProgressDialog("Lancement de la commande...");
         Call<Order> barCall = mApiManager.barService.startOrder(mOrderManager.order);
         barCall.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                hideProgressDialog();
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail start order");
                     return;
@@ -113,6 +115,7 @@ public class OrderActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
+                hideProgressDialog();
                 LoggerUtils.apiFail(TAG, "Fail confirm order.", t);
                 SnackBarUtils.showSnackError(getView());
             }

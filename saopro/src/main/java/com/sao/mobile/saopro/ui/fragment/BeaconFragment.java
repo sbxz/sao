@@ -34,10 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BeaconFragment extends BaseFragment {
-    private static final String TAG = BeaconFragment.class.getSimpleName();
-
     public static final Integer RSSI_THRESHOLD = -60;
-
+    private static final String TAG = BeaconFragment.class.getSimpleName();
     private View mView;
 
     private TextView mBeaconText;
@@ -138,7 +136,7 @@ public class BeaconFragment extends BaseFragment {
     }
 
     private void associateBeacon(final Beacon beacon) {
-        SaoBeacon saoBeacon = new SaoBeacon(beacon.getProximityUUID().toString(), beacon.getMacAddress().toString(), beacon.getMajor(), beacon.getMinor(), false, true);
+        SaoBeacon saoBeacon = new SaoBeacon(beacon.getProximityUUID().toString(), beacon.getMacAddress().toString(), beacon.getMajor(), beacon.getMinor(), false, true, "");
         Call<Void> barServiceCall = mApiManager.barService.associateBeacon(mTraderManager.currentBar.getBarId() ,saoBeacon);
         barServiceCall.enqueue(new Callback<Void>() {
             @Override
