@@ -58,6 +58,10 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
     }
 
+    public void onResumed() {
+
+    }
+
     public void startActivity(Class<?> clazz) {
         Intent intent = new Intent(getActivity(), clazz);
         startActivity(intent);

@@ -37,7 +37,7 @@
             android:layout_marginRight="25dp"
             android:gravity="center_horizontal"
             android:text="@string/no_card_yet"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabAdd"

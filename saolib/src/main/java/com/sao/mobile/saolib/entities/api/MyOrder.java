@@ -5,11 +5,13 @@ import com.google.gson.annotations.SerializedName;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.TraderOrder;
 
+import java.io.Serializable;
+
 /**
  * Created by Seb on 08/03/2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MyOrder {
+public class MyOrder implements Serializable {
     @SerializedName("bar")
     private Bar bar;
     @SerializedName("order")

@@ -1,6 +1,8 @@
 package com.sao.mobile.saopro.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saopro.R;
+import com.sao.mobile.saopro.ui.activity.BeaconInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final BeaconViewHolder beaconHolder = (BeaconViewHolder) holder;
         final SaoBeacon beacon = mItems.get(position);
 
+        beaconHolder.name.setText(beacon.getName());
         beaconHolder.uuid.setText(beacon.getUuid());
         beaconHolder.major.setText(String.valueOf(beacon.getMajor()));
         beaconHolder.minor.setText(String.valueOf(beacon.getMinor()));
@@ -59,17 +63,17 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void goToBeaconDetail(BeaconViewHolder beaconHolder, SaoBeacon beacon) {
-       /* Activity activity = (Activity) mContext;
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+        Activity activity = (Activity) mContext;
+       /* ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
                 new Pair(beaconHolder.uuid, BeaconInfoActivity.UUID_TRANSITION_NAME),
                 new Pair(beaconHolder.major, BeaconInfoActivity.MAJOR_TRANSITION_NAME),
                 new Pair(beaconHolder.minor, BeaconInfoActivity.MINOR_TRANSITION_NAME)
-        );
+        );*/
 
         Intent intent = new Intent(activity, BeaconInfoActivity.class);
         intent.putExtra(BeaconInfoActivity.BEACON_EXTRA, beacon);
-        ActivityCompat.startActivityForResult(activity, intent, REQUEST_CODE, options.toBundle());
-   */ }
+        activity.startActivity(intent);
+    }
 
     public void addListItem(List<SaoBeacon> beacon) {
         mItems.addAll(beacon);
@@ -92,11 +96,13 @@ public class BeaconAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView uuid;
         public TextView major;
         public TextView minor;
+        public TextView name;
 
         public BeaconViewHolder(View view) {
             super(view);
 
             cardView = (CardView) view.findViewById(R.id.card_view);
+            name = (TextView) view.findViewById(R.id.name);
             uuid = (TextView) view.findViewById(R.id.uuid);
             major = (TextView) view.findViewById(R.id.major);
             minor = (TextView) view.findViewById(R.id.minor);

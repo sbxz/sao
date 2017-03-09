@@ -81,6 +81,10 @@ public class BarNotificationService extends BaseService {
         super.onCreate();
         Log.i(TAG, "on create");
 
+        if (mUserManager.currentBar == null) {
+            stopSelf();
+        }
+
         Intent intent = new Intent(HomeFragment.UPDATE_CURRENT_BAR);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 

@@ -26,12 +26,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingBottom="10dp">
+
             <ImageView
                 android:id="@+id/barThumbnail"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/side_nav_bar"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/side_nav_bar" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
