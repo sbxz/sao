@@ -4,6 +4,7 @@
     <!-- Menu -->
     <string name="menu_home">Accueil</string>
     <string name="menu_bars">Mes bars</string>
+    <string name="menu_payment">Moyen de paiement</string>
     <string name="menu_stats">Statistique</string>
     <string name="menu_type_settings">Aide et paramètres</string>
     <string name="menu_settings">Paramètre de l\'application</string>
@@ -61,6 +62,9 @@
 
     <!-- Notification Activity-->
     <string name="notification_title">Notifications</string>
+
+    <!-- Payment Activity -->
+    <string name="no_card_yet">Vous n\'avez pas de carte bancaire enregistrée. Cliquez suir le bouton \"+\" pour en enregistrer une nouvelle.</string>
 
     <!-- Failure retrieve data-->
     <string name="failure_data">Erreur pendant le chargement des données</string>

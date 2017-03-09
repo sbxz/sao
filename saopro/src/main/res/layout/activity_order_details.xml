@@ -20,16 +20,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:paddingTop="@dimen/base_card_view_margin_top_bottom"
         android:paddingLeft="@dimen/base_card_view_margin_top_bottom"
-        android:paddingRight="@dimen/base_card_view_margin_top_bottom">
+        android:paddingRight="@dimen/base_card_view_margin_top_bottom"
+        android:paddingTop="@dimen/base_card_view_margin_top_bottom">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -41,16 +41,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingRight="@dimen/base_card_view_margin_left_right"
+                    android:paddingBottom="@dimen/base_card_view_margin_top_bottom"
                     android:paddingLeft="@dimen/base_card_view_margin_left_right"
-                    android:paddingTop="@dimen/base_card_view_margin_top_bottom"
-                    android:paddingBottom="@dimen/base_card_view_margin_top_bottom">
+                    android:paddingRight="@dimen/base_card_view_margin_left_right"
+                    android:paddingTop="@dimen/base_card_view_margin_top_bottom">
                     <ImageView
                         android:id="@+id/userImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/side_nav_bar"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/side_nav_bar" />
 
                     <TextView
                         android:id="@+id/userName"
@@ -64,8 +64,8 @@
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical|right"
                         android:layout_weight="1"
+                        android:gravity="center_vertical|right"
                         android:text="5min"/>
                 </LinearLayout>
 
@@ -90,8 +90,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/base_card_view_margin_top_bottom"
                         android:layout_marginBottom="@dimen/base_card_view_margin_top_bottom"
+                        android:layout_marginTop="@dimen/base_card_view_margin_top_bottom"
                         android:background="@color/colorAccent"/>
 
                     <RelativeLayout
@@ -101,17 +101,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/textBlack"
-                            android:text="Total"/>
+                            android:text="Total"
+                            android:textColor="@color/textBlack" />
 
                         <TextView
                             android:id="@+id/totalPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/textBlack"
-                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true" />
+                            android:layout_alignParentTop="true"
+                            android:textColor="@color/textBlack" />
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -122,20 +122,20 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/orderDetailsConfirm"
+                android:background="@android:color/holo_blue_dark"
                 android:foreground="?attr/selectableItemBackground"
-                android:background="@color/colorBackgroundAccent"
+                android:text="@string/orderDetailsConfirm"
                 android:textColor="@android:color/white"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginRight="50dp"
                 android:layout_marginLeft="50dp"
-                android:text="@string/confirm_info"
-                android:gravity="center_horizontal" />
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/confirm_info" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

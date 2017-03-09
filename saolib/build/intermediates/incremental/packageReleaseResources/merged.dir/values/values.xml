@@ -3,4 +3,6 @@
     <declare-styleable name="app"><attr format="dimension" name="bottomDragVisibleHeight"/><attr format="dimension" name="bototmExtraIndicatorHeight"/></declare-styleable>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="user_profile_avatar_size">88dp</dimen>
+    <string name="failure_data">Erreur pendant le chargement des données</string>
 </resources>

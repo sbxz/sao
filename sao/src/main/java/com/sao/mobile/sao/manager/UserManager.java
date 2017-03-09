@@ -1,13 +1,21 @@
 package com.sao.mobile.sao.manager;
 
+import android.content.Context;
+
 import com.estimote.sdk.Beacon;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
+import com.sao.mobile.sao.entities.CardPayment;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.User;
+import com.sao.mobile.saolib.utils.LocalStore;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static com.sao.mobile.saolib.utils.LocalStore.CARD_NUMBER_KEY;
 
 /**
  * Created by Seb on 23/01/2017.
@@ -82,4 +90,28 @@ public class UserManager {
         currentBeacon = null;
         saoBeacons = null;
     }
+
+    public List<CardPayment> getCardPayments(Context context) {
+        Set<String> keySets = LocalStore.readSetPreferences(context, CARD_NUMBER_KEY);
+
+        if (keySets == null) {
+            return null;
+        }
+
+        List<CardPayment> cardPayments = new ArrayList<>();
+        Set<String> cardSets;
+        List<String> cardList;
+        for (String key : keySets) {
+            cardList = new ArrayList<>();
+            cardSets = LocalStore.readSetPreferences(context, key);
+            for (String card : cardSets) {
+                cardList.add(card);
+            }
+            cardPayments.add(new CardPayment(cardList));
+        }
+
+        return cardPayments;
+    }
 }
+
+

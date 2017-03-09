@@ -37,6 +37,7 @@ import com.sao.mobile.sao.ui.activity.AboutActivity;
 import com.sao.mobile.sao.ui.activity.ConditionActivity;
 import com.sao.mobile.sao.ui.activity.EditProfileActivity;
 import com.sao.mobile.sao.ui.activity.LoginActivity;
+import com.sao.mobile.sao.ui.activity.PaymentActivity;
 import com.sao.mobile.sao.ui.activity.ProblemActivity;
 import com.sao.mobile.sao.ui.activity.SettingsActivity;
 import com.sao.mobile.sao.ui.fragment.BarsFragment;
@@ -305,6 +306,8 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_bar) {
             mCurrentFragment = new BarsFragment();
             setTitle(R.string.menu_bars);
+        } else if (id == R.id.nav_payment) {
+            startActivity(PaymentActivity.class);
         } else if (id == R.id.nav_settings) {
             startActivity(SettingsActivity.class);
         } else if (id == R.id.nav_condition) {

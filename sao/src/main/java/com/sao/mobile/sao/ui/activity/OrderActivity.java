@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
+import com.sao.mobile.sao.entities.CardPayment;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
@@ -24,6 +25,8 @@ import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +63,12 @@ public class OrderActivity extends BaseActivity {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<CardPayment> cardPayments = mUserManager.getCardPayments(mContext);
+                if (cardPayments == null || cardPayments.size() == 0) {
+                    startActivity(PaymentActivity.class);
+                    return;
+                }
+
                 startOrder();
             }
         });
