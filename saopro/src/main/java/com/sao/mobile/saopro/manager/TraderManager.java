@@ -3,23 +3,25 @@ package com.sao.mobile.saopro.manager;
 import android.content.Context;
 
 import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.Trader;
 import com.sao.mobile.saolib.utils.LocalStore;
+
+import java.util.List;
 
 /**
  * Created by Seb on 05/01/2017.
  */
 public class TraderManager {
     private static TraderManager ourInstance = new TraderManager();
+    public Trader trader;
+    public Bar currentBar;
+    public List<SaoBeacon> saoBeacons;
+    private TraderManager() {
+    }
 
     public static TraderManager getInstance() {
         return ourInstance;
-    }
-
-    public Trader trader;
-    public Bar currentBar;
-
-    private TraderManager() {
     }
 
     public String getTraderId(Context context) {

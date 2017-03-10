@@ -4,27 +4,23 @@
     android:layout_height="match_parent"
     tools:context="com.sao.mobile.saopro.ui.fragment.BeaconFragment">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/noBeacon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:gravity="center_horizontal"
+        android:text="@string/noBeacon"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/beaconRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/beaconInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:text="@string/beacon_info"
-            android:gravity="center_horizontal" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/beaconRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible"/>
-    </LinearLayout>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/loadProgressBar"

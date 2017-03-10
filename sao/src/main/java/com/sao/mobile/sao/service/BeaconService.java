@@ -140,6 +140,10 @@ public class BeaconService extends BaseService {
                     return;
                 }
 
+                if (response.body().getBar() == null) {
+                    return;
+                }
+
                 Log.i(TAG, "Success detect bar");
                 mUserManager.saoBeacons = response.body().getSaoBeacons();
                 mUserManager.currentBar = response.body().getBar();

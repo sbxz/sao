@@ -38,7 +38,7 @@ public class AddPaymentActivity extends BaseActivity {
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar(toolbar);
-        getSupportActionBar().setTitle("Enregister la carte de crédit");
+        getSupportActionBar().setTitle("Enregistrer la carte de crédit");
     }
 
     private void setupBody() {

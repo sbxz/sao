@@ -4,7 +4,7 @@
 
     <!-- Menu -->
     <string name="menu_home">Accueil</string>
-    <string name="menu_beacon">Beacon</string>
+    <string name="menu_beacon">Mes Beacon</string>
     <string name="menu_stats">Statistique</string>
     <string name="menu_type_settings">Aide et paramètres</string>
     <string name="menu_settings">Paramètre de l\'application</string>
@@ -72,4 +72,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_order_details">OrderDetailsActivity</string>
     <string name="title_activity_beacon_info">BeaconInfoActivity</string>
+    <string name="noBeacon">Vous n\'avez pas de beacon enregistrée. Cliquez sur le bouton \"+\" pour enregistrer le beacon le plus proche.</string>
+    <string name="searchBeacon">Recherche d\'un beacon en cours ... Veuillez placer un beacon à coté de l\'appareil pour le détecter.</string>
 </resources>

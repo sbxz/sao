@@ -34,6 +34,7 @@ import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
@@ -47,6 +48,7 @@ import com.sao.mobile.saopro.ui.activity.LoginActivity;
 import com.sao.mobile.saopro.ui.activity.NotificationActivity;
 import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.sao.mobile.saopro.ui.activity.ProblemActivity;
+import com.sao.mobile.saopro.ui.activity.ScanBeaconActivity;
 import com.sao.mobile.saopro.ui.activity.SettingsActivity;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
@@ -72,6 +74,8 @@ public class MainActivity extends BaseActivity
     private ImageView mBarThumbnail;
     private TextView mBarName;
 
+    private FloatingActionButton mFab;
+
     private Boolean isBarListVisible = false;
 
     private BroadcastReceiver mBroadcastReceiver;
@@ -87,11 +91,15 @@ public class MainActivity extends BaseActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(NotificationActivity.class);
+                if (mCurrentFragment instanceof OrderListFragment) {
+                    startActivity(NotificationActivity.class);
+                } else if (mCurrentFragment instanceof BeaconFragment) {
+                    startActivity(ScanBeaconActivity.class);
+                }
             }
         });
 
@@ -100,6 +108,14 @@ public class MainActivity extends BaseActivity
         registerDevice();
 
         registerBroadcastReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCurrentFragment != null) {
+            ((BaseFragment) mCurrentFragment).onResumed();
+        }
     }
 
     private void registerBroadcastReceiver() {
@@ -328,9 +344,11 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_home) {
             mCurrentFragment = new OrderListFragment();
             setTitle(mTraderManager.currentBar.getName());
+            mFab.setImageResource(R.drawable.ic_action_create);
         } else if (id == R.id.nav_beacon) {
             mCurrentFragment = new BeaconFragment();
             setTitle(R.string.menu_beacon);
+            mFab.setImageResource(R.drawable.ic_add_white_24dp);
         } else if (id == R.id.nav_settings) {
             startActivity(SettingsActivity.class);
         }  else if (id == R.id.nav_condition) {

@@ -65,7 +65,7 @@
     <string name="notification_title">Notifications</string>
 
     <!-- Payment Activity -->
-    <string name="no_card_yet">Vous n\'avez pas de carte bancaire enregistrée. Cliquez suir le bouton \"+\" pour en enregistrer une nouvelle.</string>
+    <string name="no_card_yet">Vous n\'avez pas de carte bancaire enregistrée. Cliquez sur le bouton \"+\" pour en enregistrer une nouvelle.</string>
 
     <!-- Failure retrieve data-->
     <string name="failure_data">Erreur pendant le chargement des données</string>
