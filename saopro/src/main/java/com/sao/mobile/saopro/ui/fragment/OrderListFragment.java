@@ -46,10 +46,6 @@ public class OrderListFragment extends BaseFragment {
     private ApiManager mApiManager = ApiManager.getInstance();
     private TraderManager mTraderManager = TraderManager.getInstance();
 
-    private int[] tabIcons = {
-            R.drawable.ic_menu_camera,
-            R.drawable.ic_menu_send
-    };
 
     public OrderListFragment() {
     }
@@ -79,8 +75,8 @@ public class OrderListFragment extends BaseFragment {
         mOrderTabs = (TabLayout) mView.findViewById(R.id.orderTabs);
         mOrderTabs.setupWithViewPager(mViewPager);
 
-        mOrderTabs.getTabAt(0).setIcon(tabIcons[0]);
-        mOrderTabs.getTabAt(1).setIcon(tabIcons[1]);
+        mOrderTabs.getTabAt(0).setText("En cours");
+        mOrderTabs.getTabAt(1).setText("A valider");
 
         mOrderTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

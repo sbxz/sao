@@ -19,6 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
+                app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/colorAccent"
                 app:tabTextColor="@color/colorPrimary"
