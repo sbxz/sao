@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><!-- item_feed.xml -->
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:foreground="?attr/selectableItemBackground"
-    android:layout_marginBottom="0.75dp">
+    android:layout_marginBottom="0.75dp"
+    android:foreground="?attr/selectableItemBackground">
 
     <FrameLayout
         android:id="@+id/quantityFrameLayout"
@@ -18,12 +17,12 @@
             android:id="@+id/productQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:layout_gravity="end"
-            android:text="20"
-            android:paddingTop="1dp"
             android:paddingRight="1dp"
+            android:paddingTop="1dp"
+            android:text="20"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
             android:textSize="14sp" />
     </FrameLayout>
 
@@ -33,44 +32,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingTop="10dp"
+        android:orientation="horizontal"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:orientation="horizontal">
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
             <TextView
                 android:id="@+id/productName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_marginBottom="10dp"
                 android:text="Name"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginBottom="10dp"/>
+                android:textColor="@color/textBlack"
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/productDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:layout_marginBottom="10dp"
                 android:text="Description"
-                android:layout_marginBottom="10dp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/productPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price"
-            android:textColor="@color/colorPrimaryDark"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="end"
+            android:text="Price"
+            android:textColor="@color/textBlack"
             android:textSize="16sp"/>
     </LinearLayout>
 

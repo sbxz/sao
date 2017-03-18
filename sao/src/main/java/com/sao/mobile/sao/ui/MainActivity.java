@@ -46,12 +46,15 @@ import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.Order;
+import com.sao.mobile.saolib.entities.api.FriendBar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,12 +96,37 @@ public class MainActivity extends BaseActivity
         getCurrentOrder();
     }
 
+    private void refreshFriendList() {
+        Call<List<FriendBar>> friendCall = mApiManager.userService.retrieveFriendBar(mUserManager.getFacebookUserId());
+        friendCall.enqueue(new Callback<List<FriendBar>>() {
+            @Override
+            public void onResponse(Call<List<FriendBar>> call, Response<List<FriendBar>> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve friend bar");
+                    return;
+                }
+
+                Log.i(TAG, "Success retrieve friend bar");
+                List<FriendBar> friendBars = response.body();
+                // TODO make friend List
+            }
+
+            @Override
+            public void onFailure(Call<List<FriendBar>> call, Throwable t) {
+                LoggerUtils.apiFail(TAG, "Fail retrieve friend bar.", t);
+                SnackBarUtils.showSnackError(getView());
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         if (mCurrentFragment != null) {
             mCurrentFragment.onResume();
         }
+
+        refreshFriendList();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sao.mobile.sao.ui.fragment;
 
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,8 @@ public class BarsFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
+    private SwipeRefreshLayout mRefreshLayout;
+
     private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
@@ -53,6 +56,14 @@ public class BarsFragment extends BaseFragment {
         
         initRecyclerView();
         refreshBarsList();
+
+        mRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh_layout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
 
         return mView;
     }

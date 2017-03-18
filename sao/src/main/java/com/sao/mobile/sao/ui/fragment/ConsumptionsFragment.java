@@ -1,9 +1,7 @@
 package com.sao.mobile.sao.ui.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,9 +13,7 @@ import android.widget.ProgressBar;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
-import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.sao.ui.adapter.ConsumptionAdapter;
-import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.api.MyOrder;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
@@ -44,6 +40,8 @@ public class ConsumptionsFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
 
+    private SwipeRefreshLayout mRefreshLayout;
+
     private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
@@ -58,6 +56,14 @@ public class ConsumptionsFragment extends BaseFragment {
 
         initRecyclerView();
         refreshConsumptionsList();
+
+        mRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh_layout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
 
         return mView;
     }

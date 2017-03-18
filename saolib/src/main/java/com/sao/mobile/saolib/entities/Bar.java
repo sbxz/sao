@@ -41,6 +41,18 @@ public class Bar implements Serializable{
     public Bar() {
     }
 
+    public Bar(Long barId, String name, String description, String address, String thumbnail, String phoneNumber, Double longitude, Double latitude, String schedule) {
+        this.barId = barId;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.thumbnail = thumbnail;
+        this.phoneNumber = phoneNumber;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.schedule = schedule;
+    }
+
     public Long getBarId() {
         return barId;
     }

@@ -33,6 +33,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.sao.mobile.saolib.NotificationConstants;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.TraderOrder;
+import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.utils.CircleTransformation;
@@ -53,6 +54,8 @@ import com.sao.mobile.saopro.ui.activity.SettingsActivity;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,6 +119,33 @@ public class MainActivity extends BaseActivity
         if (mCurrentFragment != null) {
             ((BaseFragment) mCurrentFragment).onResumed();
         }
+
+        refreshUserList();
+    }
+
+    private void refreshUserList() {
+        Call<List<User>> userCall = mApiManager.barService.getUsersBar(mTraderManager.currentBar.getBarId());
+        userCall.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.code() != 200) {
+                    Log.i(TAG, "Fail retrieve user bar");
+                    return;
+                }
+
+                Log.i(TAG, "Success retrieve user bar");
+                List<User> userBars = response.body();
+                // TODO make user List
+                // Peut être rajouter depuis quand il est dans le bar et combien de commande il a effectuer depuis
+                // Dans l'object user
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                LoggerUtils.apiFail(TAG, "Fail retrieve user bar.", t);
+                SnackBarUtils.showSnackError(getView());
+            }
+        });
     }
 
     private void registerBroadcastReceiver() {

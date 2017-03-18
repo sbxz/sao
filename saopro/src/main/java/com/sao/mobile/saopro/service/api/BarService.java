@@ -3,6 +3,7 @@ package com.sao.mobile.saopro.service.api;
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.TraderOrder;
+import com.sao.mobile.saolib.entities.User;
 
 import java.util.List;
 import java.util.Map;
@@ -50,5 +51,8 @@ public interface BarService {
     Call<Void> deleteBeacon(@Query("barId") Long barId, @Query("uuid") String uuid, @Query("major") int major, @Query("minor") int minor);
 
     @GET("bar/users")
-    Call<Void> getUsersBar(@Query("barId") Long barId);
+    Call<List<User>> getUsersBar(@Query("barId") Long barId);
+
+    @GET("trader/order")
+    Call<List<TraderOrder>> getFinishOrder(@Query("barId") Long barId);
 }

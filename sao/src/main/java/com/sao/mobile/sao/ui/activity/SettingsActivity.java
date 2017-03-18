@@ -60,5 +60,4 @@ public class SettingsActivity extends BaseActivity {
         setupToolbar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.menu_settings));
     }
-
 }

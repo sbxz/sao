@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?><!-- item_feed.xml -->
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp"
     android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingRight="@dimen/base_card_view_margin_left_right"
+        android:paddingBottom="@dimen/base_card_view_margin_top_bottom"
         android:paddingLeft="@dimen/base_card_view_margin_left_right"
-        android:paddingTop="@dimen/base_card_view_margin_top_bottom"
-        android:paddingBottom="@dimen/base_card_view_margin_top_bottom">
+        android:paddingRight="@dimen/base_card_view_margin_left_right"
+        android:paddingTop="@dimen/base_card_view_margin_top_bottom">
 
         <LinearLayout
             android:id="@+id/orderLayout"
@@ -29,35 +28,35 @@
                 android:id="@+id/userImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/side_nav_bar"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/side_nav_bar" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
                 <TextView
                     android:id="@+id/orderId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Order#5000"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/textBlack" />
                 <TextView
                     android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Sebastien Desbois"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/textBlack" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|right"
                 android:layout_weight="1"
+                android:gravity="center_vertical|right"
                 android:text="5min"/>
         </LinearLayout>
 
@@ -69,15 +68,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/base_card_view_margin_top_bottom"
-            android:layout_marginBottom="@dimen/base_card_view_margin_top_bottom">
+            android:layout_marginBottom="@dimen/base_card_view_margin_top_bottom"
+            android:layout_marginTop="@dimen/base_card_view_margin_top_bottom">
 
             <TextView
                 android:id="@+id/numberProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Commande de 5 produits"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="Commande de 5 produits" />
 
             <TextView
                 android:id="@+id/price"

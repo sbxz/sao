@@ -1,5 +1,6 @@
 package com.sao.mobile.sao.service.api;
 
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.Product;
@@ -34,6 +35,9 @@ public interface BarService {
 
     @GET("news/")
     Call<List<News>> getNews(@Query("facebookUserId") String facebookUserId);
+
+    @GET("bar/top")
+    Call<List<Bar>> getTopBar();
 
     @GET("bar/catalog")
     Call<Map<String, List<Product>>> retrieveCatalog(@Query("barId") Long barId);

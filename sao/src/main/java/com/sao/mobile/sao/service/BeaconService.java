@@ -15,6 +15,7 @@ import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.NotificationConstants;
+import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
@@ -37,7 +38,6 @@ public class BeaconService extends BaseService {
 
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
-
     private ApiManager mApiManager = ApiManager.getInstance();
 
     private List<Beacon> mBlackBeacons;
@@ -56,7 +56,8 @@ public class BeaconService extends BaseService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "on startCommand");
         mBlackBeacons = new ArrayList<>();
-        initBeaconScan();
+        //initBeaconScan();
+        startBarService();
         return START_STICKY;
     }
 
@@ -68,7 +69,10 @@ public class BeaconService extends BaseService {
 
     @Override
     public void onDestroy() {
-        mBeaconManager.disconnect();
+        if (mBeaconManager != null) {
+            mBeaconManager.disconnect();
+        }
+
         super.onDestroy();
         Log.i(TAG, "on destroy");
     }
@@ -241,6 +245,8 @@ public class BeaconService extends BaseService {
     }
 
     private void startBarService() {
+        mUserManager.currentBar = new Bar((long) 1, "La kolok", "Bar convivial, doté d'un billard et de jeux, proposant des bières en libre-service et une petite restauration.", "30 Avenue Berthelot, 69007 Lyon", "https://s3-eu-west-1.amazonaws.com/sao-thumbnail/bar/bar1.jpg", "04 72 71 31 77", (double) 45.7464333, (double) 4.8353712, "18h / 2h");
+
         if (mUserManager.currentBar == null) {
             return;
         }

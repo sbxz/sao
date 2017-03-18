@@ -17,6 +17,7 @@
             android:title="@string/menu_consumption" />
         <item
             android:id="@+id/nav_payment"
+            android:checkable="false"
             android:icon="@drawable/ic_credit_card_black_24dp"
             android:title="@string/menu_payment" />
     </group>

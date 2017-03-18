@@ -29,14 +29,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="Nom:"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/textBlack" />
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="name"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/textBlack" />
 
         </LinearLayout>
 
@@ -50,13 +50,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="UUID:"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/textBlack" />
                 <TextView
                     android:id="@+id/uuid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="uuid"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/textBlack" />
 
         </LinearLayout>
 

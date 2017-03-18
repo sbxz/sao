@@ -40,14 +40,14 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/textBlack" />
 
                 <TextView
                     android:id="@+id/card_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/textBlack" />
             </LinearLayout>
 
             <TextView

@@ -19,7 +19,6 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.News;
-import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         Picasso.with(mContext).load(bar.getThumbnail())
                 .resize(avatarSize, avatarSize)
-                .transform(new CircleTransformation())
                 .centerCrop()
                 .into(homeViewHolder.barThumbnail);
 

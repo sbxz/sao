@@ -33,6 +33,11 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/gradient_bg" />
+
             <TextView
                 android:id="@+id/barPoint"
                 android:layout_width="wrap_content"
@@ -63,7 +68,7 @@
             app:tabIndicatorHeight="4dp"
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorPrimaryDark"
-            app:tabTextColor="@color/colorPrimary" />
+            app:tabTextColor="@color/textBlack" />
 
     </android.support.design.widget.AppBarLayout>
 

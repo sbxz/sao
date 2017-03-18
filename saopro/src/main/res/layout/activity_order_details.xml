@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
                         android:text="Sebastien Desbois"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textColor="@color/textBlack" />
 
                     <TextView
                         android:id="@+id/date"
