@@ -46,6 +46,12 @@ public class ReadyFragment extends BaseFragment {
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     private void initRecyclerView() {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.orderRecylerVIew);
         PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(getActivity());
@@ -94,8 +100,15 @@ public class ReadyFragment extends BaseFragment {
         setNotWaitOrderVisible();
     }
 
-    private void setNotWaitOrderVisible() {
+    public void setNotWaitOrderVisible() {
         mNotWaitOrder.setVisibility(mOrderAdapter.getItemCount() <= 0 ? View.VISIBLE : View.GONE);
+    }
+
+    public int getItemCount() {
+        if (mOrderAdapter == null) {
+            return 0;
+        }
+        return mOrderAdapter.getItemCount();
     }
 
     public void hideProgressLoad() {
@@ -107,6 +120,4 @@ public class ReadyFragment extends BaseFragment {
         mRecyclerView.setVisibility(View.VISIBLE);
         setNotWaitOrderVisible();
     }
-
-
 }

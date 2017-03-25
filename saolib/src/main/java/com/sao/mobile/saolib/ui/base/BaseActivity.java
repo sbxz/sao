@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initActivityTransitions();
     }
 
-    private void initActivityTransitions() {
+    protected void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
             transition.excludeTarget(android.R.id.statusBarBackground, true);

@@ -2,7 +2,6 @@ package com.sao.mobile.sao.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +44,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final NewsAdapter.NewsViewHolder newsViewHolder = (NewsAdapter.NewsViewHolder) holder;
         News news = (News) mItems.get(position);
 
-        long now = System.currentTimeMillis();
-        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
-                news.getCreated(),
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE);
-
-        newsViewHolder.date.setText(relavetime);
+        newsViewHolder.date.setText(Utils.getRelativeTime(news.getCreated()));
         newsViewHolder.content.setText(news.getContent());
     }
 

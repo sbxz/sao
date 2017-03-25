@@ -150,6 +150,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:visibility="gone"
         app:fab_addButtonColorNormal="@color/fab_blue"
         app:fab_addButtonColorPressed="@color/fab_blue_press"
         app:fab_addButtonPlusIconColor="@color/white"

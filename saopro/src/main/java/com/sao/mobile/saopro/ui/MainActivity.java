@@ -35,7 +35,6 @@ import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
-import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
@@ -117,7 +116,7 @@ public class MainActivity extends BaseActivity
     public void onResume() {
         super.onResume();
         if (mCurrentFragment != null) {
-            ((BaseFragment) mCurrentFragment).onResumed();
+            mCurrentFragment.onResume();
         }
 
         refreshUserList();
@@ -240,6 +239,8 @@ public class MainActivity extends BaseActivity
             menu.add(R.id.bar_menu, bar.getBarId().intValue(), 0, bar.getName()).setIcon(R.drawable.ic_menu_shop);
         }
 
+        menu.setGroupVisible(R.id.bar_menu, isBarListVisible);
+
         mCurrentFragment = new OrderListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, mCurrentFragment);
@@ -274,7 +275,7 @@ public class MainActivity extends BaseActivity
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "coarse location permission granted");
                 } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                   /* final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Functionality limited");
                     builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
                     builder.setPositiveButton(android.R.string.ok, null);
@@ -283,7 +284,7 @@ public class MainActivity extends BaseActivity
                         public void onDismiss(DialogInterface dialog) {
                         }
                     });
-                    builder.show();
+                    builder.show();*/
                 }
             }
         }
@@ -367,15 +368,14 @@ public class MainActivity extends BaseActivity
             return true;
         }
 
-        if (mCurrentFragment instanceof OrderListFragment) {
-            ((OrderListFragment) mCurrentFragment).removeFragment();
-        }
-
         if (id == R.id.nav_home) {
             mCurrentFragment = new OrderListFragment();
             setTitle(mTraderManager.currentBar.getName());
             mFab.setImageResource(R.drawable.ic_action_create);
         } else if (id == R.id.nav_beacon) {
+            if (mCurrentFragment instanceof OrderListFragment) {
+                ((OrderListFragment) mCurrentFragment).removeFragment();
+            }
             mCurrentFragment = new BeaconFragment();
             setTitle(R.string.menu_beacon);
             mFab.setImageResource(R.drawable.ic_add_white_24dp);

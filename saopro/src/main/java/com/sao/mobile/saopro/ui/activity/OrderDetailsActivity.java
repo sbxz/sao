@@ -22,6 +22,7 @@ import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
+import com.sao.mobile.saolib.utils.Utils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.manager.ApiManager;
 import com.sao.mobile.saopro.ui.adapter.OrderDetailsAdapter;
@@ -82,7 +83,7 @@ public class OrderDetailsActivity extends BaseActivity {
         ViewCompat.setTransitionName(userName, NAME_TRANSITION_NAME);
 
         TextView date = (TextView) findViewById(R.id.date);
-        //date.setText(new Date(mOrder.getDate()).toString());
+        date.setText(Utils.getRelativeTime(mOrder.getDate()));
         ViewCompat.setTransitionName(date, DATE_TRANSITION_NAME);
 
         ImageView thumbnail = (ImageView) findViewById(R.id.userImage);

@@ -98,7 +98,6 @@ public class HomeFragment extends BaseFragment {
         // refreshData();
     }
 
-
     private void refreshData() {
         showProgressLoad();
         Call<List<News>> newsCall = mApiManager.barService.getNews(mUserManager.getFacebookUserId());

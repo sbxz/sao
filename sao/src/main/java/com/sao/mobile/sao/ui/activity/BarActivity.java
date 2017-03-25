@@ -93,7 +93,7 @@ public class BarActivity extends BaseActivity implements OnItemClickListener {
         setupHeader();
         setupTabs();
         setupFooter();
-        setupFAB();
+        //setupFAB();
 
         Map<String, List<Product>> catalog = mBarProductManager.getBarCatalog(mBar);
         if(catalog == null) {

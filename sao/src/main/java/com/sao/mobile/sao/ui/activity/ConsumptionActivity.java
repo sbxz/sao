@@ -2,45 +2,33 @@ package com.sao.mobile.sao.ui.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
-import com.sao.mobile.sao.ui.adapter.ConsumptionAdapter;
 import com.sao.mobile.sao.ui.adapter.ConsumptionProductAdapter;
 import com.sao.mobile.saolib.entities.Bar;
-import com.sao.mobile.saolib.entities.Product;
 import com.sao.mobile.saolib.entities.api.MyOrder;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
-import com.sao.mobile.saolib.ui.listener.OnItemClickListener;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
+import com.sao.mobile.saolib.utils.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-import static com.sao.mobile.sao.ui.activity.BarActivity.IMAGE_TRANSITION_NAME;
-
 public class ConsumptionActivity extends BaseActivity {
-    private static final String TAG = BarInfoActivity.class.getSimpleName();
-
     public static final String IMAGE_TRANSITION_NAME = "imageTransition";
     public static final String BAR_EXTRA = "barExtra";
     public static final String MY_ORDER_EXTRA = "myOrderExtra";
-
+    private static final String TAG = BarInfoActivity.class.getSimpleName();
     private ImageView mBarThumbnail;
     private TextView mNumOrder;
     private TextView mTotalPrice;
@@ -102,15 +90,8 @@ public class ConsumptionActivity extends BaseActivity {
         mNumOrder = (TextView) findViewById(R.id.numOrder);
         mNumOrder.setText("#" + mMyOrder.getOrder().getOrderId().toString());
 
-        long now = System.currentTimeMillis();
-        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
-                mMyOrder.getOrder().getDate(),
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE);
-
         mDate = (TextView) findViewById(R.id.date);
-        mDate.setText(relavetime);
+        mDate.setText(Utils.getRelativeTime(mMyOrder.getOrder().getDate()));
 
         mNumberProduct = (TextView) findViewById(R.id.numberProduct);
         mNumberProduct.setText("Commande de " + mMyOrder.getOrder().getTotalQuantity() + " produits");

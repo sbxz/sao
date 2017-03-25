@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,14 +61,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .centerCrop()
                 .into(homeViewHolder.barThumbnail);
 
-        long now = System.currentTimeMillis();
-        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
-                news.getCreated(),
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE);
-
-        homeViewHolder.date.setText(relavetime);
+        homeViewHolder.date.setText(Utils.getRelativeTime(news.getCreated()));
 
         homeViewHolder.barText.setText(news.getContent());
         homeViewHolder.barName.setText(bar.getName());

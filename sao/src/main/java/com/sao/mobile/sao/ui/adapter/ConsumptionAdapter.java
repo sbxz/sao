@@ -4,13 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +19,9 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.activity.ConsumptionActivity;
 import com.sao.mobile.saolib.entities.Bar;
-import com.sao.mobile.saolib.entities.OrderProduct;
 import com.sao.mobile.saolib.entities.api.MyOrder;
 import com.sao.mobile.saolib.utils.CircleTransformation;
+import com.sao.mobile.saolib.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -65,16 +63,9 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .centerCrop()
                 .into(myOrderViewHolder.barImage);
 
-        long now = System.currentTimeMillis();
-        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
-                myOrder.getOrder().getDate(),
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE);
-
         myOrderViewHolder.numOrder.setText("#"+myOrder.getOrder().getOrderId().toString());
         myOrderViewHolder.barName.setText(myOrder.getBar().getName());
-        myOrderViewHolder.date.setText(relavetime);
+        myOrderViewHolder.date.setText(Utils.getRelativeTime(myOrder.getOrder().getDate()));
         myOrderViewHolder.numberProduct.setText("Commande de "+myOrder.getOrder().getTotalQuantity()+" produits");
         myOrderViewHolder.price.setText(myOrder.getOrder().getTotalPrice().toString()+" Euros");
 

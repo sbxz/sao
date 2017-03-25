@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.utils.UnitPriceUtils;
+import com.sao.mobile.saolib.utils.Utils;
 import com.sao.mobile.saopro.R;
 import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.squareup.picasso.Picasso;
@@ -58,14 +58,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final OrderViewHolder orderHolder = (OrderViewHolder) holder;
         final TraderOrder order = mItems.get(position);
 
-        long now = System.currentTimeMillis();
-        CharSequence relavetime = DateUtils.getRelativeTimeSpanString(
-                order.getDate(),
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE);
-
-        orderHolder.date.setText(relavetime);
+        orderHolder.date.setText(Utils.getRelativeTime(order.getDate()));
         orderHolder.price.setText(UnitPriceUtils.addEuro(String.valueOf(order.getTotalPrice())));
         orderHolder.userName.setText(order.getUser().getName());
         orderHolder.orderId.setText(mContext.getString(R.string.order_number) + order.getOrderId());
@@ -132,7 +125,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void addListItem(List<TraderOrder> orders) {
-        mItems.addAll(orders);
+        mItems = orders;
         notifyDataSetChanged();
     }
 

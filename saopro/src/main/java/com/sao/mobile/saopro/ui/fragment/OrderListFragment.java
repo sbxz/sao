@@ -43,9 +43,11 @@ public class OrderListFragment extends BaseFragment {
     private InProgressFragment mInProgressFragment;
     private ReadyFragment mReadyFragment;
 
+    private TabLayout.Tab mInprogressTab;
+    private TabLayout.Tab mReadyTab;
+
     private ApiManager mApiManager = ApiManager.getInstance();
     private TraderManager mTraderManager = TraderManager.getInstance();
-
 
     public OrderListFragment() {
     }
@@ -59,6 +61,19 @@ public class OrderListFragment extends BaseFragment {
         refreshOrderList();
 
         return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mInProgressFragment != null) {
+            mInProgressFragment.onResume();
+        }
+
+        if (mReadyFragment != null) {
+            mReadyFragment.onResume();
+        }
     }
 
     private void setupTabs() {
@@ -75,8 +90,11 @@ public class OrderListFragment extends BaseFragment {
         mOrderTabs = (TabLayout) mView.findViewById(R.id.orderTabs);
         mOrderTabs.setupWithViewPager(mViewPager);
 
-        mOrderTabs.getTabAt(0).setText("En cours");
-        mOrderTabs.getTabAt(1).setText("A valider");
+        mInprogressTab = mOrderTabs.getTabAt(0);
+        mReadyTab = mOrderTabs.getTabAt(1);
+
+        mInprogressTab.setText("En cours (0)");
+        mReadyTab.setText("A valider (0)");
 
         mOrderTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -104,12 +122,16 @@ public class OrderListFragment extends BaseFragment {
                 hideProgressLoad();
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail retrieve order");
+                    mInProgressFragment.setNotNewOrderVisible();
+                    mReadyFragment.setNotWaitOrderVisible();
                     return;
                 }
 
                 Log.i(TAG, "Success retrieve orders");
                 mInProgressFragment.addListOrder(response.body().get("inProgress"));
                 mReadyFragment.addListOrder(response.body().get("ready"));
+
+                updateTabText();
             }
 
             @Override
@@ -117,6 +139,8 @@ public class OrderListFragment extends BaseFragment {
                 hideProgressLoad();
                 LoggerUtils.apiFail(TAG, "Fail retrieve orders.", t);
                 SnackBarUtils.showSnackError(getView());
+                mInProgressFragment.setNotNewOrderVisible();
+                mReadyFragment.setNotWaitOrderVisible();
             }
         });
     }
@@ -136,9 +160,16 @@ public class OrderListFragment extends BaseFragment {
         if (order.getStep().equals(Order.Step.READY)) {
             mReadyFragment.addOrder(order);
             mInProgressFragment.removeOrder(order);
+            updateTabText();
         } else if (order.getStep().equals(Order.Step.VALIDATE)) {
             mReadyFragment.removeOrder(order);
+            updateTabText();
         }
+    }
+
+    private void updateTabText() {
+        mInprogressTab.setText("En cours (" + mInProgressFragment.getItemCount() + ")");
+        mReadyTab.setText("A valider (" + mReadyFragment.getItemCount() + ")");
     }
 
     public void removeFragment() {
@@ -158,9 +189,11 @@ public class OrderListFragment extends BaseFragment {
         }
 
         mInProgressFragment.addOrder(traderOrder);
+
+        updateTabText();
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mTitleList = new ArrayList<>();
 

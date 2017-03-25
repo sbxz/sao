@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
@@ -42,6 +43,8 @@ public class ConsumptionsFragment extends BaseFragment {
 
     private SwipeRefreshLayout mRefreshLayout;
 
+    private TextView mNoOrder;
+
     private UserManager mUserManager = UserManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
@@ -53,6 +56,7 @@ public class ConsumptionsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_consumptions, container, false);
         mLoadProgressBar = (ProgressBar) mView.findViewById(R.id.loadProgressBar);
+        mNoOrder = (TextView) mView.findViewById(R.id.noOrder);
 
         initRecyclerView();
         refreshConsumptionsList();
@@ -100,7 +104,12 @@ public class ConsumptionsFragment extends BaseFragment {
                 }
 
                 Log.i(TAG, "Success retrieve bars");
-                mConsumptionAdapter.addListItem(response.body());
+                if (response.body() == null || response.body().size() == 0) {
+                    hideRecyclerView();
+                } else {
+                    mConsumptionAdapter.addListItem(response.body());
+                    showRecyclerView();
+                }
             }
 
             @Override
@@ -110,6 +119,16 @@ public class ConsumptionsFragment extends BaseFragment {
                 SnackBarUtils.showSnackError(getView());
             }
         });
+    }
+
+    private void showRecyclerView() {
+        mConsumptionRecyler.setVisibility(View.VISIBLE);
+        mNoOrder.setVisibility(View.GONE);
+    }
+
+    private void hideRecyclerView() {
+        mConsumptionRecyler.setVisibility(View.GONE);
+        mNoOrder.setVisibility(View.VISIBLE);
     }
 
     private void hideProgressLoad() {

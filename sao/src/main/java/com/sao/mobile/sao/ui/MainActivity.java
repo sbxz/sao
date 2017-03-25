@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_COARSE_LOCATION: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                /*if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "coarse location permission granted");
                 } else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -281,7 +281,7 @@ public class MainActivity extends BaseActivity
                         }
                     });
                     builder.show();
-                }
+                }*/
             }
         }
     }

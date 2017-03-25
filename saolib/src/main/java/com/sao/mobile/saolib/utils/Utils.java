@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
@@ -93,5 +94,14 @@ public class Utils {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static CharSequence getRelativeTime(long date) {
+        long now = System.currentTimeMillis();
+        return DateUtils.getRelativeTimeSpanString(
+                date,
+                now,
+                DateUtils.SECOND_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_RELATIVE);
     }
 }
