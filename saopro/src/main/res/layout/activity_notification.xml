@@ -24,27 +24,28 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/notification_receiver"/>
                 <Spinner
                     android:id="@+id/receiverSpinner"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp" />
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -52,15 +53,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:counterOverflowTextAppearance="@style/EditOverflowText"
                 app:counterEnabled="true"
-                app:counterMaxLength="50" >
+                app:counterMaxLength="50"
+                app:counterOverflowTextAppearance="@style/EditOverflowText">
                 <EditText
                     android:id="@+id/messageEditText"
                     style="@style/FullWidthEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/notification_message"/>
+                    android:hint="@string/notification_message"
+                    android:inputType="textCapSentences|textAutoCorrect" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -68,19 +70,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@android:color/holo_blue_dark"
                 android:text="@string/notification_send"
-                android:background="@color/colorBackgroundAccent"
                 android:textColor="@android:color/white"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginRight="50dp"
                 android:layout_marginLeft="50dp"
-                android:text="@string/notification_send_info"
-                android:gravity="center_horizontal" />
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/notification_send_info" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
