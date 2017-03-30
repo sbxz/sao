@@ -18,8 +18,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +43,7 @@ import com.sao.mobile.sao.ui.activity.LoginActivity;
 import com.sao.mobile.sao.ui.activity.PaymentActivity;
 import com.sao.mobile.sao.ui.activity.ProblemActivity;
 import com.sao.mobile.sao.ui.activity.SettingsActivity;
+import com.sao.mobile.sao.ui.adapter.FriendAdapter;
 import com.sao.mobile.sao.ui.fragment.BarsFragment;
 import com.sao.mobile.sao.ui.fragment.ConsumptionsFragment;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
@@ -48,7 +52,10 @@ import com.sao.mobile.saolib.entities.News;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.api.FriendBar;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.CircleTransformation;
+import com.sao.mobile.saolib.utils.DeviceUtils;
+import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
@@ -70,6 +77,8 @@ public class MainActivity extends BaseActivity
     private Toolbar mToolbar;
     private Fragment mCurrentFragment;
 
+    private RecyclerView mRecyclerView;
+    private FriendAdapter mFriendAdapter;
     private NavigationView mNavigationView;
 
     private UserManager mUserManager = UserManager.getInstance();
@@ -88,12 +97,28 @@ public class MainActivity extends BaseActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        setupRecyclerView();
         setupNavigationView();
         setupMenuListener();
 
         startServices();
         registerBroadcastReceiver();
         getCurrentOrder();
+    }
+
+    private void setupRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.friendRecycler);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(this));
+        mRecyclerView.setLayoutManager(layoutManager);
+        mFriendAdapter = new FriendAdapter(mContext, null);
+        mRecyclerView.setAdapter(mFriendAdapter);
+    }
+
+    private void setupRightNavigationView() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(Gravity.END);
     }
 
     private void refreshFriendList() {
@@ -107,8 +132,7 @@ public class MainActivity extends BaseActivity
                 }
 
                 Log.i(TAG, "Success retrieve friend bar");
-                List<FriendBar> friendBars = response.body();
-                // TODO make friend List
+                mFriendAdapter.addListItem(response.body());
             }
 
             @Override
@@ -127,6 +151,16 @@ public class MainActivity extends BaseActivity
         }
 
         refreshFriendList();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_openRight) {
+            setupRightNavigationView();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -312,6 +346,8 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }

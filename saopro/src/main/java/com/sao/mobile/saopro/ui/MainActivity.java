@@ -21,12 +21,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -35,7 +39,9 @@ import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.TraderOrder;
 import com.sao.mobile.saolib.entities.User;
 import com.sao.mobile.saolib.ui.base.BaseActivity;
+import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.CircleTransformation;
+import com.sao.mobile.saolib.utils.DeviceUtils;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
@@ -50,12 +56,14 @@ import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.sao.mobile.saopro.ui.activity.ProblemActivity;
 import com.sao.mobile.saopro.ui.activity.ScanBeaconActivity;
 import com.sao.mobile.saopro.ui.activity.SettingsActivity;
+import com.sao.mobile.saopro.ui.adapter.FriendAdapter;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.github.hanihashemi.slidingpanelayoutlib.SlidingPaneLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,6 +83,10 @@ public class MainActivity extends BaseActivity
     private ImageView mBarSelector;
     private ImageView mBarThumbnail;
     private TextView mBarName;
+
+    private SlidingPaneLayout pane;
+    private RecyclerView mRecyclerView;
+    private FriendAdapter mFriendAdapter;
 
     private FloatingActionButton mFab;
 
@@ -105,11 +117,17 @@ public class MainActivity extends BaseActivity
             }
         });
 
+        setupRecyclerView();
         setupNavigationView();
         setupMenuListener();
         registerDevice();
 
         registerBroadcastReceiver();
+    }
+
+    private void setupRightNavigationView() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(Gravity.END);
     }
 
     @Override
@@ -120,6 +138,16 @@ public class MainActivity extends BaseActivity
         }
 
         refreshUserList();
+    }
+
+    private void setupRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.friendRecycler);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(this));
+        mRecyclerView.setLayoutManager(layoutManager);
+        mFriendAdapter = new FriendAdapter(mContext, null);
+        mRecyclerView.setAdapter(mFriendAdapter);
     }
 
     private void refreshUserList() {
@@ -133,10 +161,7 @@ public class MainActivity extends BaseActivity
                 }
 
                 Log.i(TAG, "Success retrieve user bar");
-                List<User> userBars = response.body();
-                // TODO make user List
-                // Peut être rajouter depuis quand il est dans le bar et combien de commande il a effectuer depuis
-                // Dans l'object user
+                mFriendAdapter.addListItem(response.body());
             }
 
             @Override
@@ -340,6 +365,8 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
@@ -354,6 +381,11 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == R.id.action_openRight) {
+            setupRightNavigationView();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

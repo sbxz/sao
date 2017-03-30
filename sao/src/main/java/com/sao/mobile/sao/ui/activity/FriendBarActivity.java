@@ -93,7 +93,7 @@ public class FriendBarActivity extends BaseActivity {
                 }
 
                 Log.i(TAG, "success retrieve friend");
-                mFriendAdapter.addListItem(response.body());
+                //mFriendAdapter.addListItem(response.body());
             }
 
             @Override

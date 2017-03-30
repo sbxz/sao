@@ -22,4 +22,32 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
+    <LinearLayout
+        android:id="@+id/drawerRight"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true"
+        android:background="#32394A"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="20dp"
+            android:text="Retrouver vos amis"
+            android:textColor="#A1AAB7"
+            android:background="#434A5E" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/friendRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </LinearLayout>
+
 </android.support.v4.widget.DrawerLayout>
