@@ -20,7 +20,7 @@ import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.activity.ConsumptionActivity;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.api.MyOrder;
-import com.sao.mobile.saolib.utils.CircleTransformation;
+import com.sao.mobile.saolib.ui.adapter.LoadViewHolder;
 import com.sao.mobile.saolib.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -45,13 +45,20 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mLayoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        View view = mLayoutInflater.inflate(R.layout.item_my_order, parent, false);
-        return new MyOrderViewHolder(view);
+        if (viewType == LoadViewHolder.VIEW_TYPE_ITEM) {
+            return new MyOrderViewHolder(mLayoutInflater.inflate(R.layout.item_my_order, parent, false));
+        } else {
+            return new LoadViewHolder(mLayoutInflater.inflate(R.layout.item_load, parent, false));
+        }
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == LoadViewHolder.VIEW_TYPE_LOADING) {
+            return;
+        }
+
         final MyOrderViewHolder myOrderViewHolder = (MyOrderViewHolder) holder;
         final MyOrder myOrder = mItems.get(position);
         final Bar bar = myOrder.getBar();
@@ -59,15 +66,14 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         Picasso.with(mContext).load(myOrder.getBar().getThumbnail())
                 .resize(avatarSize, avatarSize)
-                .transform(new CircleTransformation())
                 .centerCrop()
                 .into(myOrderViewHolder.barImage);
 
-        myOrderViewHolder.numOrder.setText("#"+myOrder.getOrder().getOrderId().toString());
+        myOrderViewHolder.numOrder.setText("#" + myOrder.getOrder().getOrderId().toString());
         myOrderViewHolder.barName.setText(myOrder.getBar().getName());
         myOrderViewHolder.date.setText(Utils.getRelativeTime(myOrder.getOrder().getDate()));
-        myOrderViewHolder.numberProduct.setText("Commande de "+myOrder.getOrder().getTotalQuantity()+" produits");
-        myOrderViewHolder.price.setText(myOrder.getOrder().getTotalPrice().toString()+" Euros");
+        myOrderViewHolder.numberProduct.setText("Commande de " + myOrder.getOrder().getTotalQuantity() + " produits");
+        myOrderViewHolder.price.setText(myOrder.getOrder().getTotalPrice().toString() + " Euros");
 
         myOrderViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +83,10 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         });
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position) == null ? LoadViewHolder.VIEW_TYPE_LOADING : LoadViewHolder.VIEW_TYPE_ITEM;
+    }
 
     private void goToMyOrderDetail(MyOrderViewHolder myOrderViewHolder, Bar bar, MyOrder myOrder) {
         Activity activity = (Activity) mContext;
@@ -95,6 +105,21 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return mItems.size();
     }
 
+    public void addLoadItem() {
+        mItems.add(null);
+        notifyItemInserted(mItems.size() - 1);
+    }
+
+    public void removeLoadItem() {
+        mItems.remove(mItems.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    public void pushOrder(List<MyOrder> myOrders) {
+        mItems.addAll(myOrders);
+        notifyDataSetChanged();
+    }
+
     public void addListItem(List<MyOrder> myOrders) {
         mItems.addAll(myOrders);
         notifyDataSetChanged();
@@ -105,7 +130,7 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    private static class MyOrderViewHolder extends RecyclerView.ViewHolder{
+    private static class MyOrderViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView barImage;
         TextView numOrder;
@@ -114,7 +139,7 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView numberProduct;
         TextView price;
 
-        MyOrderViewHolder (View view) {
+        MyOrderViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.card_view);
             barImage = (ImageView) view.findViewById(R.id.barImage);

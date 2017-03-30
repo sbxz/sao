@@ -55,7 +55,6 @@ import com.sao.mobile.saolib.ui.base.BaseActivity;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.CircleTransformation;
 import com.sao.mobile.saolib.utils.DeviceUtils;
-import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saolib.utils.LocalStore;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
@@ -70,8 +69,8 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int DEFAULT_SIZE_PAGE = 8;
     private static final String TAG = MainActivity.class.getSimpleName();
-
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
     private Toolbar mToolbar;

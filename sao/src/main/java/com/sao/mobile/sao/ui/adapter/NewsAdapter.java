@@ -36,6 +36,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         View view = mLayoutInflater.inflate(R.layout.item_news, parent, false);
+
         return new NewsAdapter.NewsViewHolder(view);
     }
 

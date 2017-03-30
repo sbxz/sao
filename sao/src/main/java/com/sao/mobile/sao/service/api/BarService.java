@@ -34,7 +34,7 @@ public interface BarService {
     Call<Void> leaveBar(@Query("facebookUserId") String facebookUserId);
 
     @GET("news/")
-    Call<List<News>> getNews(@Query("facebookUserId") String facebookUserId);
+    Call<List<News>> getNews(@Query("facebookUserId") String facebookUserId, @Query("page") int page, @Query("size") int size);
 
     @GET("bar/top")
     Call<List<Bar>> getTopBar();

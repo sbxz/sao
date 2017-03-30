@@ -29,10 +29,10 @@ public interface UserService {
     Call<User> retrieveUserInfo(@Query("facebookUserId") String facebookUserId);
 
     @GET("bar/")
-    Call<List<Bar>> retrieveBars(@Query("facebookUserId") String facebookUserId);
+    Call<List<Bar>> retrieveBars(@Query("facebookUserId") String facebookUserId, @Query("page") int page, @Query("size") int size);
 
     @GET("bar/me/order")
-    Call<List<MyOrder>> retrieveFinishOrder(@Query("facebookUserId") String facebookUserId);
+    Call<List<MyOrder>> retrieveFinishOrder(@Query("facebookUserId") String facebookUserId, @Query("page") int page, @Query("size") int size);
 
     @GET("user/friend")
     Call<List<FriendBar>> retrieveFriendBar(@Query("facebookUserId") String facebookUserId);

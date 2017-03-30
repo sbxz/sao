@@ -18,6 +18,7 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.News;
+import com.sao.mobile.saolib.ui.adapter.LoadViewHolder;
 import com.sao.mobile.saolib.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -29,9 +30,9 @@ import java.util.List;
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public Boolean isMoreDataAvailable = true;
     private List<News> mItems;
     private Context mContext;
-
     private LayoutInflater mLayoutInflater;
 
     public HomeAdapter(Context context, List<News> items) {
@@ -44,13 +45,19 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (mLayoutInflater == null) {
             mLayoutInflater = LayoutInflater.from(parent.getContext());
         }
-
-        View view = mLayoutInflater.inflate(R.layout.item_home, parent, false);
-        return new HomeViewHolder(view);
+        if (viewType == LoadViewHolder.VIEW_TYPE_ITEM) {
+            return new HomeViewHolder(mLayoutInflater.inflate(R.layout.item_home, parent, false));
+        } else {
+            return new LoadViewHolder(mLayoutInflater.inflate(R.layout.item_load, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == LoadViewHolder.VIEW_TYPE_LOADING) {
+            return;
+        }
+
         final HomeViewHolder homeViewHolder = (HomeViewHolder) holder;
         News news = (News) mItems.get(position);
         final Bar bar = news.getBar();
@@ -90,6 +97,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mItems.size();
     }
 
+    public void pushNews(List<News> newsList) {
+        mItems.addAll(newsList);
+        notifyDataSetChanged();
+    }
+
     public void addListItem(List<News> newsList) {
         mItems = newsList;
         notifyDataSetChanged();
@@ -98,6 +110,20 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addItem(News news) {
         mItems.add(0, news);
         notifyItemInserted(0);
+    }
+
+    public void addLoadItem() {
+        mItems.add(null);
+        notifyItemInserted(mItems.size() - 1);
+    }
+
+    public void removeLoadItem() {
+        mItems.remove(mItems.size() - 1);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position) == null ? LoadViewHolder.VIEW_TYPE_LOADING : LoadViewHolder.VIEW_TYPE_ITEM;
     }
 
     private static class HomeViewHolder extends RecyclerView.ViewHolder {

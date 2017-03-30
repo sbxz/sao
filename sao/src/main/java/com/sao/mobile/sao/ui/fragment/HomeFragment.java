@@ -24,6 +24,7 @@ import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.ui.MainActivity;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.sao.ui.adapter.HomeAdapter;
 import com.sao.mobile.saolib.entities.Bar;
@@ -32,7 +33,6 @@ import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
 import com.sao.mobile.saolib.ui.recyclerView.PreCachingLayoutManager;
 import com.sao.mobile.saolib.utils.DeviceUtils;
-import com.sao.mobile.saolib.utils.EndlessRecyclerScrollListener;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 import com.sao.mobile.saolib.utils.SnackBarUtils;
 import com.squareup.picasso.Picasso;
@@ -67,8 +67,7 @@ public class HomeFragment extends BaseFragment {
     private HomeAdapter mHomeAdapter;
     private ProgressBar mLoadProgressBar;
 
-    private LinearLayoutManager mLayoutManager;
-    private EndlessRecyclerScrollListener mEndlessRecyclerScrollListener;
+    private int currentNewsPage = 0;
 
     private OrderManager mOrderManager = OrderManager.getInstance();
     private UserManager mUserManager = UserManager.getInstance();
@@ -100,7 +99,8 @@ public class HomeFragment extends BaseFragment {
 
     private void refreshData() {
         showProgressLoad();
-        Call<List<News>> newsCall = mApiManager.barService.getNews(mUserManager.getFacebookUserId());
+
+        Call<List<News>> newsCall = mApiManager.barService.getNews(mUserManager.getFacebookUserId(), currentNewsPage, MainActivity.DEFAULT_SIZE_PAGE);
         newsCall.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
@@ -111,7 +111,10 @@ public class HomeFragment extends BaseFragment {
                 }
 
                 Log.i(TAG, "Success retrieve news");
-                mHomeAdapter.addListItem(response.body());
+                if (response.body().size() > 0) {
+                    mHomeAdapter.addListItem(response.body());
+                    currentNewsPage++;
+                }
             }
 
             @Override
@@ -285,20 +288,56 @@ public class HomeFragment extends BaseFragment {
     private void setupRecyclerView() {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.homeRecycerView);
         mRecyclerView.setNestedScrollingEnabled(false);
-        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(getActivity());
+        final PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mEndlessRecyclerScrollListener = new EndlessRecyclerScrollListener(layoutManager) {
+        mMainScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onLoadMore(int currentPage) {
-
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    loadMoreNews();
+                }
             }
-        };
+        });
 
-        mRecyclerView.addOnScrollListener(mEndlessRecyclerScrollListener);
         mHomeAdapter = new HomeAdapter(mContext, null);
         mRecyclerView.setAdapter(mHomeAdapter);
+    }
+
+    private void loadMoreNews() {
+        if (!mHomeAdapter.isMoreDataAvailable) {
+            return;
+        }
+
+        mHomeAdapter.addLoadItem();
+        Call<List<News>> newsCall = mApiManager.barService.getNews(mUserManager.getFacebookUserId(), currentNewsPage, MainActivity.DEFAULT_SIZE_PAGE);
+        newsCall.enqueue(new Callback<List<News>>() {
+            @Override
+            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
+                mHomeAdapter.removeLoadItem();
+                if (!response.isSuccessful()) {
+                    Log.i(TAG, "Fail retrieve news");
+                    mHomeAdapter.isMoreDataAvailable = false;
+                    return;
+                }
+
+                if (response.body().size() > 0) {
+                    mHomeAdapter.pushNews(response.body());
+                    currentNewsPage++;
+                } else {
+                    mHomeAdapter.isMoreDataAvailable = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<News>> call, Throwable t) {
+                mHomeAdapter.removeLoadItem();
+                mHomeAdapter.isMoreDataAvailable = false;
+                mHomeAdapter.notifyDataSetChanged();
+                LoggerUtils.apiFail(TAG, "Fail retrieve news.", t);
+            }
+        });
     }
 }

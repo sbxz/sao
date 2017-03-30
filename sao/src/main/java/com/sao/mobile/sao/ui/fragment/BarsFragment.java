@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.UserManager;
+import com.sao.mobile.sao.ui.MainActivity;
 import com.sao.mobile.sao.ui.adapter.BarsAdapter;
 import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.ui.base.BaseFragment;
@@ -70,6 +71,7 @@ public class BarsFragment extends BaseFragment {
 
     private void initRecyclerView() {
         mBarRecyler = (RecyclerView) mView.findViewById(R.id.barRecycler);
+        mBarRecyler.setNestedScrollingEnabled(false);
         PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
@@ -78,17 +80,18 @@ public class BarsFragment extends BaseFragment {
         mEndlessRecyclerScrollListener = new EndlessRecyclerScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-
+                loadMoreBar(currentPage);
             }
         };
 
         mBarRecyler.addOnScrollListener(mEndlessRecyclerScrollListener);
+
         mBarAdapter = new BarsAdapter(mContext, null);
         mBarRecyler.setAdapter(mBarAdapter);
     }
 
     private void refreshBarsList() {
-        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars(mUserManager.getFacebookUserId());
+        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars(mUserManager.getFacebookUserId(), 0, MainActivity.DEFAULT_SIZE_PAGE);
         barsCall.enqueue(new Callback<List<Bar>>() {
             @Override
             public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {
@@ -99,7 +102,10 @@ public class BarsFragment extends BaseFragment {
                 }
 
                 Log.i(TAG, "Success retrieve bars");
-                mBarAdapter.addListItem(response.body());
+                if (response.body().size() > 0) {
+                    mBarAdapter.addListItem(response.body());
+                    mEndlessRecyclerScrollListener.setLoaded();
+                }
             }
 
             @Override
@@ -107,6 +113,41 @@ public class BarsFragment extends BaseFragment {
                 hideProgressLoad();
                 LoggerUtils.apiFail(TAG, "Fail retrieve user bar.", t);
                 SnackBarUtils.showSnackError(getView());
+            }
+        });
+    }
+
+    private void loadMoreBar(int currentPage) {
+        if (!mEndlessRecyclerScrollListener.isMoreDataAvailable) {
+            return;
+        }
+
+        mBarAdapter.addLoadItem();
+        Call<List<Bar>> barsCall = mApiManager.userService.retrieveBars(mUserManager.getFacebookUserId(), currentPage, MainActivity.DEFAULT_SIZE_PAGE);
+        barsCall.enqueue(new Callback<List<Bar>>() {
+            @Override
+            public void onResponse(Call<List<Bar>> call, Response<List<Bar>> response) {
+                mBarAdapter.removeLoadItem();
+                mEndlessRecyclerScrollListener.setLoaded();
+                if (!response.isSuccessful()) {
+                    Log.i(TAG, "Fail retrieve more bar");
+                    mEndlessRecyclerScrollListener.isMoreDataAvailable = false;
+                    return;
+                }
+
+                if (response.body().size() > 0) {
+                    mBarAdapter.pushBar(response.body());
+                } else {
+                    mEndlessRecyclerScrollListener.isMoreDataAvailable = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Bar>> call, Throwable t) {
+                mEndlessRecyclerScrollListener.setLoaded();
+                mEndlessRecyclerScrollListener.isMoreDataAvailable = false;
+                mBarAdapter.removeLoadItem();
+                LoggerUtils.apiFail(TAG, "Fail retrieve more bar.", t);
             }
         });
     }

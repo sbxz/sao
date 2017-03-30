@@ -19,13 +19,13 @@ import android.widget.TextView;
 import com.sao.mobile.sao.R;
 import com.sao.mobile.sao.ui.activity.BarActivity;
 import com.sao.mobile.saolib.entities.Bar;
+import com.sao.mobile.saolib.ui.adapter.LoadViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private List<Bar> mItems;
     private Context mContext;
 
@@ -42,13 +42,20 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLayoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        View view = mLayoutInflater.inflate(R.layout.item_bar, parent, false);
-        return new BarsViewHolder(view);
+        if (viewType == LoadViewHolder.VIEW_TYPE_ITEM) {
+            return new BarsViewHolder(mLayoutInflater.inflate(R.layout.item_bar, parent, false));
+        } else {
+            return new LoadViewHolder(mLayoutInflater.inflate(R.layout.item_load, parent, false));
+        }
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == LoadViewHolder.VIEW_TYPE_LOADING) {
+            return;
+        }
+
         final BarsViewHolder barsViewHolder = (BarsViewHolder) holder;
         final Bar bar = mItems.get(position);
 
@@ -80,6 +87,26 @@ public class BarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Intent intent = new Intent(activity, BarActivity.class);
         intent.putExtra(BarActivity.BAR_EXTRA, bar);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position) == null ? LoadViewHolder.VIEW_TYPE_LOADING : LoadViewHolder.VIEW_TYPE_ITEM;
+    }
+
+    public void removeLoadItem() {
+        mItems.remove(mItems.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    public void pushBar(List<Bar> bars) {
+        mItems.addAll(bars);
+        notifyDataSetChanged();
+    }
+
+    public void addLoadItem() {
+        mItems.add(null);
+        notifyItemInserted(mItems.size() - 1);
     }
 
     @Override
