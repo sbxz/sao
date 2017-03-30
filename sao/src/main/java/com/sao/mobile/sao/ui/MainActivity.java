@@ -80,6 +80,7 @@ public class MainActivity extends BaseActivity
     private RecyclerView mRecyclerView;
     private FriendAdapter mFriendAdapter;
     private NavigationView mNavigationView;
+    private DrawerLayout mDrawer;
 
     private UserManager mUserManager = UserManager.getInstance();
     private OrderManager mOrderManager = OrderManager.getInstance();
@@ -116,10 +117,6 @@ public class MainActivity extends BaseActivity
         mRecyclerView.setAdapter(mFriendAdapter);
     }
 
-    private void setupRightNavigationView() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.openDrawer(Gravity.END);
-    }
 
     private void refreshFriendList() {
         Call<List<FriendBar>> friendCall = mApiManager.userService.retrieveFriendBar(mUserManager.getFacebookUserId());
@@ -157,7 +154,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.action_openRight) {
-            setupRightNavigationView();
+            mDrawer.openDrawer(Gravity.END);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -261,10 +258,10 @@ public class MainActivity extends BaseActivity
     }
 
     private void setupNavigationView() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -343,11 +340,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
-            drawer.closeDrawer(GravityCompat.END);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
@@ -396,8 +392,7 @@ public class MainActivity extends BaseActivity
         fragmentTransaction.replace(R.id.frame, mCurrentFragment);
         fragmentTransaction.commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

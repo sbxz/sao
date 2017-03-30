@@ -63,7 +63,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import io.github.hanihashemi.slidingpanelayoutlib.SlidingPaneLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,8 +82,7 @@ public class MainActivity extends BaseActivity
     private ImageView mBarSelector;
     private ImageView mBarThumbnail;
     private TextView mBarName;
-
-    private SlidingPaneLayout pane;
+    private DrawerLayout mDrawer;
     private RecyclerView mRecyclerView;
     private FriendAdapter mFriendAdapter;
 
@@ -123,11 +121,6 @@ public class MainActivity extends BaseActivity
         registerDevice();
 
         registerBroadcastReceiver();
-    }
-
-    private void setupRightNavigationView() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.openDrawer(Gravity.END);
     }
 
     @Override
@@ -249,10 +242,10 @@ public class MainActivity extends BaseActivity
     }
 
     private void setupNavigationView() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -362,11 +355,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
-            drawer.closeDrawer(GravityCompat.END);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
@@ -383,7 +375,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.action_openRight) {
-            setupRightNavigationView();
+            mDrawer.openDrawer(Gravity.END);
             return true;
         }
 
@@ -431,8 +423,7 @@ public class MainActivity extends BaseActivity
         fragmentTransaction.replace(R.id.frame, mCurrentFragment);
         fragmentTransaction.commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
@@ -467,8 +458,8 @@ public class MainActivity extends BaseActivity
             fragmentTransaction.commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
