@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginLeft="10dp"
     android:layout_marginTop="2dp"
-    android:paddingRight="5dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:background="#32394A"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingLeft="10dp"
+    android:paddingRight="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,12 +17,10 @@
         android:paddingBottom="@dimen/base_card_view_margin_top_bottom"
         android:paddingLeft="@dimen/base_card_view_margin_left_right"
         android:paddingRight="@dimen/base_card_view_margin_left_right"
-        android:paddingTop="@dimen/base_card_view_margin_top_bottom"
-        android:background="#32394A"
-        >
+        android:paddingTop="@dimen/base_card_view_margin_top_bottom">
 
         <ImageView
-            android:id="@+id/friendThumbnail"
+            android:id="@+id/userThumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
@@ -33,39 +32,38 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/friendName"
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:paddingLeft="20dp"
                 android:text="La Kolok  "
-                android:textColor="@color/white"
-                />
+                android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/friendLocalization"
+                android:id="@+id/userInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="0.7"
                 android:paddingLeft="20dp"
-                android:text="Localisation"
-                android:textSize="12dp"
+                android:text=""
                 android:textColor="@color/white"
-                />
+                android:textSize="12dp" />
         </LinearLayout>
 
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:paddingRight="20dp"
         android:layout_gravity="right"
+        android:layout_marginBottom="5dp"
         android:drawableRight="@drawable/circle"
-        />
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp" />
     <View
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="0.8dp"
+        android:layout_gravity="bottom"
         android:background="#434A5E" />
 
 </FrameLayout>

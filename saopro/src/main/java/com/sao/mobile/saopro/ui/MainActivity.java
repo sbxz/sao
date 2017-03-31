@@ -30,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -56,7 +55,7 @@ import com.sao.mobile.saopro.ui.activity.OrderDetailsActivity;
 import com.sao.mobile.saopro.ui.activity.ProblemActivity;
 import com.sao.mobile.saopro.ui.activity.ScanBeaconActivity;
 import com.sao.mobile.saopro.ui.activity.SettingsActivity;
-import com.sao.mobile.saopro.ui.adapter.FriendAdapter;
+import com.sao.mobile.saopro.ui.adapter.CustomerAdapter;
 import com.sao.mobile.saopro.ui.fragment.BeaconFragment;
 import com.sao.mobile.saopro.ui.fragment.OrderListFragment;
 import com.squareup.picasso.Picasso;
@@ -84,7 +83,7 @@ public class MainActivity extends BaseActivity
     private TextView mBarName;
     private DrawerLayout mDrawer;
     private RecyclerView mRecyclerView;
-    private FriendAdapter mFriendAdapter;
+    private CustomerAdapter mCustomerAdapter;
 
     private FloatingActionButton mFab;
 
@@ -139,8 +138,8 @@ public class MainActivity extends BaseActivity
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(this));
         mRecyclerView.setLayoutManager(layoutManager);
-        mFriendAdapter = new FriendAdapter(mContext, null);
-        mRecyclerView.setAdapter(mFriendAdapter);
+        mCustomerAdapter = new CustomerAdapter(mContext, null);
+        mRecyclerView.setAdapter(mCustomerAdapter);
     }
 
     private void refreshUserList() {
@@ -154,7 +153,7 @@ public class MainActivity extends BaseActivity
                 }
 
                 Log.i(TAG, "Success retrieve user bar");
-                mFriendAdapter.addListItem(response.body());
+                mCustomerAdapter.addListItem(response.body());
             }
 
             @Override

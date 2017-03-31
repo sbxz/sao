@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sao.mobile.saolib.entities.User;
-
 import com.sao.mobile.saopro.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,13 +20,13 @@ import java.util.List;
  */
 
 
-public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<User> mItems;
     private Context mContext;
 
     private LayoutInflater mLayoutInflater;
 
-    public FriendAdapter(Context context, List<User> items) {
+    public CustomerAdapter(Context context, List<User> items) {
         this.mContext = context;
         this.mItems = items != null ? items : new ArrayList<User>();
     }
@@ -38,23 +37,23 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mLayoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        View view = mLayoutInflater.inflate(R.layout.item_friend, parent, false);
-        return new FriendAdapter.FriendViewHolder(view);
+        View view = mLayoutInflater.inflate(R.layout.item_customer, parent, false);
+        return new CustomerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final FriendAdapter.FriendViewHolder friendViewHolder = (FriendAdapter.FriendViewHolder) holder;
-        User userFriend = (User) mItems.get(position);
+        final CustomerViewHolder customerViewHolder = (CustomerViewHolder) holder;
+        User user = (User) mItems.get(position);
 
-        friendViewHolder.friendName.setText(userFriend.getName()+' ');
-        friendViewHolder.friendLocalization.setText(userFriend.getName());
+        customerViewHolder.userName.setText(user.getName());
+        customerViewHolder.userInfo.setText("");
 
         int avatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
-        Picasso.with(mContext).load(userFriend.getThumbnail())
+        Picasso.with(mContext).load(user.getThumbnail())
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
-                .into(friendViewHolder.friendThumbnail);
+                .into(customerViewHolder.userThumbnail);
     }
 
     @Override
@@ -67,16 +66,16 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    private static class FriendViewHolder extends RecyclerView.ViewHolder {
-        ImageView friendThumbnail;
-        TextView friendName;
-        TextView friendLocalization;
+    private static class CustomerViewHolder extends RecyclerView.ViewHolder {
+        ImageView userThumbnail;
+        TextView userName;
+        TextView userInfo;
 
-        FriendViewHolder(View view) {
+        CustomerViewHolder(View view) {
             super(view);
-            friendThumbnail = (ImageView) view.findViewById(R.id.friendThumbnail);
-            friendName = (TextView) view.findViewById(R.id.friendName);
-            friendLocalization = (TextView) view.findViewById(R.id.friendLocalization);
+            userThumbnail = (ImageView) view.findViewById(R.id.userThumbnail);
+            userName = (TextView) view.findViewById(R.id.userName);
+            userInfo = (TextView) view.findViewById(R.id.userInfo);
         }
     }
 }
