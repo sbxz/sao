@@ -9,20 +9,20 @@ import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Nearable;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
 import com.sao.mobile.sao.manager.ApiManager;
 import com.sao.mobile.sao.manager.OrderManager;
 import com.sao.mobile.sao.manager.UserManager;
 import com.sao.mobile.sao.ui.fragment.HomeFragment;
 import com.sao.mobile.saolib.NotificationConstants;
-import com.sao.mobile.saolib.entities.Bar;
 import com.sao.mobile.saolib.entities.Order;
 import com.sao.mobile.saolib.entities.SaoBeacon;
 import com.sao.mobile.saolib.entities.api.BeaconResponse;
 import com.sao.mobile.saolib.ui.base.BaseService;
 import com.sao.mobile.saolib.utils.LoggerUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,8 +30,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BeaconService extends BaseService {
-    public static final Integer RSSI_THRESHOLD = -60;
-    public static final Integer LEAVE_RSSI = -80;
+    public static final Integer RSSI_THRESHOLD = -47;
+    public static final Integer LEAVE_RSSI = -70;
+    public static final Double TRADE_DISTANCE = 0.07;
+    public static final Double LEAVE_DISTANCE = 1.00;
     private static final String TAG = BeaconService.class.getSimpleName();
     private BeaconManager mBeaconManager;
     private Region mRegion;
@@ -40,12 +42,26 @@ public class BeaconService extends BaseService {
     private OrderManager mOrderManager = OrderManager.getInstance();
     private ApiManager mApiManager = ApiManager.getInstance();
 
-    private List<Beacon> mBlackBeacons;
+    // private List<Beacon> mBlackBeacons;
 
     private Boolean isScanning = false;
     private Boolean isLeaving = false;
 
     public BeaconService() {
+    }
+
+    protected static double calculateAccuracy(int txPower, double rssi) {
+        if (rssi == 0) {
+            return -1.0; // if we cannot determine accuracy, return -1.
+        }
+
+        double ratio = rssi * 1.0 / txPower;
+        if (ratio < 1.0) {
+            return Math.pow(ratio, 10);
+        } else {
+            double accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+            return accuracy;
+        }
     }
 
     @Override
@@ -55,9 +71,8 @@ public class BeaconService extends BaseService {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "on startCommand");
-        mBlackBeacons = new ArrayList<>();
-        //initBeaconScan();
-        startBarService();
+        initBeaconScan();
+        //startBarService();
         return START_STICKY;
     }
 
@@ -91,11 +106,26 @@ public class BeaconService extends BaseService {
             }
         });
 
+        mBeaconManager.setNearableListener(new BeaconManager.NearableListener() {
+            @Override
+            public void onNearablesDiscovered(List<Nearable> nearables) {
+                Log.d(TAG, "Discovered nearables: " + nearables);
+            }
+        });
+
+        mBeaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
+            @Override
+            public void onEddystonesFound(List eddystones) {
+                Log.d(TAG, "Nearby eddystones: " + eddystones);
+            }
+        });
+
         mRegion = new Region("ranged region", null, null, null);
 
         mBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
+                //mBeaconManager.setForegroundScanPeriod(200L, 0L);
                 mBeaconManager.startRanging(mRegion);
             }
         });
@@ -103,6 +133,11 @@ public class BeaconService extends BaseService {
 
     private void beaconsDiscovered(List<Beacon> beacons) {
         Beacon nearBeacon = beacons.get(0);
+        double distance = Utils.computeAccuracy(nearBeacon);
+        Utils.Proximity proximity = Utils.computeProximity(nearBeacon);
+        Log.i(TAG, "distance: " + distance + " - getRSSI: " + nearBeacon.getRssi() + " - getMeasuredPower()" + nearBeacon.getMeasuredPower());
+        Log.i(TAG, "proximity: " + proximity);
+
 
         SaoBeacon newCurrentBeacon = mUserManager.getBeacon(nearBeacon);
         if (newCurrentBeacon != null) {
@@ -115,13 +150,14 @@ public class BeaconService extends BaseService {
             }
 
             return;
+        } else if (mUserManager.currentBar != null) {
+            leaveBar();
         }
 
-        if (mBlackBeacons.size() != 0 && !isAvailableBeacon(nearBeacon)) {
+        /*if (!isAvailableBeacon(nearBeacon)) {
             return;
-        }
+        }*/
 
-        Log.i(TAG, "beacon RSSI: " + nearBeacon.getRssi());
         if (nearBeacon.getRssi() >= LEAVE_RSSI) {
             scanBeacon(nearBeacon);
         }
@@ -140,7 +176,7 @@ public class BeaconService extends BaseService {
                 isScanning = false;
                 if (response.code() != 200) {
                     Log.i(TAG, "Beacon not found uuid= " + beacon.getProximityUUID().toString() + " major= " + beacon.getMajor() + " minor= " + beacon.getMinor());
-                    putBeaconBlackList(beacon);
+                    //putBeaconBlackList(beacon);
                     return;
                 }
 
@@ -203,7 +239,7 @@ public class BeaconService extends BaseService {
         mUserManager.currentBeacon = null;
         mUserManager.currentBar = null;
     }
-
+/*
     private Boolean isAvailableBeacon(Beacon beacon) {
         if (mBlackBeacons.size() == 0) {
             return false;
@@ -229,7 +265,7 @@ public class BeaconService extends BaseService {
         if (!isFind) {
             mBlackBeacons.add(beacon);
         }
-    }
+    }*/
 
     private void launchTraderOrder(Beacon nearBeacon) {
         if (mUserManager.currentBeacon == null ||
@@ -245,7 +281,7 @@ public class BeaconService extends BaseService {
     }
 
     private void startBarService() {
-        mUserManager.currentBar = new Bar((long) 1, "La kolok", "Bar convivial, doté d'un billard et de jeux, proposant des bières en libre-service et une petite restauration.", "30 Avenue Berthelot, 69007 Lyon", "https://s3-eu-west-1.amazonaws.com/sao-thumbnail/bar/bar1.jpg", "04 72 71 31 77", (double) 45.7464333, (double) 4.8353712, "18h / 2h");
+        //mUserManager.currentBar = new Bar((long) 1, "La kolok", "Bar convivial, doté d'un billard et de jeux, proposant des bières en libre-service et une petite restauration.", "30 Avenue Berthelot, 69007 Lyon", "https://s3-eu-west-1.amazonaws.com/sao-thumbnail/bar/bar1.jpg", "04 72 71 31 77", (double) 45.7464333, (double) 4.8353712, "18h / 2h");
 
         if (mUserManager.currentBar == null) {
             return;

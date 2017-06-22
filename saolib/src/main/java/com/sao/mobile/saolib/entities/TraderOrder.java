@@ -21,7 +21,7 @@ public class TraderOrder implements Serializable {
     private Double totalPrice;
     @SerializedName("step")
     private Order.Step step;
-    @SerializedName("orderProducts")
+    @SerializedName("products")
     private List<OrderProduct> orderProducts;
     @SerializedName("date")
     private Long date;

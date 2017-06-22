@@ -66,14 +66,14 @@ public class SaoMessagingService extends FirebaseMessagingService {
                 barNews(data.get(NotificationConstants.KEY_NEWS));
                 break;
             case NotificationConstants.TYPE_FRIEND_BAR:
-                Log.i(TAG, "Bar news");
+                Log.i(TAG, "Friend bar");
                 friendBar(data.get(NotificationConstants.KEY_FRIEND));
                 break;
         }
     }
 
     private void orderValidate(Map<String, String> data) {
-        mOrderManager.removeOrder();
+        mOrderManager.order = null;
 
         Intent intent = new Intent(NotificationConstants.TYPE_ORDER_VALIDATE);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
@@ -110,6 +110,9 @@ public class SaoMessagingService extends FirebaseMessagingService {
         if (friendBarResponse == null) {
             return;
         }
+
+        Intent intent = new Intent(NotificationConstants.TYPE_FRIEND_BAR);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
 
         notificationManager.displayFriendBarNotification(getApplicationContext(), friendBarResponse);
     }

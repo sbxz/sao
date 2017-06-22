@@ -77,6 +77,7 @@ public class OrderListFragment extends BaseFragment {
     }
 
     private void setupTabs() {
+        removeFragment();
         mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
 
         mInProgressFragment = new InProgressFragment();

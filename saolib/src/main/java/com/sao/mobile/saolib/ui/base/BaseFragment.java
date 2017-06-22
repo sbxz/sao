@@ -75,4 +75,6 @@ public abstract class BaseFragment extends Fragment {
     protected void logApiError(String tag, String message, Throwable t) {
         Log.e(tag, message + " Message= " + t.getMessage() + " Cause= " + t.getCause());
     }
+
+
 }

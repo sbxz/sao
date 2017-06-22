@@ -46,6 +46,10 @@ public class BarNotificationService extends BaseService {
     }
 
     public static Notification getBarNotification(Context context, Bar bar, String contentText, Bitmap barBitmap) {
+        if (bar == null) {
+            return null;
+        }
+
         Intent notificationIntent = new Intent(context, BarActivity.class);
         notificationIntent.putExtra(BarActivity.BAR_EXTRA, bar);
 
@@ -83,6 +87,7 @@ public class BarNotificationService extends BaseService {
 
         if (mUserManager.currentBar == null) {
             stopSelf();
+            return;
         }
 
         Intent intent = new Intent(HomeFragment.UPDATE_CURRENT_BAR);
@@ -103,6 +108,9 @@ public class BarNotificationService extends BaseService {
         }
 
         Notification notification = getBarNotification(mContext, mUserManager.currentBar, orderStatus, bitmap);
+        if (notification == null) {
+            return;
+        }
         startForeground(BAR_NOTIFICATION_ID, notification);
     }
 

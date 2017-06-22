@@ -17,7 +17,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -88,6 +87,7 @@ public class MainActivity extends BaseActivity
     private BroadcastReceiver mBroadcastReceiver;
 
     private Boolean mAlertVisible = false;
+    private long mLastCallOrder = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +182,8 @@ public class MainActivity extends BaseActivity
                     if (mCurrentFragment.isVisible() && mCurrentFragment instanceof HomeFragment) {
                         ((HomeFragment) mCurrentFragment).addNews(news);
                     }
+                } else if (intent.getAction().equals(NotificationConstants.TYPE_FRIEND_BAR)) {
+                    refreshFriendList();
                 }
             }
         };
@@ -196,14 +198,20 @@ public class MainActivity extends BaseActivity
                 new IntentFilter(NotificationConstants.TYPE_OPEN_ORDER));
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
                 new IntentFilter(NotificationConstants.TYPE_BAR_NEWS));
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(NotificationConstants.TYPE_FRIEND_BAR));
     }
 
     private void displayTraderAlert() {
+        final long now = System.currentTimeMillis();
         if (mAlertVisible) {
             return;
         }
 
-        mAlertVisible = true;
+        if (mLastCallOrder != 0 && now - mLastCallOrder < 0000) {
+            return;
+        }
+
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
         builder.setTitle("Valider la commande?");
         builder.setMessage("Envoie une alerte au bar");
@@ -214,6 +222,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         callValidateTraderOrder();
+                        mLastCallOrder = now;
                         mAlertVisible = false;
                     }
                 });
@@ -228,11 +237,13 @@ public class MainActivity extends BaseActivity
                 });
 
         android.app.AlertDialog dialog = builder.create();
+        mAlertVisible = true;
         dialog.show();
     }
 
     private void callValidateTraderOrder() {
-        Call<Void> barCall = mApiManager.barService.orderBeacon(mUserManager.getFacebookUserId(), mUserManager.currentBeacon.getUuid(), mUserManager.currentBeacon.getMajor(), mUserManager.currentBeacon.getMinor());
+        Call<Void> barCall = mApiManager.barService.orderBeacon(mUserManager.getFacebookUserId(), mUserManager.currentBeacon.getUuid(),
+                mUserManager.currentBeacon.getMajor(), mUserManager.currentBeacon.getMinor());
         barCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -275,19 +286,7 @@ public class MainActivity extends BaseActivity
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("This app needs location access");
-                builder.setMessage("Please grant location access so this app can detect beacons.");
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
-                        }
-                    }
-                });
-                builder.show();
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
             }
         }
     }
@@ -358,7 +357,6 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        Fragment fragment = null;
 
         if (id == R.id.nav_home) {
             mCurrentFragment = new HomeFragment();
@@ -443,6 +441,10 @@ public class MainActivity extends BaseActivity
                 if (order != null && !order.getStep().equals(Order.Step.VALIDATE)) {
                     Log.i(TAG, "Success Order");
                     mOrderManager.order = order;
+                    if (mCurrentFragment instanceof HomeFragment) {
+                        ((HomeFragment) mCurrentFragment).setupCurrentBar();
+                    }
+
                 }
             }
 

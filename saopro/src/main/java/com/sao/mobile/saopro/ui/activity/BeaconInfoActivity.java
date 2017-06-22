@@ -93,10 +93,12 @@ public class BeaconInfoActivity extends BaseActivity {
                 hideProgressDialog();
                 if (response.code() != 200) {
                     Log.i(TAG, "Fail delete beacon");
+                    SnackBarUtils.showSnackError(getView());
                     return;
                 }
 
                 finish();
+
             }
 
             @Override

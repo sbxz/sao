@@ -16,16 +16,14 @@ import java.util.List;
  */
 public class OrderManager {
     private static OrderManager ourInstance = new OrderManager();
-
-    public static OrderManager getInstance() {
-        return ourInstance;
-    }
-
     public Order order;
-
     private UserManager mUserManager = UserManager.getInstance();
 
     private OrderManager() {
+    }
+
+    public static OrderManager getInstance() {
+        return ourInstance;
     }
 
     public Product addProduct(Product product) {
@@ -90,6 +88,10 @@ public class OrderManager {
     }
 
     public void removeOrder() {
+        if (mUserManager.currentBar != null && order != null && mUserManager.currentBar.getBarId().equals(order.getBarId())) {
+            return;
+        }
+
         order = null;
     }
 

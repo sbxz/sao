@@ -70,8 +70,8 @@ public class BeaconFragment extends BaseFragment {
         mBeaconRecyclerView.setAdapter(mBeaconAdapter);
     }
 
-    @Override
-    public void onResumed() {
+    public void onResume() {
+        super.onResume();
         retrieveBeaconBar();
     }
 

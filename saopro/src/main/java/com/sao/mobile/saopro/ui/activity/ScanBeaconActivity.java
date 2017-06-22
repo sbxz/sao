@@ -30,7 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScanBeaconActivity extends BaseActivity {
-    public static final Integer RSSI_THRESHOLD = -60;
+    public static final Integer RSSI_THRESHOLD = -50;
     private static final String TAG = ScanBeaconActivity.class.getSimpleName();
     private FrameLayout mSearchBeaconLayout;
     private EditText mInputName;
